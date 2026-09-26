@@ -1,0 +1,30 @@
+{
+  "stats": {
+    "atk_flat":     { "name": "Ataque",               "min": 5,  "max": 40 },
+    "atk_pct":      { "name": "Ataque %",             "min": 2,  "max": 15 },
+    "crit_chance":  { "name": "Chance de crítico %",  "min": 1,  "max": 8 },
+    "crit_damage":  { "name": "Dano crítico %",       "min": 5,  "max": 40 },
+    "attack_speed": { "name": "Velocidade de ataque %", "min": 2, "max": 12 },
+    "life_steal":   { "name": "Roubo de vida %",      "min": 1,  "max": 5 },
+    "hp_flat":      { "name": "Vida",                 "min": 20, "max": 200 },
+    "hp_pct":       { "name": "Vida %",               "min": 2,  "max": 12 },
+    "def_flat":     { "name": "Defesa",               "min": 5,  "max": 50 },
+    "def_pct":      { "name": "Defesa %",             "min": 2,  "max": 15 },
+    "block":        { "name": "Bloqueio %",           "min": 2,  "max": 12 },
+    "move_speed":   { "name": "Velocidade de movimento %", "min": 2, "max": 10 },
+    "cooldown":     { "name": "Recarga de skill %",   "min": 2,  "max": 10 },
+    "resist_all":   { "name": "Resistência elemental %", "min": 2, "max": 12 },
+    "zen_find":     { "name": "Zen encontrado %",     "min": 5,  "max": 30 }
+  },
+  "pools": {
+    "helm":   ["hp_flat", "hp_pct", "def_flat", "def_pct", "cooldown", "resist_all", "crit_chance"],
+    "armor":  ["hp_flat", "hp_pct", "def_flat", "def_pct", "resist_all", "block", "life_steal"],
+    "gloves": ["atk_flat", "atk_pct", "attack_speed", "crit_chance", "crit_damage", "def_flat", "life_steal"],
+    "pants":  ["hp_flat", "hp_pct", "def_flat", "def_pct", "resist_all", "move_speed", "cooldown"],
+    "boots":  ["move_speed", "hp_flat", "def_flat", "def_pct", "resist_all", "zen_find", "attack_speed"],
+    "weapon": ["atk_flat", "atk_pct", "crit_chance", "crit_damage", "attack_speed", "life_steal", "cooldown"],
+    "shield": ["block", "def_flat", "def_pct", "hp_flat", "hp_pct", "resist_all"],
+    "wings":  ["atk_pct", "hp_pct", "def_pct", "move_speed", "crit_damage", "resist_all"],
+    "pet":    ["zen_find", "move_speed", "hp_flat", "atk_flat", "life_steal", "cooldown"]
+  }
+}

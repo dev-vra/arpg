@@ -1,0 +1,37 @@
+{
+  "sets": {
+    "ferro_vigilia": {
+      "name": "Ferro-Vigília",
+      "class": "sentinela",
+      "slots": ["helm", "armor", "gloves", "pants", "boots"],
+      "bonuses": {
+        "2": { "def_flat": 20 },
+        "3": { "hp_pct": 5 },
+        "4": { "block": 5 },
+        "5": { "def_pct": 10, "atk_pct": 8 }
+      }
+    },
+    "coroa_vale_oco": {
+      "name": "Coroa do Vale Oco",
+      "class": "",
+      "slots": ["helm", "armor", "gloves", "pants", "boots"],
+      "bonuses": {
+        "2": { "hp_flat": 50 },
+        "3": { "atk_flat": 10 },
+        "4": { "resist_all": 5 },
+        "5": { "hp_pct": 8, "move_speed": 5 }
+      }
+    },
+    "mares_rubras": {
+      "name": "Marés Rubras",
+      "class": "",
+      "slots": ["helm", "armor", "gloves", "pants", "boots"],
+      "bonuses": {
+        "2": { "crit_chance": 2 },
+        "3": { "atk_pct": 5 },
+        "4": { "crit_damage": 15 },
+        "5": { "life_steal": 3, "attack_speed": 8 }
+      }
+    }
+  }
+}

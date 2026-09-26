@@ -1,0 +1,12 @@
+{
+  "allowed_kinds": ["equipment_skin", "wings_skin", "pet_cosmetic", "effect", "frame", "title", "character_slot", "stash_tab", "season_pass"],
+  "forbidden_keys": ["stats", "modifiers", "affixes", "tier", "tiers", "chance", "chances", "drop_rate", "xp_rate", "refine", "jewels", "zen", "fortune", "unlock_content", "unlock_tier", "skip", "trait", "class_unlock", "boost"],
+  "caps": { "character_slot": 8, "stash_tab": 10 },
+  "products": [
+    { "id": "skin_vigilia_noturna", "kind": "equipment_skin", "name": "Vigília Noturna (visual)", "grants": { "cosmetic_id": "skin_vigilia_noturna" } },
+    { "id": "wings_cinza_dourada", "kind": "wings_skin", "name": "Asas Cinza-Dourada (visual)", "grants": { "cosmetic_id": "wings_cinza_dourada" } },
+    { "id": "frame_vale", "kind": "frame", "name": "Moldura do Vale", "grants": { "cosmetic_id": "frame_vale" } },
+    { "id": "extra_char_slot", "kind": "character_slot", "name": "Slot de personagem", "grants": { "character_slots": 1 } },
+    { "id": "season_pass_1", "kind": "season_pass", "name": "Passe da Temporada 1", "grants": { "cosmetic_ids": ["title_pioneiro", "effect_cinzas"] } }
+  ]
+}
