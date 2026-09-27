@@ -94,7 +94,7 @@ func _run() -> void:
 	_ok(drops > 5, "drops no chão (%d)" % drops)
 	var zen0: int = gs.character.wallet.zen
 	await create_timer(1.5).timeout
-	_ok(gs.character.wallet.zen > zen0, "Zen coletado pelo ímã")
+	_ok(gs.character.wallet.zen > zen0, "Cinzas coletado pelo ímã")
 	for n in w.get_children():
 		if n.get_script() == load("res://game/world/loot_drop.gd"):
 			n.global_position = w.player.global_position

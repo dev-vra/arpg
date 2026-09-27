@@ -1,4 +1,4 @@
-## Unidade: giro de atributos, trava de linha, custo em Prisma e Zen, Sigilo.
+## Unidade: giro de atributos, trava de linha, custo em Prisma e Cinzas, Sigilo.
 extends "res://tests/test_case.gd"
 
 const H = preload("res://tests/helpers.gd")
@@ -24,9 +24,9 @@ func test_cost_grows_with_level_and_locks() -> void:
 	var c2 := Spin.cost(it, [0, 1], eco)
 	eq(c0["prisma"], 1, "1 Prisma por giro")
 	eq(c0["zen"], 1500, "1000 + 50 × nível 10")
-	check(c1["zen"] > c0["zen"] and c2["zen"] > c1["zen"], "trava soma Zen")
+	check(c1["zen"] > c0["zen"] and c2["zen"] > c1["zen"], "trava soma Cinzas")
 	it["item_level"] = 40
-	check(Spin.cost(it, [], eco)["zen"] > c0["zen"], "nível do item soma Zen")
+	check(Spin.cost(it, [], eco)["zen"] > c0["zen"], "nível do item soma Cinzas")
 
 
 func test_locks_are_kept_and_limited() -> void:
@@ -81,7 +81,7 @@ func test_spin_charges_prisma_and_zen() -> void:
 	var r := Spin.spin(it, [], c, eco, affix, Rng.new(1))
 	check(r["ok"], "giro pago")
 	eq(c.wallet.amount("prisma"), 0, "Prisma consumida")
-	eq(c.wallet.amount("zen"), 0, "Zen consumido")
+	eq(c.wallet.amount("zen"), 0, "Cinzas consumido")
 	var r2 := Spin.spin(it, [], c, eco, affix, Rng.new(1))
 	eq(r2.get("error"), "insufficient", "sem recursos")
 

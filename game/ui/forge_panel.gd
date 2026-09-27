@@ -111,7 +111,7 @@ func _cost_text(cost: Dictionary) -> String:
 	var w = GameState.character.wallet
 	for k in cost:
 		var have: int = w.amount(k)
-		var nm: String = "Zen" if k == "zen" else GameState.economy["jewels"][k]["name"]
+		var nm: String = "Cinzas" if k == "zen" else GameState.economy["jewels"][k]["name"]
 		parts.append("[color=%s]%s %s[/color] [color=#8b8f99](tem %s)[/color]" % ["#e8e2d6" if have >= int(cost[k]) else "#ff6b6b", ItemText.short_zen(int(cost[k])), nm, ItemText.short_zen(have)])
 	return "Custo: " + "   ".join(parts)
 

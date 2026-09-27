@@ -24,7 +24,7 @@ func test_wallet_spend_is_atomic() -> void:
 	var w = Wallet.new()
 	w.add("lume", 5)
 	w.add("zen", 10)
-	check(not w.spend({"lume": 2, "zen": 50}), "falta Zen")
+	check(not w.spend({"lume": 2, "zen": 50}), "falta Cinzas")
 	eq(w.amount("lume"), 5, "nada gasto")
 	check(w.spend({"lume": 2, "zen": 10}), "paga")
 	eq(w.amount("lume"), 3, "Lume")

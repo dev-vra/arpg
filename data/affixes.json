@@ -14,7 +14,7 @@
     "move_speed":   { "name": "Velocidade de movimento %", "min": 2, "max": 10 },
     "cooldown":     { "name": "Recarga de skill %",   "min": 2,  "max": 10 },
     "resist_all":   { "name": "Resistência elemental %", "min": 2, "max": 12 },
-    "zen_find":     { "name": "Zen encontrado %",     "min": 5,  "max": 30 }
+    "zen_find":     { "name": "Cinzas encontradas %",     "min": 5,  "max": 30 }
   },
   "pools": {
     "helm":   ["hp_flat", "hp_pct", "def_flat", "def_pct", "cooldown", "resist_all", "crit_chance"],

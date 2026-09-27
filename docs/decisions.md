@@ -9,7 +9,7 @@ Números propostos, a calibrar pela simulação. Nenhuma regra travada do plano 
    Fortuna: +2 pp T1, +4 pp T2. Piedade: +0,5 pp T1 e +1,5 pp T2 por giro, teto de 20.
 4. **Crítico da Fortuna** (5%): o valor sai no topo da faixa do tier sorteado.
 5. **Piedade** zera quando alguma linha girada sai T3 ou melhor. Ela é do personagem, não do item.
-6. **Custo do giro**: `1 Prisma + (1000 + 50 × nível do item) × (1 + 0,75 × travas)` Zen.
+6. **Custo do giro**: `1 Prisma + (1000 + 50 × nível do item) × (1 + 0,75 × travas)` Cinzas.
 7. **Refino**: +12 é o teto do MVP (`refine.mvp_max`); Aurora já está na tabela para a fase 4.
 8. **Nível do T1**: 60 como placeholder até o nível máximo ser definido.
 9. **Bônus de set** conta slots distintos; duas peças no mesmo slot contam como uma.
@@ -22,3 +22,8 @@ Números propostos, a calibrar pela simulação. Nenhuma regra travada do plano 
 13. **Boneco modular por máscara de osso**: o corpo base é inteiro; cada peça cobre regiões (tronco, braços, mãos, pernas, pés) e o shader descarta a pele desses ossos. Comum usa roupa de Camponês; Superior e Set usam Patrulheiro; cor e brilho vêm do set/raridade.
 14. **Mobs humanoides** no mesmo estilo (carniçais, encapuzados, saqueadores, conjuradores), vestidos por dados em `data/mobs.json`.
 15. **Temas de mapa** em `data/themes.json`: floresta (árvores e pedras como borda, grama espalhada, chão procedural), ruínas e praça (muros e lajotas). Do lado da câmera a borda é baixa para não esconder o herói.
+
+## Moeda
+
+16. **"Zen" virou "Cinzas"** (decisão do dono do projeto): Zen é a moeda do Mu e feria a regra de nomes próprios.
+    A chave interna continua `zen` nos dados e no save, para não quebrar saves; só o nome exibido mudou.

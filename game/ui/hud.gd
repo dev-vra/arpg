@@ -251,7 +251,7 @@ func refresh() -> void:
 	xp_bar.max_value = GameState.xp_needed()
 	xp_bar.value = GameState.xp
 	var w = c.wallet
-	money_label.text = "[color=#ffd54f]Zen %s[/color]  [color=#ffe08a]Lume %d[/color]  [color=#ff7043]Brasa %d[/color]  [color=#c77dff]Prisma %d[/color]  [color=#4dd0e1]Sigilo %d[/color]" % [
+	money_label.text = "[color=#ffd54f]Cinzas %s[/color]  [color=#ffe08a]Lume %d[/color]  [color=#ff7043]Brasa %d[/color]  [color=#c77dff]Prisma %d[/color]  [color=#4dd0e1]Sigilo %d[/color]" % [
 		ItemText.short_zen(w.zen), w.amount("lume"), w.amount("brasa"), w.amount("prisma"), w.amount("sigilo")]
 	map_label.text = world.map_def["name"]
 	_render_quests()

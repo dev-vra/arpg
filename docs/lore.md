@@ -14,6 +14,9 @@ a luz virou fragmentos espalhados pela terra e a sombra que ela prendia escapou 
 - **A Cinza levanta os mortos.** Carniçais são aldeões tomados por ela.
 - **O rei não morreu.** Virou o **Rei Partido** e ainda ocupa o **Trono Partido**, cercado por quem o serve.
 
+- **Cinzas são a moeda do Bastião**: o resíduo apagado dos estilhaços. Não refinam nada, mas pagam a Forja,
+  e todo giro de atributos queima Cinzas. Por isso elas sempre saem de circulação.
+
 ## Facções e lugares
 - **Sentinelas**: ordem que jurou juntar os estilhaços antes que a Cinza os consuma. O jogador é uma Sentinela recém-jurada.
 - **Bastião Cinzento**: último refúgio murado. Tem a **Forja Cinzenta**, a única capaz de trabalhar estilhaços.

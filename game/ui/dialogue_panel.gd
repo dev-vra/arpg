@@ -184,7 +184,7 @@ func _reward_text(q: Dictionary) -> String:
 		elif k == "xp":
 			parts.append("%d XP" % int(r[k]))
 		else:
-			parts.append("%s %s" % [ItemText.short_zen(int(r[k])), "Zen" if k == "zen" else GameState.economy["jewels"][k]["name"]])
+			parts.append("%s %s" % [ItemText.short_zen(int(r[k])), "Cinzas" if k == "zen" else GameState.economy["jewels"][k]["name"]])
 	return ", ".join(parts)
 
 

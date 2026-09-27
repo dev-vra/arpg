@@ -1,4 +1,4 @@
-## Carteira do personagem: joias por tipo e Zen.
+## Carteira do personagem: joias por tipo e Cinzas.
 ## Custos são dicionários {"lume": 2, "zen": 1500}.
 extends RefCounted
 

@@ -1,4 +1,4 @@
-## Rotação de atributos: 1 Prisma + Zen por giro. Linhas travadas ficam;
+## Rotação de atributos: 1 Prisma + Cinzas por giro. Linhas travadas ficam;
 ## as destravadas são sorteadas de novo e sempre entregam um tier (T5 no pior caso).
 extends RefCounted
 

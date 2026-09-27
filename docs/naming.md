@@ -5,7 +5,7 @@ O teste `tests/test_naming.gd` falha se algum campo `name` em `data/` usar um te
 
 ## Termos proibidos (colisão)
 
-- Mu: MU, Bless, Soul, Life, Chaos, Dragon, Wings, Fenrir, Blood Castle, Devil Square, pentagrama/Pentagram
+- Mu: MU, Zen, Bless, Soul, Life, Chaos, Dragon, Wings, Fenrir, Blood Castle, Devil Square, pentagrama/Pentagram
 - Torchlight Infinite: pactspirit, Vorax, Torchlight
 - Diablo: Diablo, Sanctuary
 
@@ -19,7 +19,7 @@ O teste `tests/test_naming.gd` falha se algum campo `name` em `data/` usar um te
 | Prisma | Rotação de atributos |
 | Sigilo | Adicionar linha de atributo |
 | Fagulha | Combustível da Forja |
-| Zen | Moeda de sumidouro |
+| Cinzas | Moeda de sumidouro |
 
 ## Classes, sets e armas
 

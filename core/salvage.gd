@@ -1,4 +1,4 @@
-## Reciclagem: item excedente vira Zen e Lume, com perda (sumidouro de itens).
+## Reciclagem: item excedente vira Cinzas e Lume, com perda (sumidouro de itens).
 extends RefCounted
 
 

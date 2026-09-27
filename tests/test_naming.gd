@@ -5,7 +5,7 @@ extends "res://tests/test_case.gd"
 const Config = preload("res://core/config.gd")
 
 const FORBIDDEN := [
-	"mu", "bless", "soul", "life", "chaos", "dragon", "wings", "fenrir", "blood castle",
+	"mu", "zen", "bless", "soul", "life", "chaos", "dragon", "wings", "fenrir", "blood castle",
 	"devil square", "pentagram", "pactspirit", "vorax", "torchlight", "diablo", "sanctuary",
 ]
 

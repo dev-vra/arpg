@@ -1,4 +1,4 @@
-## Drops de campo: joias, Zen e itens por abate, calibrados a partir dos números
+## Drops de campo: joias, Cinzas e itens por abate, calibrados a partir dos números
 ## por partida de economy.json (drops) divididos pelos abates de uma partida.
 ## playtest_multiplier acelera o teste fechado; a simulação usa 1.
 extends RefCounted

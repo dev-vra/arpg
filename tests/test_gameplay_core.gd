@@ -87,7 +87,7 @@ func test_salvage_pays() -> void:
 	var it := Item.make("helm", 10)
 	it["rarity"] = "superior"
 	var v := Salvage.salvage(it, c, eco)
-	check(c.wallet.amount("zen") == v["zen"] and v["zen"] > 0, "Zen")
+	check(c.wallet.amount("zen") == v["zen"] and v["zen"] > 0, "Cinzas")
 	eq(c.wallet.amount("lume"), 1, "Lume")
 
 

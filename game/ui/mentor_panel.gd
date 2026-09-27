@@ -51,7 +51,7 @@ func _card(q: Dictionary, st: String) -> Control:
 		elif k == "xp":
 			rew.append("%d XP" % int(r[k]))
 		else:
-			rew.append("%s %s" % [ItemText.short_zen(int(r[k])), "Zen" if k == "zen" else GameState.economy["jewels"][k]["name"]])
+			rew.append("%s %s" % [ItemText.short_zen(int(r[k])), "Cinzas" if k == "zen" else GameState.economy["jewels"][k]["name"]])
 	var state_txt: String = {"available": "[color=#d9a441]Nova[/color]", "active": "[color=#5aa0ff]Em andamento %d/%d[/color]" % p, "ready": "[color=#3fd67a]Concluída: entregue![/color]"}[st]
 	row.add_child(rich("[font_size=22][b]%s[/b][/font_size]  %s
 %s

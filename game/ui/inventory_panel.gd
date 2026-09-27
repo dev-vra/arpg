@@ -118,7 +118,7 @@ func _equip_best() -> void:
 
 func _salvage_selected() -> void:
 	var v := GameState.salvage(selected)
-	GameState.toast.emit("Reciclado: +%d Zen%s" % [v.get("zen", 0), (" +%d Lume" % v["lume"]) if v.has("lume") else ""], Color("#ffd54f"))
+	GameState.toast.emit("Reciclado: +%d Cinzas%s" % [v.get("zen", 0), (" +%d Lume" % v["lume"]) if v.has("lume") else ""], Color("#ffd54f"))
 	selected = {}
 	_render()
 
