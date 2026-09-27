@@ -11,6 +11,7 @@ var look: Dictionary = {}
 var prop := ""
 var used := false
 var radius := 3.2
+var npc_id := ""
 
 
 ## look: aparência de NPC humanoide (com "anim"); prop: nome de prop do kit.

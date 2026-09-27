@@ -31,6 +31,10 @@ var visuals := Config.data("visuals")
 var themes_db := Config.data("themes")
 var quests_db := Config.data("quests")
 var quests: Dictionary = Quests.new_state()
+var dialogues_db := Config.data("dialogues")
+var tracked_quest := ""
+var flags: Dictionary = {}
+var discovered: Dictionary = {}   # map_id -> PackedByteArray (1 = célula vista)
 
 var rng = Rng.new()
 var character = Character.new()
@@ -158,7 +162,8 @@ func item_changed(item: Dictionary) -> void:
 
 func to_dict() -> Dictionary:
 	return {"version": SAVE_VERSION, "content_version": economy["content_version"], "character": character.to_dict(),
-		"xp": xp, "inventory": inventory, "equipped": equipped, "quests": quests}
+		"xp": xp, "inventory": inventory, "equipped": equipped, "quests": quests,
+		"tracked": tracked_quest, "flags": flags, "discovered": _pack_discovered()}
 
 
 func save_game() -> void:
@@ -174,6 +179,12 @@ func load_game() -> void:
 	xp = int(d.get("xp", 0))
 	inventory = _ints(d.get("inventory", []))
 	quests = d.get("quests", Quests.new_state())
+	tracked_quest = d.get("tracked", "")
+	flags = d.get("flags", {})
+	discovered = {}
+	var disc: Dictionary = d.get("discovered", {})
+	for k in disc:
+		discovered[k] = Marshalls.base64_to_raw(disc[k])
 	equipped = {}
 	var eq: Dictionary = d.get("equipped", {})
 	for k in eq:
@@ -186,6 +197,9 @@ func new_game() -> void:
 	inventory = []
 	equipped = {}
 	quests = Quests.new_state()
+	tracked_quest = ""
+	flags = {}
+	discovered = {}
 	character.wallet.add("zen", 5000)
 	character.wallet.add("lume", 6)
 	character.wallet.add("prisma", 3)
@@ -222,6 +236,7 @@ func accept_quest(id: String) -> bool:
 	var ok := Quests.accept(quests_db, quests, id, character.level)
 	if ok:
 		toast.emit("Missão aceita: %s" % Quests.find(quests_db, id)["name"], Color("#ffd166"))
+		tracked_quest = id
 		save_game()
 		changed.emit()
 	return ok
@@ -293,3 +308,45 @@ func equip_best() -> int:
 	recompute()
 	save_game()
 	return n
+
+
+
+# --- descoberta do mapa (névoa) ---
+
+func _pack_discovered() -> Dictionary:
+	var out := {}
+	for k in discovered:
+		out[k] = Marshalls.raw_to_base64(discovered[k])
+	return out
+
+
+func discovery(map_id: String, size: int) -> PackedByteArray:
+	if not discovered.has(map_id) or discovered[map_id].size() != size:
+		var b := PackedByteArray()
+		b.resize(size)
+		discovered[map_id] = b
+	return discovered[map_id]
+
+
+## Revela células num raio em volta; retorna true se algo novo apareceu.
+func reveal(map_id: String, w: int, h: int, cell: Vector2i, radius: int) -> bool:
+	var b := discovery(map_id, w * h)
+	var changed_any := false
+	for dy in range(-radius, radius + 1):
+		for dx in range(-radius, radius + 1):
+			var c := cell + Vector2i(dx, dy)
+			if c.x < 0 or c.y < 0 or c.x >= w or c.y >= h or dx * dx + dy * dy > radius * radius + 1:
+				continue
+			var i := c.y * w + c.x
+			if b[i] == 0:
+				b[i] = 1
+				changed_any = true
+	return changed_any
+
+
+func npc_quests(npc: String) -> Array:
+	var out := []
+	for q in quests_db["quests"]:
+		if q.get("giver", "mentor") == npc and quest_status(q["id"]) != "locked" and quest_status(q["id"]) != "completed":
+			out.append(q)
+	return out

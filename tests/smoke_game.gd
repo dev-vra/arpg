@@ -30,7 +30,18 @@ func _run() -> void:
 	var w = current_scene
 	_ok(w != null and w.player != null, "Bastião carregou com jogador")
 	_ok(get_nodes_in_group("interactable").size() >= 3, "NPCs e portal no Bastião")
-	for p in ["inventory", "forge", "maps", "mentor", "menu"]:
+	await _frames(3)
+	_ok(w.hud.panel != null, "introdução da Ilse abre sozinha no primeiro acesso")
+	w.hud.close_panel()
+	w.hud.open_dialogue("forge")
+	await _frames(3)
+	_ok(w.hud.panel != null and w.hud.panel.options.get_child_count() >= 3, "diálogo da Vesna com opções")
+	w.hud.close_panel()
+	w.hud.open_bigmap()
+	await _frames(3)
+	_ok(w.hud.panel != null, "mapa grande abre")
+	w.hud.close_panel()
+	for p in ["inventory", "forge", "maps", "mentor", "menu", "quests"]:
 		w.hud.open_panel(p)
 		await _frames(3)
 		_ok(w.hud.panel != null, "painel %s abre" % p)
@@ -43,6 +54,13 @@ func _run() -> void:
 	_ok(w.map_id == "vale_oco", "viajou ao Vale Oco")
 	var mobs := get_nodes_in_group("enemies")
 	_ok(mobs.size() > 10, "mobs nasceram (%d)" % mobs.size())
+	await create_timer(0.5).timeout
+	var disc: PackedByteArray = gs.discovery("vale_oco", w.info["w"] * w.info["h"])
+	var seen := 0
+	for b in disc:
+		seen += b
+	_ok(seen > 5, "névoa: células descobertas em volta do jogador (%d)" % seen)
+	_ok(not w.guide_target.is_empty() and w.guide.multimesh.visible_instance_count > 0, "trilha dourada até o objetivo (%s)" % w.guide_target.get("label", "-"))
 	# Anda e ataca um pouco para exercitar física, animação e IA.
 	w.player.joy = Vector3(1, 0, 0.3)
 	await _frames(30)

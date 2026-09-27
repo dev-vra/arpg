@@ -32,8 +32,14 @@ func _run() -> void:
 	gs.equipped["weapon"]["refine"] = 9
 	gs.recompute()
 	gs.current_map = "bastiao"
+	gs.flags["intro_seen"] = true
 	change_scene_to_file("res://game/main.tscn")
-	await _shot(out + "/1_hub.png")
+	await create_timer(0.5).timeout
+	current_scene.hud.open_dialogue("mentor")
+	await create_timer(1.5).timeout
+	await _shot(out + "/1_dialogue.png")
+	current_scene.hud.close_panel()
+	gs.accept_quest("q_primeiros_passos")
 	current_scene.travel("vale_oco", "normal")
 	await create_timer(0.5).timeout
 	var w = current_scene
@@ -46,12 +52,13 @@ func _run() -> void:
 	w.player.use_skill(1)
 	await create_timer(0.12).timeout
 	await _shot(out + "/2_combat.png")
-	gs.accept_quest("q_primeiros_passos")
+	w.hud.open_bigmap()
+	await _shot(out + "/4_bigmap.png")
+	w.hud.close_panel()
 	for i in 3:
 		gs.inventory.append(Loot.make_item(ctx, ["weapon", "helm", "boots"][i], 25, "superior", ""))
 	w.hud.open_panel("inventory")
 	w.hud.panel._select(gs.inventory[0])
 	await _shot(out + "/3_inventory.png")
-	w.hud.open_panel("mentor")
-	await _shot(out + "/4_quests.png")
+
 	quit()

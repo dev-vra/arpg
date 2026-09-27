@@ -1,0 +1,26 @@
+{
+ "npcs": {
+  "mentor": {
+   "name": "Ilse", "title": "Mentora das Sentinelas", "services": ["quests"],
+   "look": {"sex": "Female", "skin": "#e0b8a0", "hair": "Hair_Long", "hair_color": "#d8d0c0", "anim": "Idle_Talking",
+    "parts": [[["Female_Ranger_Head_Hood", "Female_Ranger_Body", "Female_Ranger_Acc_Pauldrons"], ["torso"], "#2c3e6b", 0.8], [["Female_Ranger_Arms"], ["arms", "hands"], "#22304f", 0.7], [["Female_Ranger_Legs"], ["legs"], "#1c2238", 0.7], [["Female_Ranger_Feet"], ["feet"], "#1c2238", 0.5]]},
+   "greet": ["A Cinza não dorme, Sentinela. Nós também não.", "Cada estilhaço que você traz é um amanhecer a menos perdido.", "Voltou inteira. Bom. Vamos ao trabalho."],
+   "topics": [
+    {"label": "O que foi o Estilhaço?", "text": "O rei Ardan quis refundir a Coroa-Aurora para nunca morrer. A Coroa se partiu. A luz virou estilhaços e a sombra que ela prendia escapou como Cinza. É ela que levanta os mortos."},
+    {"label": "Por que refinar nunca falha?", "text": "Porque as joias são pedaços da mesma luz. Ela sempre quer voltar a ser inteira. A Forja só ajuda o caminho."},
+    {"label": "Quem é o Rei Partido?", "text": "Ardan. Ele não morreu. Espera no Trono Partido que a Coroa se refaça para ele. Não deixe isso acontecer."}
+   ],
+   "intro": "Você fez o juramento, então agora é Sentinela. Este é o Bastião Cinzento, o último muro entre nós e a Cinza. Vesna cuida da Forja; eu cuido de você. Comece pelo Vale Oco: o portal fica no centro da praça."
+  },
+  "forge": {
+   "name": "Vesna", "title": "Mestra da Forja Cinzenta", "services": ["forge", "quests"],
+   "look": {"sex": "Female", "skin": "#b98a6e", "hair": "Hair_Buns", "hair_color": "#6b2a1a", "anim": "Idle_FoldArms",
+    "parts": [[["Female_Peasant_Body"], ["torso"], "#5a3a28", 0.5], [["Female_Peasant_Arms"], ["arms", "hands"], "#4a3024", 0.3], [["Female_Peasant_Legs"], ["legs"], "#2e2622", 0.6], [["Female_Peasant_Feet"], ["feet"], "#2e2622", 0.4]]},
+   "greet": ["Traga estilhaços, que eu faço o resto.", "Aço sem Brasa é só ferro bonito.", "Nada que passa pela minha forja sai pior. Nunca."],
+   "topics": [
+    {"label": "Como funciona a Forja?", "text": "Lume e Brasa sobem o refino, sempre. Prisma gira os atributos e sempre entrega alguma coisa, do T5 ao T1. Sigilo grava uma linha nova. Eu te mostro as chances antes de bater o martelo."},
+    {"label": "Você perdeu alguém?", "text": "Meu irmão foi ao Vale buscar Brasa e voltou carniçal. Eu mesma o enterrei de novo. Por isso forjo para as Sentinelas."}
+   ]
+  }
+ }
+}

@@ -9,14 +9,9 @@ const LootDrop = preload("res://game/world/loot_drop.gd")
 const Interactable = preload("res://game/world/interactable.gd")
 const Hud = preload("res://game/ui/hud.gd")
 const Loot = preload("res://core/loot.gd")
+const Fx = preload("res://game/fx/fx.gd")
 
 const CAM_OFFSET := Vector3(0, 10.5, 6.4)
-const NPC_LOOKS := {
-	"forge": {"sex": "Female", "skin": "#b98a6e", "hair": "Hair_Buns", "hair_color": "#6b2a1a", "anim": "Idle_FoldArms",
-		"parts": [[["Female_Peasant_Body"], ["torso"], "#5a3a28", 0.5], [["Female_Peasant_Arms"], ["arms", "hands"], "#4a3024", 0.3], [["Female_Peasant_Legs"], ["legs"], "#2e2622", 0.6], [["Female_Peasant_Feet"], ["feet"], "#2e2622", 0.4]]},
-	"mentor": {"sex": "Female", "skin": "#e0b8a0", "hair": "Hair_Long", "hair_color": "#d8d0c0", "anim": "Idle_Talking",
-		"parts": [[["Female_Ranger_Head_Hood", "Female_Ranger_Body", "Female_Ranger_Acc_Pauldrons"], ["torso"], "#2c3e6b", 0.8], [["Female_Ranger_Arms"], ["arms", "hands"], "#22304f", 0.7], [["Female_Ranger_Legs"], ["legs"], "#1c2238", 0.7], [["Female_Ranger_Feet"], ["feet"], "#1c2238", 0.5]]},
-}
 
 var map_id: String
 var map_def: Dictionary
@@ -32,6 +27,10 @@ var boss_dead := false
 var kills := 0
 var lights: Array = []
 var builder
+var guide: MultiMeshInstance3D
+var guide_target: Dictionary = {}
+var _tick := 0.0
+var npc_nodes := {}
 
 
 func _ready() -> void:
@@ -53,6 +52,10 @@ func _ready() -> void:
 	add_child(camera)
 	camera.global_position = player.global_position + CAM_OFFSET
 	camera.look_at(player.global_position + Vector3(0, 1, 0))
+	info["w"] = map_def["rows"][0].length()
+	info["h"] = map_def["rows"].size()
+	guide = _make_guide()
+	add_child(guide)
 	hud = Hud.new()
 	hud.world = self
 	add_child(hud)
@@ -98,7 +101,7 @@ func _spawn_hub() -> void:
 	var npcs: Dictionary = info["npcs"]
 	if npcs.has("F"):
 		var f: Vector3 = npcs["F"]
-		_interactable("forge", "Vesna · Forja Cinzenta", f, NPC_LOOKS["forge"])
+		npc_nodes["forge"] = _npc("forge", f)
 		builder.place("Anvil", f + Vector3(1.6, 0, 0.4), -0.4, 1.3)
 		builder.place("Workbench", f + Vector3(-1.8, 0, -1.2), 0.3, 1.2)
 		builder.place("WeaponStand", f + Vector3(0.2, 0, -1.8), 0.0, 1.3)
@@ -110,12 +113,15 @@ func _spawn_hub() -> void:
 		add_child(fire)
 		lights.append(fire)
 	if npcs.has("M"):
-		_interactable("mentor", "Ilse · Mentora", npcs["M"], NPC_LOOKS["mentor"])
+		npc_nodes["mentor"] = _npc("mentor", npcs["M"])
 		builder.place("Banner_1", npcs["M"] + Vector3(1.4, 0, -1.6), 0.0, 1.4)
 		builder.place("Banner_2", npcs["M"] + Vector3(-1.4, 0, -1.6), 0.0, 1.4)
 	for p in info["portal"]:
 		_interactable("portal", "Portal dos Mapas", p)
 	player.potions = player.POTION_CHARGES
+	if not GameState.flags.get("intro_seen", false):
+		GameState.flags["intro_seen"] = true
+		hud.open_dialogue.call_deferred("mentor", true)
 
 
 func _spawn_field() -> void:
@@ -135,6 +141,13 @@ func _spawn_field() -> void:
 		c.radius = 2.4
 	for pos in info["exits"]:
 		_interactable("exit", "Voltar ao Bastião", pos)
+
+
+func _npc(id: String, pos: Vector3):
+	var d: Dictionary = GameState.dialogues_db["npcs"][id]
+	var n = _interactable(id, "%s · %s" % [d["name"], d["title"]], pos, d["look"])
+	n.npc_id = id
+	return n
 
 
 func _spawn_mob(mid: String, lvl: int, diff: Dictionary, pos: Vector3):
@@ -167,6 +180,12 @@ func _process(delta: float) -> void:
 	for l in lights:
 		l.light_energy = 2.0 + sin(Time.get_ticks_msec() * 0.011 + l.position.x) * 0.25
 	hud.set_prompt(_nearest_interactable())
+	_tick += delta
+	if _tick >= 0.3:
+		_tick = 0.0
+		if GameState.reveal(map_id, info["w"], info["h"], _cell(player.global_position), 3):
+			hud.minimap_dirty()
+		_update_guide()
 
 
 func shake(amount: float, time: float) -> void:
@@ -275,10 +294,8 @@ func _nearest_interactable():
 
 func interact(n) -> void:
 	match n.kind:
-		"forge":
-			hud.open_panel("forge")
-		"mentor":
-			hud.open_panel("mentor")
+		"forge", "mentor":
+			hud.open_dialogue(n.kind)
 		"portal":
 			hud.open_panel("maps")
 		"exit":
@@ -303,3 +320,106 @@ func travel(to_map: String, difficulty: String) -> void:
 func _on_player_died() -> void:
 	GameState.save_game()
 	hud.show_death()
+
+
+
+# --- rastreio de missão: alvo e trilha no chão ---
+
+## Onde está o objetivo da missão rastreada, a partir deste mapa.
+func quest_target() -> Dictionary:
+	var id: String = GameState.tracked_quest
+	if id == "" or not GameState.tracked_quests().has(id):
+		return {}
+	var q: Dictionary = GameState.Quests.find(GameState.quests_db, id)
+	var g: Dictionary = q["goal"]
+	if GameState.quests["done"].has(id):
+		var giver: String = q.get("giver", "mentor")
+		if npc_nodes.has(giver):
+			return {"pos": npc_nodes[giver].global_position, "label": "Entregar a %s" % GameState.dialogues_db["npcs"][giver]["name"]}
+		return _way_home()
+	var want_map := ""
+	var want_mob := ""
+	match g["type"]:
+		"kill":
+			want_map = g.get("map", "")
+			want_mob = "" if g["mob"] == "any" else g["mob"]
+		"collect":
+			want_mob = g["mob"]
+			want_map = _map_with_mob(want_mob)
+		"clear":
+			want_map = g["map"]
+	if map_def["kind"] == "hub":
+		if info["portal"].is_empty():
+			return {}
+		return {"pos": info["portal"][0], "label": "Portal: %s" % GameState.maps_db["maps"][want_map]["name"]}
+	if want_map != "" and want_map != map_id:
+		return _way_home()
+	if g["type"] == "clear":
+		if boss and is_instance_valid(boss) and boss.state != "dead":
+			return {"pos": boss.global_position, "label": boss.def["name"]}
+		return {}
+	var best = null
+	for e in get_tree().get_nodes_in_group("enemies"):
+		if want_mob != "" and e.id != want_mob:
+			continue
+		if best == null or e.global_position.distance_to(player.global_position) < best.global_position.distance_to(player.global_position):
+			best = e
+	return {"pos": best.global_position, "label": best.def["name"]} if best else {}
+
+
+func _way_home() -> Dictionary:
+	return {"pos": info["exits"][0], "label": "Voltar ao Bastião"} if not info["exits"].is_empty() else {}
+
+
+func _map_with_mob(mob: String) -> String:
+	for id in GameState.maps_db["maps"]:
+		if GameState.maps_db["maps"][id].get("mobs", []).has(mob):
+			return id
+	return ""
+
+
+func _make_guide() -> MultiMeshInstance3D:
+	var mesh := PrismMesh.new()
+	mesh.size = Vector3(0.38, 0.42, 0.04)
+	var mm := MultiMesh.new()
+	mm.transform_format = MultiMesh.TRANSFORM_3D
+	mm.mesh = mesh
+	mm.instance_count = 48
+	mm.visible_instance_count = 0
+	var mmi := MultiMeshInstance3D.new()
+	mmi.multimesh = mm
+	mmi.material_override = Fx.glow_mat(Color("#ffd166", 0.75), 0.9)
+	mmi.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
+	return mmi
+
+
+## Setas douradas no chão, a cada 1,8 m, do jogador até o objetivo (caminho A*).
+func _update_guide() -> void:
+	guide_target = quest_target()
+	var mm := guide.multimesh
+	if guide_target.is_empty() or player.dead:
+		mm.visible_instance_count = 0
+		return
+	var pts := PackedVector3Array([player.global_position])
+	pts.append_array(path_between(player.global_position, guide_target["pos"]))
+	pts.append(guide_target["pos"])
+	var n := 0
+	var carry := 1.4
+	for i in range(pts.size() - 1):
+		var a: Vector3 = pts[i]
+		var b: Vector3 = pts[i + 1]
+		a.y = 0.08
+		b.y = 0.08
+		var seg := a.distance_to(b)
+		var dir := (b - a).normalized() if seg > 0.01 else Vector3.FORWARD
+		var t := carry
+		while t < seg and n < mm.instance_count:
+			var pos := a + dir * t
+			if pos.distance_to(guide_target["pos"]) < 1.5:
+				break
+			var basis := Basis.looking_at(dir, Vector3.UP) * Basis(Vector3.RIGHT, -PI / 2)
+			mm.set_instance_transform(n, Transform3D(basis, pos))
+			n += 1
+			t += 1.8
+		carry = t - seg
+	mm.visible_instance_count = n

@@ -44,3 +44,8 @@ Desafios: Primeira Brasa, Vale Oco, Chefe do mapa 3, Trilha de temporada.
 - Mobs: Carniçal, Espreitadora Encapuzada, Saqueador Couraçado, Litomante.
 - Chefes: Carcereiro do Vale Oco, Arauto das Criptas, Rei Partido.
 - Skills da Sentinela: Golpe, Investida do Baluarte, Giro Fendalua, Brado de Vigília, Impacto Sísmico.
+
+## Lore (ver lore.md)
+
+Vésper (reino), Coroa-Aurora, Forja Primeva, Estilhaço, Cinza, Ardan (o Rei Partido), Sentinelas.
+Itens de missão: Dente de Carniçal, Capuz Rasgado, Selo Rubro.

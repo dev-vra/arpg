@@ -5,12 +5,15 @@ extends CanvasLayer
 const UiTheme = preload("res://game/ui/ui_theme.gd")
 const ItemText = preload("res://game/ui/item_text.gd")
 const TouchControls = preload("res://game/ui/touch_controls.gd")
+const Minimap = preload("res://game/ui/minimap.gd")
+const DialoguePanel = preload("res://game/ui/dialogue_panel.gd")
 const PANELS := {
 	"inventory": preload("res://game/ui/inventory_panel.gd"),
 	"forge": preload("res://game/ui/forge_panel.gd"),
 	"maps": preload("res://game/ui/maps_panel.gd"),
 	"mentor": preload("res://game/ui/mentor_panel.gd"),
 	"menu": preload("res://game/ui/menu_panel.gd"),
+	"quests": preload("res://game/ui/quest_log_panel.gd"),
 }
 
 var world
@@ -32,7 +35,8 @@ var panel_layer: Control
 var panel: Control
 var map_label: Label
 var perf_label: Label
-var quest_label: RichTextLabel
+var quest_box: VBoxContainer
+var minimap
 
 
 func _ready() -> void:
@@ -123,19 +127,90 @@ func _top_left() -> void:
 	money_label.add_theme_font_size_override("normal_font_size", 17)
 	money_label.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	v.add_child(money_label)
-	quest_label = RichTextLabel.new()
-	quest_label.bbcode_enabled = true
-	quest_label.fit_content = true
-	quest_label.scroll_active = false
-	quest_label.add_theme_font_size_override("normal_font_size", 16)
-	quest_label.add_theme_font_size_override("bold_font_size", 16)
-	quest_label.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	v.add_child(quest_label)
+	quest_box = VBoxContainer.new()
+	quest_box.add_theme_constant_override("separation", 2)
+	v.add_child(quest_box)
+
+
+## Caixa de missões clicável: toque rastreia (trilha no chão e no mapa); de novo abre o diário.
+func _render_quests() -> void:
+	for c in quest_box.get_children():
+		c.queue_free()
+	for id in GameState.tracked_quests():
+		var q: Dictionary = GameState.Quests.find(GameState.quests_db, id)
+		var prog: Array = GameState.Quests.progress(GameState.quests_db, GameState.quests, id)
+		var ready: bool = GameState.quests["done"].has(id)
+		var tracked: bool = GameState.tracked_quest == id
+		var b := Button.new()
+		b.flat = true
+		b.alignment = HORIZONTAL_ALIGNMENT_LEFT
+		b.add_theme_font_size_override("font_size", 16)
+		var giver: String = GameState.dialogues_db["npcs"][q.get("giver", "mentor")]["name"]
+		b.text = "%s%s  %s" % ["> " if tracked else "   ", q["name"], ("entregar a " + giver) if ready else "%d/%d" % prog]
+		b.add_theme_color_override("font_color", Color("#3fd67a") if ready else (Color("#ffd166") if tracked else Color("#c9c4b8")))
+		b.pressed.connect(_on_quest_pressed.bind(id))
+		quest_box.add_child(b)
+
+
+func _on_quest_pressed(id: String) -> void:
+	if GameState.tracked_quest == id:
+		open_panel("quests")
+	else:
+		GameState.tracked_quest = id
+		GameState.toast.emit("Rastreando: siga as marcas douradas", Color("#ffd166"))
+		_render_quests()
+
+
+func minimap_dirty() -> void:
+	if minimap:
+		minimap.mark_dirty()
+
+
+func open_bigmap() -> void:
+	close_panel()
+	controls.release_all()
+	controls.enabled = false
+	var dim := ColorRect.new()
+	dim.color = Color(0, 0, 0, 0.7)
+	dim.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+	panel_layer.add_child(dim)
+	var big = Minimap.new()
+	big.world = world
+	big.full = true
+	var vp := root.get_viewport_rect().size
+	big.position = Vector2(40, 30)
+	big.size = vp - Vector2(80, 60)
+	dim.add_child(big)
+	var close := UiTheme.button("Fechar mapa", func(): close_panel(), 170)
+	close.position = Vector2(vp.x - 230, 44)
+	dim.add_child(close)
+	panel = big
+
+
+func open_dialogue(npc_id: String, intro: bool = false) -> void:
+	close_panel()
+	controls.release_all()
+	controls.enabled = false
+	var dim := ColorRect.new()
+	dim.color = Color(0, 0, 0, 0.35)
+	dim.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+	panel_layer.add_child(dim)
+	var d = DialoguePanel.new()
+	d.hud = self
+	d.npc_id = npc_id
+	d.intro = intro
+	dim.add_child(d)
+	panel = d
 
 
 func _top_right() -> void:
 	var h := HBoxContainer.new()
-	_place(h, Vector2(1, 0), Vector2(-620, 12), Vector2(606, 0))
+	_place(h, Vector2(1, 0), Vector2(-740, 12), Vector2(726, 0))
+	minimap = Minimap.new()
+	minimap.world = world
+	_place(minimap, Vector2(1, 0), Vector2(-234, 74), Vector2(220, 220))
+	minimap.opened.connect(open_bigmap)
+	root.add_child(minimap)
 	h.alignment = BoxContainer.ALIGNMENT_END
 	h.add_theme_constant_override("separation", 8)
 	root.add_child(h)
@@ -143,6 +218,7 @@ func _top_right() -> void:
 	map_label.add_theme_color_override("font_color", UiTheme.GOLD)
 	map_label.size_flags_vertical = Control.SIZE_SHRINK_CENTER
 	h.add_child(map_label)
+	h.add_child(UiTheme.button("Missões", func(): open_panel("quests"), 120))
 	h.add_child(UiTheme.button("Mochila", func(): open_panel("inventory"), 120))
 	if world.map_def["kind"] == "field":
 		h.add_child(UiTheme.button("Base", func(): world.travel("bastiao", "normal"), 90))
@@ -178,16 +254,7 @@ func refresh() -> void:
 	money_label.text = "[color=#ffd54f]Zen %s[/color]  [color=#ffe08a]Lume %d[/color]  [color=#ff7043]Brasa %d[/color]  [color=#c77dff]Prisma %d[/color]  [color=#4dd0e1]Sigilo %d[/color]" % [
 		ItemText.short_zen(w.zen), w.amount("lume"), w.amount("brasa"), w.amount("prisma"), w.amount("sigilo")]
 	map_label.text = world.map_def["name"]
-	var lines := []
-	for id in GameState.tracked_quests():
-		var q: Dictionary = GameState.Quests.find(GameState.quests_db, id)
-		var prog: Array = GameState.Quests.progress(GameState.quests_db, GameState.quests, id)
-		if GameState.quests["done"].has(id):
-			lines.append("[color=#3fd67a]%s: concluída, fale com a Ilse[/color]" % q["name"])
-		else:
-			lines.append("[color=#ffe3a0]%s[/color] %d/%d" % [q["name"], prog[0], prog[1]])
-	quest_label.text = "\n".join(lines)
-	quest_label.visible = not lines.is_empty()
+	_render_quests()
 
 
 func _process(_d: float) -> void:
@@ -231,7 +298,7 @@ func set_prompt(target) -> void:
 	prompt_target = target
 	prompt.visible = target != null and panel == null
 	if target:
-		var verb := {"forge": "Falar", "mentor": "Missões", "portal": "Usar", "exit": "Usar", "chest": "Abrir"}
+		var verb := {"forge": "Falar", "mentor": "Falar", "portal": "Usar", "exit": "Usar", "chest": "Abrir"}
 		prompt.text = "%s: %s  (E)" % [verb.get(target.kind, "Usar"), target.title]
 
 
@@ -308,3 +375,7 @@ func _unhandled_input(event: InputEvent) -> void:
 				world.interact(prompt_target)
 		KEY_I:
 			open_panel("inventory")
+		KEY_M:
+			open_bigmap()
+		KEY_L:
+			open_panel("quests")
