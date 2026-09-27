@@ -4,11 +4,8 @@
    "name": "Bastião Cinzento",
    "kind": "hub",
    "level": 1,
-   "floor": [
-    "floor_tile_large"
-   ],
-   "ambient": "#2a2f3a",
-   "fog": "#0d0f14",
+   "ambient": "#3a4458",
+   "fog": "#0d1018",
    "rows": [
     "###########",
     "#T.d...d.T#",
@@ -17,7 +14,10 @@
     "#d...O...d#",
     "#T.......T#",
     "###########"
-   ]
+   ],
+   "theme": "plaza",
+   "moon": 0.22,
+   "ambient_energy": 0.4
   },
   "vale_oco": {
    "name": "Vale Oco",
@@ -34,12 +34,8 @@
     "couracado"
    ],
    "boss": "carcereiro",
-   "floor": [
-    "floor_dirt_large",
-    "floor_dirt_large_rocky"
-   ],
-   "ambient": "#262b24",
-   "fog": "#0b0d0a",
+   "ambient": "#2a3f5c",
+   "fog": "#070b14",
    "rows": [
     "########################",
     "#P....######.....m..####",
@@ -58,7 +54,10 @@
     "######...m...###...B..##",
     "######.......###..X...##",
     "########################"
-   ]
+   ],
+   "theme": "forest",
+   "moon": 0.5,
+   "ambient_energy": 0.7
   },
   "criptas_rubras": {
    "name": "Criptas Rubras",
@@ -75,13 +74,8 @@
     "litomante"
    ],
    "boss": "arauto",
-   "floor": [
-    "floor_tile_large",
-    "floor_tile_large_rocks",
-    "floor_tile_big_grate"
-   ],
-   "ambient": "#2c2226",
-   "fog": "#100a0c",
+   "ambient": "#4a2a3a",
+   "fog": "#10070c",
    "rows": [
     "##########################",
     "#P...####.....m....#######",
@@ -100,7 +94,10 @@
     "#......######...........B#",
     "#......######......m....X#",
     "##########################"
-   ]
+   ],
+   "theme": "ruins",
+   "moon": 0.35,
+   "ambient_energy": 0.6
   },
   "trono_partido": {
    "name": "Trono Partido",
@@ -119,12 +116,8 @@
    ],
    "boss": "rei_partido",
    "challenge": "map3_boss",
-   "floor": [
-    "floor_tile_large",
-    "floor_tile_large_rocks"
-   ],
-   "ambient": "#1f2533",
-   "fog": "#080a10",
+   "ambient": "#2a3450",
+   "fog": "#060810",
    "rows": [
     "########################",
     "#P.....#####......m...T#",
@@ -142,7 +135,10 @@
     "#..m.....##....B....####",
     "#.............X.....####",
     "########################"
-   ]
+   ],
+   "theme": "ruins",
+   "moon": 0.45,
+   "ambient_energy": 0.65
   }
  },
  "start": "bastiao"

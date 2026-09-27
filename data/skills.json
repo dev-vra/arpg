@@ -1,12 +1,95 @@
 {
-  "sentinela": {
-    "basic": { "name": "Golpe", "anim": "1H_Melee_Attack_Slice_Diagonal", "mult": 1.0, "cooldown": 0.75, "range": 2.4, "arc_deg": 110, "tags": ["melee"] },
-    "skills": [
-      { "id": "investida", "name": "Investida do Baluarte", "kind": "dash", "anim": "1H_Melee_Attack_Stab", "mult": 1.6, "cooldown": 6.0, "distance": 7.0, "radius": 1.8, "icon": "»", "tags": ["melee", "movement"] },
-      { "id": "giro", "name": "Giro Fendalua", "kind": "spin", "anim": "2H_Melee_Attack_Spin", "mult": 1.4, "cooldown": 5.0, "radius": 3.4, "icon": "@", "tags": ["melee", "area"] },
-      { "id": "brado", "name": "Brado de Vigília", "kind": "buff", "anim": "Cheer", "cooldown": 14.0, "duration": 6.0, "def_bonus_pct": 40, "heal_pct": 18, "radius": 8.0, "icon": "+", "tags": ["buff"] },
-      { "id": "impacto", "name": "Impacto Sísmico", "kind": "slam", "anim": "2H_Melee_Attack_Chop", "mult": 2.4, "cooldown": 9.0, "radius": 4.2, "forward": 2.2, "stun": 1.2, "icon": "#", "tags": ["melee", "area"] }
-    ],
-    "dodge": { "cooldown": 2.5, "distance": 5.0, "duration": 0.35, "anim": "Dodge_Forward" }
+ "sentinela": {
+  "basic": {
+   "name": "Golpe",
+   "anim": "Sword_Regular_A",
+   "mult": 1.0,
+   "cooldown": 0.75,
+   "range": 2.4,
+   "arc_deg": 110,
+   "tags": [
+    "melee"
+   ],
+   "combo": [
+    "Sword_Regular_A",
+    "Sword_Regular_B",
+    "Sword_Regular_C"
+   ]
+  },
+  "skills": [
+   {
+    "id": "investida",
+    "name": "Investida do Baluarte",
+    "kind": "dash",
+    "anim": "Shield_Dash",
+    "mult": 1.6,
+    "cooldown": 6.0,
+    "distance": 7.0,
+    "radius": 1.8,
+    "icon": "»",
+    "tags": [
+     "melee",
+     "movement"
+    ]
+   },
+   {
+    "id": "giro",
+    "name": "Giro Fendalua",
+    "kind": "spin",
+    "anim": "Sword_Regular_Combo",
+    "mult": 1.4,
+    "cooldown": 5.0,
+    "radius": 3.4,
+    "icon": "@",
+    "tags": [
+     "melee",
+     "area"
+    ]
+   },
+   {
+    "id": "brado",
+    "name": "Brado de Vigília",
+    "kind": "buff",
+    "anim": "Spell_Simple_Shoot",
+    "cooldown": 14.0,
+    "duration": 6.0,
+    "def_bonus_pct": 40,
+    "heal_pct": 18,
+    "radius": 8.0,
+    "icon": "+",
+    "tags": [
+     "buff"
+    ]
+   },
+   {
+    "id": "impacto",
+    "name": "Impacto Sísmico",
+    "kind": "slam",
+    "anim": "Shield_OneShot",
+    "mult": 2.4,
+    "cooldown": 9.0,
+    "radius": 4.2,
+    "forward": 2.2,
+    "stun": 1.2,
+    "icon": "#",
+    "tags": [
+     "melee",
+     "area"
+    ]
+   }
+  ],
+  "dodge": {
+   "cooldown": 2.5,
+   "distance": 5.0,
+   "duration": 0.35,
+   "anim": "Roll"
+  },
+  "anims": {
+   "idle": "Sword_Idle",
+   "run": "Jog_Fwd",
+   "hit": "Hit_Chest",
+   "block": "Sword_Block",
+   "death": "Death01"
   }
+ }
 }

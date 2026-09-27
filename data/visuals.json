@@ -1,46 +1,187 @@
 {
-  "glow_thresholds": [
-    9,
-    12,
-    15
-  ],
-  "glow_strength": [
-    0.0,
-    0.45,
-    0.9,
-    1.5
-  ],
-  "body_color": "#c9a58a",
-  "slot_part": {
-    "helm": "head",
-    "armor": "torso",
-    "gloves": "arms",
-    "pants": "legs",
-    "boots": "feet"
+ "glow_thresholds": [
+  9,
+  12,
+  15
+ ],
+ "glow_strength": [
+  0.0,
+  0.35,
+  0.7,
+  1.1
+ ],
+ "sets": {
+  "ferro_vigilia": {
+   "color": "#8c9aab",
+   "glow": "#7fd1ff",
+   "aura": "#9fe0ff",
+   "style": "plates",
+   "mix": 0.75,
+   "metal": 0.7
   },
-  "sets": {
-    "ferro_vigilia": {
-      "color": "#6f7a86",
-      "glow": "#7fd1ff",
-      "aura": "#9fe0ff",
-      "style": "plates"
-    },
-    "coroa_vale_oco": {
-      "color": "#8a6d3b",
-      "glow": "#ffd27f",
-      "aura": "#ffe3a0",
-      "style": "crown"
-    },
-    "mares_rubras": {
-      "color": "#8e2b2b",
-      "glow": "#ff6a5a",
-      "aura": "#ff9b8f",
-      "style": "fins"
-    }
+  "coroa_vale_oco": {
+   "color": "#b8913f",
+   "glow": "#ffd27f",
+   "aura": "#ffe3a0",
+   "style": "crown",
+   "mix": 0.7,
+   "metal": 0.6
   },
-  "default": {
-    "color": "#777777",
-    "glow": "#ffffff",
-    "aura": "#ffffff"
+  "mares_rubras": {
+   "color": "#9c2f36",
+   "glow": "#ff6a5a",
+   "aura": "#ff9b8f",
+   "style": "fins",
+   "mix": 0.75,
+   "metal": 0.4
   }
+ },
+ "default": {
+  "color": "#777777",
+  "glow": "#ffffff",
+  "aura": "#ffffff"
+ },
+ "hero": {
+  "sex": "Male",
+  "skin": "#c89478",
+  "hair": "Hair_SimpleParted",
+  "hair_color": "#2b1d14"
+ },
+ "outfits": {
+  "common": {
+   "helm": [
+    [
+     "{S}_Ranger_Head_Hood"
+    ],
+    []
+   ],
+   "armor": [
+    [
+     "{S}_Peasant_Body"
+    ],
+    [
+     "torso"
+    ]
+   ],
+   "gloves": [
+    [
+     "{S}_Peasant_Arms"
+    ],
+    [
+     "arms",
+     "hands"
+    ]
+   ],
+   "pants": [
+    [
+     "{S}_Peasant_Legs"
+    ],
+    [
+     "legs"
+    ]
+   ],
+   "boots": [
+    [
+     "{S}_Peasant_Feet"
+    ],
+    [
+     "feet"
+    ]
+   ]
+  },
+  "fine": {
+   "helm": [
+    [
+     "{S}_Ranger_Head_Hood"
+    ],
+    []
+   ],
+   "armor": [
+    [
+     "{S}_Ranger_Body",
+     "{PAULDRON}"
+    ],
+    [
+     "torso"
+    ]
+   ],
+   "gloves": [
+    [
+     "{S}_Ranger_Arms"
+    ],
+    [
+     "arms",
+     "hands"
+    ]
+   ],
+   "pants": [
+    [
+     "{S}_Ranger_Legs"
+    ],
+    [
+     "legs"
+    ]
+   ],
+   "boots": [
+    [
+     "{BOOTS}"
+    ],
+    [
+     "feet"
+    ]
+   ]
+  }
+ },
+ "sex_parts": {
+  "Male": {
+   "PAULDRON": "Male_Ranger_Acc_Pauldron",
+   "BOOTS": "Male_Ranger_Feet_Boots"
+  },
+  "Female": {
+   "PAULDRON": "Female_Ranger_Acc_Pauldrons",
+   "BOOTS": "Female_Ranger_Feet"
+  }
+ },
+ "props": {
+  "weapon": {
+   "prop": "Sword_Bronze",
+   "bone": "hand_r",
+   "rot": [
+    0,
+    0,
+    0
+   ],
+   "pos": [
+    0,
+    0,
+    0
+   ]
+  },
+  "shield": {
+   "prop": "Shield_Wooden",
+   "bone": "lowerarm_l",
+   "rot": [
+    0,
+    0,
+    0
+   ],
+   "pos": [
+    0,
+    0,
+    0
+   ]
+  }
+ },
+ "rarity_look": {
+  "common": {
+   "color": "#8a7560",
+   "mix": 0.0,
+   "metal": 0.0
+  },
+  "superior": {
+   "color": "#5d7fb5",
+   "mix": 0.35,
+   "metal": 0.2
+  }
+ }
 }

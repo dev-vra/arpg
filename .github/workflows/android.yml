@@ -1,0 +1,70 @@
+name: apk
+
+on:
+  push:
+  workflow_dispatch:
+
+jobs:
+  android:
+    runs-on: ubuntu-latest
+    env:
+      GODOT_VERSION: 4.4.1
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: "17"
+      - name: Cache do Godot e dos export templates
+        id: godot-cache
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/godot
+            ~/.local/share/godot/export_templates
+          key: godot-${{ env.GODOT_VERSION }}
+      - name: Baixar Godot e templates
+        if: steps.godot-cache.outputs.cache-hit != 'true'
+        run: |
+          mkdir -p ~/godot ~/.local/share/godot/export_templates
+          cd ~/godot
+          curl -sSL -o g.zip "https://github.com/godotengine/godot/releases/download/${GODOT_VERSION}-stable/Godot_v${GODOT_VERSION}-stable_linux.x86_64.zip"
+          unzip -q g.zip && rm g.zip && mv Godot_v${GODOT_VERSION}-stable_linux.x86_64 godot
+          curl -sSL -o t.tpz "https://github.com/godotengine/godot/releases/download/${GODOT_VERSION}-stable/Godot_v${GODOT_VERSION}-stable_export_templates.tpz"
+          unzip -q t.tpz && rm t.tpz
+          mv templates ~/.local/share/godot/export_templates/${GODOT_VERSION}.stable
+      # Chave só de teste (sideload). Fica em cache para a assinatura não mudar entre builds.
+      - name: Keystore de teste
+        id: ks-cache
+        uses: actions/cache@v4
+        with:
+          path: ~/test.keystore
+          key: arpg-test-keystore-v1
+      - name: Gerar keystore de teste
+        if: steps.ks-cache.outputs.cache-hit != 'true'
+        run: keytool -genkeypair -keystore ~/test.keystore -storepass arpgtest -alias arpg -keypass arpgtest -keyalg RSA -keysize 2048 -validity 10000 -dname "CN=ARPG Test,O=dev-vra,C=BR"
+      - name: Configurar SDK no editor
+        run: |
+          mkdir -p ~/.config/godot
+          cat > ~/.config/godot/editor_settings-4.4.tres <<EOT
+          [gd_resource type="EditorSettings" format=3]
+
+          [resource]
+          export/android/android_sdk_path = "$ANDROID_HOME"
+          export/android/java_sdk_path = "$JAVA_HOME"
+          EOT
+      - name: Importar e exportar APK
+        env:
+          GODOT_ANDROID_KEYSTORE_RELEASE_PATH: /home/runner/test.keystore
+          GODOT_ANDROID_KEYSTORE_RELEASE_USER: arpg
+          GODOT_ANDROID_KEYSTORE_RELEASE_PASSWORD: arpgtest
+        run: |
+          mkdir -p export
+          ~/godot/godot --headless --path . --import > /dev/null 2>&1 || true
+          ~/godot/godot --headless --path . --export-release Android export/arpg-mvp.apk
+          ls -la export/
+      - uses: actions/upload-artifact@v4
+        with:
+          name: arpg-mvp-apk
+          path: export/arpg-mvp.apk
+          retention-days: 14

@@ -27,6 +27,7 @@ var maps_db := Config.data("maps")
 var mobs_db := Config.data("mobs")
 var skills_db := Config.data("skills")
 var visuals := Config.data("visuals")
+var themes_db := Config.data("themes")
 
 var rng = Rng.new()
 var character = Character.new()

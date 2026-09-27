@@ -27,7 +27,7 @@ Abra o projeto no Godot 4.4+ e aperte F5, ou rode `godot --path .`.
 
 Os drops do teste estão acelerados por `field_loot.playtest_multiplier` em `data/economy.json` (8x). A simulação usa 1x.
 
-Arte: KayKit (Kay Lousberg, CC0), só como placeholder. Veja `assets/kaykit/README.md`.
+Arte: Quaternius (CC0), proporção realista: personagens base, roupas modulares, biblioteca universal de animações, props, natureza e vila. Veja `assets/q/README.md`.
 
 ## APK
 
@@ -36,7 +36,7 @@ Arte: KayKit (Kay Lousberg, CC0), só como placeholder. Veja `assets/kaykit/READ
 Release (menor, ~30 MB), com a chave passada por variável de ambiente (nunca commitada):
 `GODOT_ANDROID_KEYSTORE_RELEASE_PATH=... GODOT_ANDROID_KEYSTORE_RELEASE_USER=... GODOT_ANDROID_KEYSTORE_RELEASE_PASSWORD=... godot --headless --export-release Android export/arpg-mvp.apk`
 
-Animações: só o `Skeleton_Minion.glb` importa animações (15 fps); todos os bonecos usam essa biblioteca via `game/actors/anim_lib.gd` (mesmo rig KayKit).
+Personagens: `game/actors/humanoid.gd` monta corpo base + roupas por slot no mesmo esqueleto (65 ossos) e esconde a pele coberta por máscara de osso no shader; animações UAL 1+2 compartilhadas (`game/actors/ual.gd`). Mapas: temas em `data/themes.json` (floresta, ruínas, praça).
 
 ## Testes
 

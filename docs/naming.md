@@ -41,6 +41,6 @@ Desafios: Primeira Brasa, Vale Oco, Chefe do mapa 3, Trilha de temporada.
 
 - Base: Bastião Cinzento. NPCs: Vesna (Forja Cinzenta), Ilse (Mentora).
 - Mapas: Vale Oco (nível 1), Criptas Rubras (15), Trono Partido (30).
-- Mobs: Esqueleto Servo, Esqueleto Espreitador, Esqueleto Couraçado, Esqueleto Litomante.
+- Mobs: Carniçal, Espreitadora Encapuzada, Saqueador Couraçado, Litomante.
 - Chefes: Carcereiro do Vale Oco, Arauto das Criptas, Rei Partido.
 - Skills da Sentinela: Golpe, Investida do Baluarte, Giro Fendalua, Brado de Vigília, Impacto Sísmico.

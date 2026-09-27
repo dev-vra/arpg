@@ -3,33 +3,38 @@
 extends Node3D
 
 const Fx = preload("res://game/fx/fx.gd")
-const AnimLib = preload("res://game/actors/anim_lib.gd")
+const Humanoid = preload("res://game/actors/humanoid.gd")
 
 var kind := ""
 var title := ""
-var model_path := ""
-var anim_name := ""
+var look: Dictionary = {}
+var prop := ""
 var used := false
 var radius := 3.2
 
 
-func setup(k: String, t: String, model: String = "", anim: String = "") -> void:
+## look: aparência de NPC humanoide (com "anim"); prop: nome de prop do kit.
+func setup(k: String, t: String, npc_look: Dictionary = {}, prop_name: String = "") -> void:
 	kind = k
 	title = t
-	model_path = model
-	anim_name = anim
+	look = npc_look
+	prop = prop_name
 
 
 func _ready() -> void:
 	add_to_group("interactable")
-	if model_path != "":
-		var m: Node3D = load(model_path).instantiate()
+	if not look.is_empty():
+		var h := Humanoid.new()
+		h.configure(look)
+		add_child(h)
+		h.dress(look)
+		if look.has("weapon"):
+			h.set_prop("weapon", look["weapon"], "hand_r", Transform3D(), {})
+		h.play(look.get("anim", "Idle"))
+	elif prop != "":
+		var m: Node3D = load("res://assets/q/props/%s.gltf" % prop).instantiate()
+		m.scale = Vector3.ONE * 1.6
 		add_child(m)
-		m.rotation.y = 0.0
-		if anim_name != "":
-			var ap := AnimLib.attach(m)
-			if ap.has_animation(anim_name):
-				ap.play(anim_name)
 	if kind in ["portal", "exit"]:
 		_portal_fx(Color("#7fd1ff") if kind == "portal" else Color("#8dff9a"))
 	var l := Label3D.new()
@@ -39,7 +44,7 @@ func _ready() -> void:
 	l.pixel_size = 0.006
 	l.modulate = Color("#ffe3a0")
 	l.billboard = BaseMaterial3D.BILLBOARD_ENABLED
-	l.position.y = 3.3
+	l.position.y = 2.6
 	add_child(l)
 
 
@@ -49,7 +54,7 @@ func _portal_fx(c: Color) -> void:
 	t.inner_radius = 1.15
 	t.outer_radius = 1.4
 	ring.mesh = t
-	ring.material_override = Fx.glow_mat(c, 1.0)
+	ring.material_override = Fx.glow_mat(c, 0.45)
 	ring.rotation.x = PI / 2
 	ring.position.y = 1.5
 	add_child(ring)

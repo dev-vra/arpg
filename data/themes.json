@@ -1,0 +1,188 @@
+{
+ "themes": {
+  "forest": {
+   "ground": {
+    "a": "#2f3a24",
+    "b": "#4a3f2c",
+    "c": "#1f2a1c",
+    "scale": 0.045
+   },
+   "paths": [
+    "RockPath_Round_Wide",
+    "RockPath_Square_Wide",
+    "RockPath_Round_Small_1"
+   ],
+   "path_chance": 0.12,
+   "border_tall": [
+    "TwistedTree_1",
+    "TwistedTree_2",
+    "TwistedTree_3",
+    "TwistedTree_4",
+    "DeadTree_1",
+    "DeadTree_2",
+    "DeadTree_3",
+    "DeadTree_4",
+    "Pine_1",
+    "Pine_2",
+    "Pine_3",
+    "CommonTree_1",
+    "CommonTree_2"
+   ],
+   "border_low": [
+    "Rock_Medium_1",
+    "Rock_Medium_2",
+    "Rock_Medium_3",
+    "Bush_Common",
+    "Bush_Common_Flowers"
+   ],
+   "tall_scale": [
+    0.4,
+    0.62
+   ],
+   "tall_chance": 0.55,
+   "scatter": [
+    "Grass_Common_Short",
+    "Grass_Wispy_Short",
+    "Clover_1",
+    "Fern_1",
+    "Grass_Common_Short",
+    "Mushroom_Common",
+    "Pebble_Round_1",
+    "Pebble_Round_3",
+    "Flower_3_Group",
+    "Grass_Wispy_Short"
+   ],
+   "scatter_per_cell": 4,
+   "scatter_scale": [
+    0.3,
+    0.55
+   ],
+   "decor": [
+    "Rock_Medium_2",
+    "Mushroom_Laetiporus",
+    "Plant_1_Big",
+    "Plant_7_Big",
+    "Bush_Common_Flowers"
+   ],
+   "light": {
+    "color": "#6ee7ff",
+    "energy": 1.6,
+    "range": 8.0,
+    "prop": "Mushroom_Laetiporus"
+   }
+  },
+  "ruins": {
+   "ground": {
+    "a": "#3a2e2c",
+    "b": "#524036",
+    "c": "#2a2224",
+    "scale": 0.06
+   },
+   "tiles": [
+    "Floor_UnevenBrick",
+    "Floor_RedBrick"
+   ],
+   "tile_chance": 0.55,
+   "walls": [
+    "Wall_UnevenBrick_Straight",
+    "Wall_UnevenBrick_Straight",
+    "Wall_UnevenBrick_Window_Wide_Round",
+    "Wall_UnevenBrick_Door_Round"
+   ],
+   "corner": "Corner_Exterior_Brick",
+   "low_wall": "Wall_UnevenBrick_Straight",
+   "behind": [
+    "DeadTree_1",
+    "DeadTree_3",
+    "TwistedTree_2"
+   ],
+   "border_low": [
+    "Rock_Medium_1",
+    "Rock_Medium_3",
+    "Prop_Brick1",
+    "Prop_Brick3"
+   ],
+   "tall_scale": [
+    0.4,
+    0.55
+   ],
+   "scatter": [
+    "Pebble_Round_1",
+    "Pebble_Square_2",
+    "Grass_Wispy_Short",
+    "Clover_1",
+    "Prop_Brick1"
+   ],
+   "scatter_per_cell": 2,
+   "scatter_scale": [
+    0.35,
+    0.6
+   ],
+   "decor": [
+    "Vase_Rubble_Medium",
+    "Chain_Coil",
+    "Cage_Small",
+    "Crate_Metal",
+    "Barrel",
+    "Prop_Vine4"
+   ],
+   "light": {
+    "color": "#ff8a3d",
+    "energy": 2.0,
+    "range": 9.0,
+    "prop": "Torch_Metal"
+   }
+  },
+  "plaza": {
+   "ground": {
+    "a": "#39342e",
+    "b": "#48413a",
+    "c": "#2c2824",
+    "scale": 0.05
+   },
+   "tiles": [
+    "Floor_Brick"
+   ],
+   "tile_chance": 1.0,
+   "walls": [
+    "Wall_UnevenBrick_Straight",
+    "Wall_Plaster_WoodGrid",
+    "Wall_UnevenBrick_Window_Wide_Round",
+    "Wall_Plaster_Straight"
+   ],
+   "corner": "Corner_Exterior_Brick",
+   "low_wall": "Wall_UnevenBrick_Straight",
+   "behind": [
+    "CommonTree_1",
+    "CommonTree_3",
+    "Pine_2"
+   ],
+   "border_low": [
+    "Bush_Common",
+    "Bush_Common_Flowers"
+   ],
+   "tall_scale": [
+    0.45,
+    0.6
+   ],
+   "scatter": [],
+   "scatter_per_cell": 0,
+   "decor": [
+    "Barrel",
+    "Crate_Wooden",
+    "Barrel_Holder",
+    "Stall_Empty",
+    "WeaponStand",
+    "Cauldron",
+    "Dummy",
+    "Prop_Wagon"
+   ],
+   "light": {
+    "color": "#ffb060",
+    "energy": 2.2,
+    "range": 10.0,
+    "prop": "Torch_Metal"
+   }
+  }
+ }
+}

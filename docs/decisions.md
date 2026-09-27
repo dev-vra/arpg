@@ -14,3 +14,11 @@ Números propostos, a calibrar pela simulação. Nenhuma regra travada do plano 
 8. **Nível do T1**: 60 como placeholder até o nível máximo ser definido.
 9. **Bônus de set** conta slots distintos; duas peças no mesmo slot contam como uma.
 10. **Sigilo** usa a tabela liberada com Fortuna, sem Piedade.
+
+## Visual v2 (troca de arte)
+
+11. **Aparelho-alvo mudou** (decisão do dono do projeto): de Android de entrada para aparelhos médios e bons (Galaxy S21, iPhones recentes). Renderer continua Mobile.
+12. **Arte grátis Quaternius (CC0)** no lugar do KayKit: proporção realista, mais perto do Torchlight Infinite e do Mu. Só assets grátis por enquanto.
+13. **Boneco modular por máscara de osso**: o corpo base é inteiro; cada peça cobre regiões (tronco, braços, mãos, pernas, pés) e o shader descarta a pele desses ossos. Comum usa roupa de Camponês; Superior e Set usam Patrulheiro; cor e brilho vêm do set/raridade.
+14. **Mobs humanoides** no mesmo estilo (carniçais, encapuzados, saqueadores, conjuradores), vestidos por dados em `data/mobs.json`.
+15. **Temas de mapa** em `data/themes.json`: floresta (árvores e pedras como borda, grama espalhada, chão procedural), ruínas e praça (muros e lajotas). Do lado da câmera a borda é baixa para não esconder o herói.

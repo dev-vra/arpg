@@ -1,4 +1,4 @@
-## Mob esqueleto (KayKit, CC0) orientado a dados (data/mobs.json).
+## Mob humanoide (Quaternius, CC0) orientado a dados (data/mobs.json).
 ## IA: acorda ao ver o jogador, persegue (linha reta ou A* na grade),
 ## avisa o golpe (telegraph) e ataca; à distância mantém espaço e atira.
 ## Chefe tem golpe em área com aviso no chão.
@@ -6,10 +6,9 @@ extends CharacterBody3D
 
 signal killed(mob)
 
-const GEAR_SHADER = preload("res://game/shaders/gear.gdshader")
 const Fx = preload("res://game/fx/fx.gd")
-const AnimLib = preload("res://game/actors/anim_lib.gd")
 const Projectile = preload("res://game/actors/projectile.gd")
+const Humanoid = preload("res://game/actors/humanoid.gd")
 
 var def: Dictionary
 var id := ""
@@ -55,40 +54,22 @@ func _ready() -> void:
 	cs.shape = cap
 	cs.position.y = 1.0 * sc
 	add_child(cs)
-	model = load("res://assets/kaykit/chars/%s.glb" % def["model"]).instantiate()
+	model = Humanoid.new()
+	model.configure(def["look"])
 	model.scale = Vector3.ONE * sc
 	add_child(model)
-	anim = AnimLib.attach(model)
-	var sk: Skeleton3D = model.find_child("Skeleton3D", true, false)
-	_attach(sk, "handslot.r", def.get("weapon", ""))
-	_attach(sk, "handslot.l", def.get("offhand", ""))
-	var tint := Color(def.get("tint", "#ffffff"))
-	for mi in model.find_children("*", "MeshInstance3D", true, false):
-		var src = mi.mesh.surface_get_material(0)
-		if not (src is StandardMaterial3D):
-			continue
-		var m := ShaderMaterial.new()
-		m.shader = GEAR_SHADER
-		m.set_shader_parameter("tex", src.albedo_texture)
-		m.set_shader_parameter("tint", tint)
-		m.set_shader_parameter("tint_mix", 0.4 if def.has("tint") else 0.0)
-		if is_boss:
-			m.set_shader_parameter("glow_color", tint)
-			m.set_shader_parameter("glow_strength", 0.6)
-		mi.material_override = m
-		mats.append(m)
+	var tint := Color(def.get("tint", "#000000"))
+	model.dress(def["look"], tint, 0.5 if is_boss else 0.0)
+	var wlook := {"color": Color("#6b5a4a"), "mix": 0.3, "metal": 0.5, "glow": tint, "strength": 0.4 if is_boss else 0.0}
+	if def.has("weapon"):
+		model.set_prop("weapon", def["weapon"], "hand_r", Transform3D(), wlook)
+	if def.has("offhand"):
+		model.set_prop("shield", def["offhand"], "lowerarm_l", Transform3D(), wlook)
+	anim = model.anim
+	mats = model.mats
 	if not is_boss:
 		_make_bar(sc)
-	play("Skeletons_Inactive_Standing_Pose" if randf() < 0.5 else "Idle")
-
-
-func _attach(sk: Skeleton3D, bone: String, asset: String) -> void:
-	if asset == "" or sk == null or sk.find_bone(bone) < 0:
-		return
-	var ba := BoneAttachment3D.new()
-	ba.bone_name = bone
-	sk.add_child(ba)
-	ba.add_child(load("res://assets/kaykit/weapons/%s.gltf" % asset).instantiate())
+	play(_a("idle"))
 
 
 func _make_bar(sc: float) -> void:
@@ -119,9 +100,12 @@ func _make_bar(sc: float) -> void:
 	bar.visible = false
 
 
+func _a(role: String) -> String:
+	return def["anims"].get(role, def["anims"]["idle"])
+
+
 func play(name: String, speed: float = 1.0) -> void:
-	if anim and anim.has_animation(name) and anim.current_animation != name:
-		anim.play(name, 0.12, speed)
+	model.play(name, speed)
 
 
 func _physics_process(delta: float) -> void:
@@ -144,7 +128,7 @@ func _physics_process(delta: float) -> void:
 		"idle":
 			if dist < (15.0 if is_boss else 11.0) and world.has_line_of_sight(global_position, player.global_position):
 				state = "chase"
-				play("Skeletons_Awaken_Standing", 2.0)
+				model.play_once(_a("spawn"), 1.5)
 				t = 0.45
 				if is_boss:
 					world.boss_awake(self)
@@ -160,7 +144,7 @@ func _physics_process(delta: float) -> void:
 				state = "windup"
 				t = 0.38 if not ranged else 0.55
 				_face(to)
-				play("1H_Melee_Attack_Chop" if not ranged else "Spellcast_Shoot", 1.3)
+				model.play_once(_a("attack"), 1.3)
 				_telegraph()
 			elif ranged and dist < reach * 0.55:
 				_move(-to.normalized(), delta, 0.8)
@@ -168,7 +152,7 @@ func _physics_process(delta: float) -> void:
 				_move(_steer(player.global_position), delta, 1.0)
 			else:
 				velocity = Vector3.ZERO
-				play("Idle_Combat")
+				play(_a("idle"))
 		"windup":
 			t -= delta
 			if t <= 0.0:
@@ -199,7 +183,7 @@ func _move(dir: Vector3, delta: float, mult: float) -> void:
 	velocity = Vector3(v.x, -1.0, v.z)
 	move_and_slide()
 	_face(v)
-	play("Running_A" if def["speed"] > 3.5 else "Walking_A", 1.0)
+	play(_a("move"), clampf(float(def["speed"]) / 3.0, 0.8, 1.5))
 
 
 ## Direto se há visão; senão segue o caminho A* da grade.
@@ -249,7 +233,7 @@ func _start_slam() -> void:
 	state = "slam"
 	t = 1.0
 	slam_cd = float(def["slam_cd"])
-	play("2H_Melee_Attack_Chop", 0.9)
+	model.play_once(_a("slam") if def["anims"].has("slam") else _a("attack"), 0.9)
 	var warn := Fx.disc(world, global_position, float(def["slam_radius"]), Color("#ff2d2d"), 1.0)
 	warn.scale = Vector3(0.2, 1, 0.2)
 	warn.create_tween().tween_property(warn, "scale", Vector3.ONE, 0.95)
@@ -284,7 +268,7 @@ func stun(time: float) -> void:
 		time *= 0.35
 	stun_time = maxf(stun_time, time)
 	if state != "dead":
-		play("Hit_B", 0.6)
+		model.play_once(_a("hit"), 0.6)
 		if state == "idle":
 			state = "chase"
 
@@ -309,7 +293,7 @@ func take_damage(amount: float, crit: bool, from: Vector3) -> float:
 		push.y = 0
 		global_position += push.normalized() * 0.25
 		if state == "chase" and randf() < 0.35:
-			play("Hit_A", 1.6)
+			model.play_once(_a("hit"), 1.6)
 	if bar:
 		bar.visible = true
 		bar_fill.scale.x = maxf(0.0, hp / max_hp)
@@ -326,7 +310,7 @@ func _die() -> void:
 	collision_mask = 1
 	if bar:
 		bar.visible = false
-	play("Death_A" if randf() < 0.5 else "Death_B")
+	model.play_once(_a("death"), 1.0)
 	killed.emit(self)
 	var tw := create_tween()
 	tw.tween_interval(2.5)

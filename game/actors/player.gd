@@ -35,6 +35,7 @@ var buff_def := 0.0
 var since_hit := 10.0
 var dead := false
 var attack_held := false
+var combo_i := 0
 
 
 func _ready() -> void:
@@ -51,7 +52,7 @@ func _ready() -> void:
 	add_child(visual)
 	var lamp := OmniLight3D.new()
 	lamp.light_color = Color("#ffd6a0")
-	lamp.light_energy = 0.8
+	lamp.light_energy = 0.55
 	lamp.omni_range = 8.0
 	lamp.position = Vector3(0, 4.2, 2.6)
 	add_child(lamp)
@@ -119,9 +120,9 @@ func _physics_process(delta: float) -> void:
 	move_and_slide()
 	if dir.length() > 0.1 and lock_time <= 0.0:
 		facing = dir.normalized()
-		visual.play("Running_A", 1.1 * speed / SPEED)
+		visual.play(kit["anims"]["run"], 1.05 * speed / SPEED)
 	elif lock_time <= 0.0:
-		visual.play("Idle")
+		visual.play(kit["anims"]["idle"])
 	visual.rotation.y = lerp_angle(visual.rotation.y, atan2(facing.x, facing.z), minf(1.0, delta * 18.0))
 	if attack_held:
 		basic_attack()
@@ -143,7 +144,9 @@ func basic_attack() -> void:
 	var aspd: float = 1.0 + GameState.stats.get("attack_speed", 0.0) / 100.0
 	basic_cd = float(b["cooldown"]) / aspd
 	lock_time = 0.28 / aspd
-	visual.play(b["anim"], 1.6 * aspd, 0.05)
+	var combo: Array = b.get("combo", [b["anim"]])
+	visual.play_once(combo[combo_i % combo.size()], 1.5 * aspd)
+	combo_i += 1
 	Fx.slash(world, global_position + facing * 0.6, facing, Color("#fff1c9"), float(b["range"]), float(b["arc_deg"]))
 	for e in world.enemies_in_arc(global_position, facing, float(b["range"]) + 0.6, float(b["arc_deg"])):
 		_hit(e, float(b["mult"]), Color("#fff1c9"))
@@ -161,7 +164,7 @@ func use_skill(i: int) -> void:
 		if to.length() > 0.1:
 			facing = to.normalized()
 			visual.rotation.y = atan2(facing.x, facing.z)
-	visual.play(s["anim"], 1.5, 0.05)
+	visual.play_once(s["anim"], 1.4)
 	match s["kind"]:
 		"dash":
 			dash_skill = s
@@ -214,7 +217,7 @@ func dodge() -> void:
 	dash_vel = dir * float(d["distance"]) / dash_time
 	dash_skill = {}
 	invuln = dash_time + 0.1
-	visual.play(d["anim"], 1.8, 0.04)
+	visual.play_once(d["anim"], 1.6)
 
 
 func drink_potion() -> void:
@@ -248,7 +251,7 @@ func take_damage(raw: float, attacker_level: int) -> void:
 	var s: Dictionary = GameState.stats
 	if randf() * 100.0 < s["block"]:
 		Fx.number(world, global_position, "Bloqueio", Color("#9fd3ff"))
-		visual.play("Block_Hit", 1.5, 0.05)
+		visual.play_once(kit["anims"]["block"], 1.5)
 		return
 	var defense: float = s["def"] * (1.0 + (buff_def / 100.0 if buff_time > 0.0 else 0.0))
 	var dmg := Stats.mitigate(raw, defense, attacker_level)
@@ -261,5 +264,5 @@ func take_damage(raw: float, attacker_level: int) -> void:
 	if hp <= 0.0:
 		hp = 0.0
 		dead = true
-		visual.play("Death_A", 1.0, 0.05)
+		visual.play_once(kit["anims"]["death"], 1.0)
 		died.emit()

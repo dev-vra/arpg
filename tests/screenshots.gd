@@ -12,7 +12,9 @@ func _init() -> void:
 func _shot(path: String) -> void:
 	await create_timer(0.8).timeout
 	root.get_viewport().get_texture().get_image().save_png(path)
-	print("shot ", path)
+	var dc := RenderingServer.get_rendering_info(RenderingServer.RENDERING_INFO_TOTAL_DRAW_CALLS_IN_FRAME)
+	var tris := RenderingServer.get_rendering_info(RenderingServer.RENDERING_INFO_TOTAL_PRIMITIVES_IN_FRAME)
+	print("shot %s  draw_calls=%d  primitivas=%d" % [path, dc, tris])
 
 
 func _run() -> void:

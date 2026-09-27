@@ -4,6 +4,11 @@ extends SceneTree
 
 
 func _init() -> void:
+	# Adia para o primeiro frame: autoloads (GameState) já existem.
+	_run.call_deferred()
+
+
+func _run() -> void:
 	var filter := ""
 	var args := OS.get_cmdline_user_args()
 	if args.size() > 0:

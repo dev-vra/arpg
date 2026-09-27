@@ -1,11 +1,431 @@
 {
-  "mobs": {
-    "servo":       { "name": "Esqueleto Servo",       "model": "Skeleton_Minion",  "weapon": "Skeleton_Blade", "hp": 42, "dmg": 6,  "speed": 3.0, "range": 1.7, "attack_cd": 1.4, "xp": 12, "scale": 1.0 },
-    "espreitador": { "name": "Esqueleto Espreitador", "model": "Skeleton_Rogue",   "weapon": "Skeleton_Blade", "hp": 30, "dmg": 7,  "speed": 4.6, "range": 1.6, "attack_cd": 1.0, "xp": 14, "scale": 1.0 },
-    "couracado":   { "name": "Esqueleto Couraçado",   "model": "Skeleton_Warrior", "weapon": "Skeleton_Axe", "offhand": "Skeleton_Shield_Small_A", "hp": 95, "dmg": 12, "speed": 2.5, "range": 1.9, "attack_cd": 1.9, "xp": 26, "scale": 1.08 },
-    "litomante":   { "name": "Esqueleto Litomante",   "model": "Skeleton_Mage",    "weapon": "Skeleton_Staff", "hp": 34, "dmg": 9,  "speed": 2.8, "range": 9.0, "attack_cd": 2.3, "xp": 18, "scale": 1.0, "ranged": true, "bolt_color": "#9b6bff" },
-    "carcereiro":  { "name": "Carcereiro do Vale Oco", "model": "Skeleton_Warrior", "weapon": "Skeleton_Axe", "hp": 950, "dmg": 20, "speed": 2.9, "range": 2.8, "attack_cd": 2.0, "xp": 320, "scale": 1.9, "boss": true, "slam_cd": 6.5, "slam_radius": 4.5, "tint": "#ffb36b" },
-    "arauto":      { "name": "Arauto das Criptas",    "model": "Skeleton_Mage",    "weapon": "Skeleton_Staff", "hp": 1300, "dmg": 26, "speed": 3.0, "range": 10.0, "attack_cd": 1.6, "xp": 520, "scale": 1.8, "boss": true, "ranged": true, "bolt_color": "#ff4d6d", "slam_cd": 7.0, "slam_radius": 5.0, "tint": "#ff6b6b" },
-    "rei_partido": { "name": "Rei Partido",           "model": "Skeleton_Warrior", "weapon": "Skeleton_Axe", "offhand": "Skeleton_Shield_Small_A", "hp": 2400, "dmg": 34, "speed": 3.2, "range": 3.0, "attack_cd": 1.8, "xp": 900, "scale": 2.1, "boss": true, "slam_cd": 5.5, "slam_radius": 5.5, "tint": "#8fd3ff" }
+ "mobs": {
+  "servo": {
+   "name": "Carniçal",
+   "hp": 42,
+   "dmg": 6,
+   "speed": 2.4,
+   "range": 1.6,
+   "attack_cd": 1.4,
+   "xp": 12,
+   "scale": 1.0,
+   "anims": {
+    "idle": "Zombie_Idle",
+    "move": "Zombie_Walk_Fwd",
+    "attack": "Zombie_Scratch",
+    "hit": "Hit_Chest",
+    "death": "Death01",
+    "spawn": "LayToIdle"
+   },
+   "look": {
+    "sex": "Male",
+    "skin": "#7d8f6a",
+    "skin_mix": 0.85,
+    "hair": "",
+    "eye_glow": "#9fff6a",
+    "parts": [
+     [
+      [
+       "Male_Peasant_Legs"
+      ],
+      [
+       "pelvis_thigh"
+      ],
+      "#3e342c",
+      0.6
+     ]
+    ]
+   }
+  },
+  "espreitador": {
+   "name": "Espreitadora Encapuzada",
+   "hp": 30,
+   "dmg": 7,
+   "speed": 4.4,
+   "range": 1.6,
+   "attack_cd": 1.0,
+   "xp": 14,
+   "scale": 1.0,
+   "anims": {
+    "idle": "Sword_Idle",
+    "move": "Jog_Fwd",
+    "attack": "Sword_Regular_A",
+    "hit": "Hit_Chest",
+    "death": "Death01",
+    "spawn": "Idle"
+   },
+   "weapon": "Sword_Bronze",
+   "look": {
+    "sex": "Female",
+    "skin": "#b9a3a0",
+    "skin_mix": 0.5,
+    "hair": "Hair_Long",
+    "eye_glow": "#ff4dd2",
+    "parts": [
+     [
+      [
+       "Female_Ranger_Head_Hood",
+       "Female_Ranger_Body"
+      ],
+      [
+       "torso"
+      ],
+      "#2b2233",
+      0.8
+     ],
+     [
+      [
+       "Female_Ranger_Legs"
+      ],
+      [
+       "legs"
+      ],
+      "#1f1a26",
+      0.8
+     ],
+     [
+      [
+       "Female_Ranger_Feet"
+      ],
+      [
+       "feet"
+      ],
+      "#1f1a26",
+      0.6
+     ]
+    ]
+   }
+  },
+  "couracado": {
+   "name": "Saqueador Couraçado",
+   "hp": 95,
+   "dmg": 12,
+   "speed": 2.5,
+   "range": 1.9,
+   "attack_cd": 1.9,
+   "xp": 26,
+   "scale": 1.1,
+   "anims": {
+    "idle": "Idle_Shield",
+    "move": "Walk",
+    "attack": "Sword_Heavy_Combo",
+    "hit": "Hit_Knockback",
+    "death": "Death01",
+    "spawn": "Idle",
+    "slam": "Shield_OneShot"
+   },
+   "weapon": "Axe_Bronze",
+   "offhand": "Shield_Wooden",
+   "look": {
+    "sex": "Male",
+    "skin": "#a88a78",
+    "skin_mix": 0.3,
+    "hair": "Hair_Beard",
+    "eye_glow": "#ff7a3a",
+    "parts": [
+     [
+      [
+       "Male_Ranger_Body",
+       "Male_Ranger_Acc_Pauldron"
+      ],
+      [
+       "torso"
+      ],
+      "#6a4a36",
+      0.7
+     ],
+     [
+      [
+       "Male_Ranger_Arms"
+      ],
+      [
+       "arms",
+       "hands"
+      ],
+      "#4a3a30",
+      0.6
+     ],
+     [
+      [
+       "Male_Ranger_Legs"
+      ],
+      [
+       "legs"
+      ],
+      "#3a2e26",
+      0.7
+     ],
+     [
+      [
+       "Male_Ranger_Feet_Boots"
+      ],
+      [
+       "feet"
+      ],
+      "#3a2e26",
+      0.5
+     ]
+    ]
+   }
+  },
+  "litomante": {
+   "name": "Litomante",
+   "hp": 34,
+   "dmg": 9,
+   "speed": 2.6,
+   "range": 9.0,
+   "attack_cd": 2.3,
+   "xp": 18,
+   "scale": 1.0,
+   "ranged": true,
+   "bolt_color": "#9b6bff",
+   "anims": {
+    "idle": "Spell_Simple_Idle",
+    "move": "Walk",
+    "attack": "Spell_Simple_Shoot",
+    "hit": "Hit_Chest",
+    "death": "Death01",
+    "spawn": "Idle",
+    "slam": "Spell_Simple_Shoot"
+   },
+   "look": {
+    "sex": "Female",
+    "skin": "#9aa6c4",
+    "skin_mix": 0.6,
+    "hair": "",
+    "eye_glow": "#b18cff",
+    "parts": [
+     [
+      [
+       "Female_Ranger_Head_Hood",
+       "Female_Peasant_Body"
+      ],
+      [
+       "torso"
+      ],
+      "#3a2a5c",
+      0.85
+     ],
+     [
+      [
+       "Female_Peasant_Legs"
+      ],
+      [
+       "legs"
+      ],
+      "#241a38",
+      0.8
+     ],
+     [
+      [
+       "Female_Peasant_Feet"
+      ],
+      [
+       "feet"
+      ],
+      "#241a38",
+      0.6
+     ]
+    ]
+   }
+  },
+  "carcereiro": {
+   "name": "Carcereiro do Vale Oco",
+   "hp": 950,
+   "dmg": 20,
+   "speed": 2.9,
+   "range": 2.6,
+   "attack_cd": 2.0,
+   "xp": 320,
+   "scale": 1.75,
+   "boss": true,
+   "slam_cd": 6.5,
+   "slam_radius": 4.5,
+   "tint": "#ffb36b",
+   "anims": {
+    "idle": "Zombie_Idle",
+    "move": "Zombie_Walk_Fwd",
+    "attack": "Sword_Heavy_Combo",
+    "hit": "Hit_Knockback",
+    "death": "Death01",
+    "spawn": "Idle",
+    "slam": "Shield_OneShot"
+   },
+   "weapon": "Axe_Bronze",
+   "look": {
+    "sex": "Male",
+    "skin": "#6f7f5c",
+    "skin_mix": 0.9,
+    "hair": "",
+    "eye_glow": "#ffb36b",
+    "parts": [
+     [
+      [
+       "Male_Ranger_Acc_Pauldron",
+       "Male_Peasant_Legs"
+      ],
+      [
+       "pelvis_thigh"
+      ],
+      "#3b2e22",
+      0.7
+     ]
+    ]
+   }
+  },
+  "arauto": {
+   "name": "Arauto das Criptas",
+   "hp": 1300,
+   "dmg": 26,
+   "speed": 3.0,
+   "range": 10.0,
+   "attack_cd": 1.6,
+   "xp": 520,
+   "scale": 1.7,
+   "boss": true,
+   "ranged": true,
+   "bolt_color": "#ff4d6d",
+   "slam_cd": 7.0,
+   "slam_radius": 5.0,
+   "tint": "#ff6b6b",
+   "anims": {
+    "idle": "Spell_Simple_Idle",
+    "move": "Walk",
+    "attack": "Spell_Simple_Shoot",
+    "hit": "Hit_Chest",
+    "death": "Death01",
+    "spawn": "Idle",
+    "slam": "Spell_Simple_Shoot"
+   },
+   "look": {
+    "sex": "Female",
+    "skin": "#c7a3a3",
+    "skin_mix": 0.6,
+    "hair": "Hair_Long",
+    "eye_glow": "#ff4d6d",
+    "parts": [
+     [
+      [
+       "Female_Ranger_Head_Hood",
+       "Female_Ranger_Body",
+       "Female_Ranger_Acc_Pauldrons"
+      ],
+      [
+       "torso"
+      ],
+      "#5c1a24",
+      0.85
+     ],
+     [
+      [
+       "Female_Ranger_Arms"
+      ],
+      [
+       "arms",
+       "hands"
+      ],
+      "#3a1018",
+      0.8
+     ],
+     [
+      [
+       "Female_Ranger_Legs"
+      ],
+      [
+       "legs"
+      ],
+      "#2a0c12",
+      0.8
+     ],
+     [
+      [
+       "Female_Ranger_Feet"
+      ],
+      [
+       "feet"
+      ],
+      "#2a0c12",
+      0.6
+     ]
+    ]
+   }
+  },
+  "rei_partido": {
+   "name": "Rei Partido",
+   "hp": 2400,
+   "dmg": 34,
+   "speed": 3.2,
+   "range": 2.8,
+   "attack_cd": 1.8,
+   "xp": 900,
+   "scale": 1.9,
+   "boss": true,
+   "slam_cd": 5.5,
+   "slam_radius": 5.5,
+   "tint": "#8fd3ff",
+   "anims": {
+    "idle": "Idle_Shield",
+    "move": "Walk",
+    "attack": "Sword_Heavy_Combo",
+    "hit": "Hit_Knockback",
+    "death": "Death01",
+    "spawn": "Idle",
+    "slam": "Shield_OneShot"
+   },
+   "weapon": "Sword_Bronze",
+   "offhand": "Shield_Wooden",
+   "look": {
+    "sex": "Male",
+    "skin": "#8fa3b8",
+    "skin_mix": 0.7,
+    "hair": "Hair_Beard",
+    "eye_glow": "#8fd3ff",
+    "parts": [
+     [
+      [
+       "Male_Ranger_Head_Hood",
+       "Male_Ranger_Body",
+       "Male_Ranger_Acc_Pauldron"
+      ],
+      [
+       "torso"
+      ],
+      "#c9a54a",
+      0.85
+     ],
+     [
+      [
+       "Male_Ranger_Arms"
+      ],
+      [
+       "arms",
+       "hands"
+      ],
+      "#8a7030",
+      0.8
+     ],
+     [
+      [
+       "Male_Ranger_Legs"
+      ],
+      [
+       "legs"
+      ],
+      "#2c3444",
+      0.8
+     ],
+     [
+      [
+       "Male_Ranger_Feet_Boots"
+      ],
+      [
+       "feet"
+      ],
+      "#2c3444",
+      0.7
+     ]
+    ]
+   }
   }
+ }
 }

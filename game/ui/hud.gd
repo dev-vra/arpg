@@ -31,6 +31,7 @@ var prompt_target
 var panel_layer: Control
 var panel: Control
 var map_label: Label
+var perf_label: Label
 
 
 func _ready() -> void:
@@ -59,6 +60,12 @@ func _ready() -> void:
 	panel_layer.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 	panel_layer.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	root.add_child(panel_layer)
+	perf_label = Label.new()
+	perf_label.add_theme_font_size_override("font_size", 14)
+	perf_label.add_theme_color_override("font_color", Color(1, 1, 1, 0.6))
+	perf_label.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	_place(perf_label, Vector2(0, 1), Vector2(14, -24), Vector2(360, 20))
+	root.add_child(perf_label)
 	GameState.changed.connect(refresh)
 	GameState.toast.connect(show_toast)
 	world.player.hp_changed.connect(refresh)
@@ -165,6 +172,10 @@ func refresh() -> void:
 
 
 func _process(_d: float) -> void:
+	# Medidor para o teste em aparelho (Gate 0): FPS, draw calls e primitivas.
+	perf_label.text = "%d FPS · %d draw calls · %dk tris" % [Engine.get_frames_per_second(),
+		RenderingServer.get_rendering_info(RenderingServer.RENDERING_INFO_TOTAL_DRAW_CALLS_IN_FRAME),
+		RenderingServer.get_rendering_info(RenderingServer.RENDERING_INFO_TOTAL_PRIMITIVES_IN_FRAME) / 1000]
 	if boss and is_instance_valid(boss):
 		boss_bar.value = boss.hp
 	if panel == null and not world.player.dead:
