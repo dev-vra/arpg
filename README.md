@@ -33,6 +33,11 @@ Arte: KayKit (Kay Lousberg, CC0), só como placeholder. Veja `assets/kaykit/READ
 
 `export_presets.cfg` já tem o preset Android (arm64). Para gerar o APK é preciso instalar os export templates do Godot 4.4.1 e o Android SDK/JDK, e configurar o keystore de debug no editor. Depois: `godot --headless --export-debug Android export/arpg.apk`.
 
+Release (menor, ~30 MB), com a chave passada por variável de ambiente (nunca commitada):
+`GODOT_ANDROID_KEYSTORE_RELEASE_PATH=... GODOT_ANDROID_KEYSTORE_RELEASE_USER=... GODOT_ANDROID_KEYSTORE_RELEASE_PASSWORD=... godot --headless --export-release Android export/arpg-mvp.apk`
+
+Animações: só o `Skeleton_Minion.glb` importa animações (15 fps); todos os bonecos usam essa biblioteca via `game/actors/anim_lib.gd` (mesmo rig KayKit).
+
 ## Testes
 
 ```bash

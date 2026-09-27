@@ -3,6 +3,7 @@
 extends Node3D
 
 const Fx = preload("res://game/fx/fx.gd")
+const AnimLib = preload("res://game/actors/anim_lib.gd")
 
 var kind := ""
 var title := ""
@@ -25,10 +26,10 @@ func _ready() -> void:
 		var m: Node3D = load(model_path).instantiate()
 		add_child(m)
 		m.rotation.y = 0.0
-		var ap: AnimationPlayer = m.find_child("AnimationPlayer", true, false)
-		if ap and anim_name != "" and ap.has_animation(anim_name):
-			ap.play(anim_name)
-			ap.get_animation(anim_name).loop_mode = Animation.LOOP_LINEAR
+		if anim_name != "":
+			var ap := AnimLib.attach(m)
+			if ap.has_animation(anim_name):
+				ap.play(anim_name)
 	if kind in ["portal", "exit"]:
 		_portal_fx(Color("#7fd1ff") if kind == "portal" else Color("#8dff9a"))
 	var l := Label3D.new()

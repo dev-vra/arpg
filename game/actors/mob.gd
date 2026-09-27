@@ -8,6 +8,7 @@ signal killed(mob)
 
 const GEAR_SHADER = preload("res://game/shaders/gear.gdshader")
 const Fx = preload("res://game/fx/fx.gd")
+const AnimLib = preload("res://game/actors/anim_lib.gd")
 const Projectile = preload("res://game/actors/projectile.gd")
 
 var def: Dictionary
@@ -57,7 +58,7 @@ func _ready() -> void:
 	model = load("res://assets/kaykit/chars/%s.glb" % def["model"]).instantiate()
 	model.scale = Vector3.ONE * sc
 	add_child(model)
-	anim = model.find_child("AnimationPlayer", true, false)
+	anim = AnimLib.attach(model)
 	var sk: Skeleton3D = model.find_child("Skeleton3D", true, false)
 	_attach(sk, "handslot.r", def.get("weapon", ""))
 	_attach(sk, "handslot.l", def.get("offhand", ""))

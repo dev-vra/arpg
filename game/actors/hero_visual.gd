@@ -7,6 +7,7 @@ extends Node3D
 const GEAR_SHADER = preload("res://game/shaders/gear.gdshader")
 const SetBonus = preload("res://core/set_bonus.gd")
 const Fx = preload("res://game/fx/fx.gd")
+const AnimLib = preload("res://game/actors/anim_lib.gd")
 
 const SHIELD_BY_RARITY := {"common": "Round_Shield", "superior": "Rectangle_Shield", "ancestral": "Badge_Shield", "socketed": "Badge_Shield", "relic": "Spike_Shield"}
 const CLOTH := Color("#6b5a48")
@@ -26,7 +27,7 @@ func _ready() -> void:
 	model = load("res://assets/kaykit/chars/Knight.glb").instantiate()
 	add_child(model)
 	skeleton = model.find_child("Skeleton3D", true, false)
-	anim = model.find_child("AnimationPlayer", true, false)
+	anim = AnimLib.attach(model)
 	for mi in model.find_children("*", "MeshInstance3D", true, false):
 		var src: StandardMaterial3D = mi.mesh.surface_get_material(0)
 		var m := ShaderMaterial.new()
