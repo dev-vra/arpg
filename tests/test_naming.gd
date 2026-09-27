@@ -24,8 +24,9 @@ func _names(value, out: Array) -> void:
 
 func test_no_forbidden_terms_in_names() -> void:
 	var names := []
-	for d in [Config.economy(), Config.affixes(), Config.sets(), Config.shop()]:
-		_names(d, names)
+	for f in DirAccess.get_files_at("res://data"):
+		if f.ends_with(".json"):
+			_names(Config.load_json("res://data/" + f), names)
 	check(names.size() > 10, "encontrou nomes")
 	var re := RegEx.new()
 	for term in FORBIDDEN:

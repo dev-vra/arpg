@@ -243,5 +243,60 @@
       15
     ],
     "max_unspent_ratio": 0.6
+  },
+  "field_loot": {
+    "kills_per_run": 30,
+    "playtest_multiplier": 8,
+    "item_chance": 0.1,
+    "superior_share": 0.35,
+    "fortune_chance": 0.05,
+    "boss_items": 2,
+    "boss_kill_weight": 10,
+    "lines": {
+      "common": [
+        1,
+        2
+      ],
+      "superior": [
+        2,
+        3
+      ],
+      "ancestral": [
+        2,
+        4
+      ]
+    },
+    "difficulty": {
+      "normal": {
+        "hp": 1.0,
+        "dmg": 1.0,
+        "loot": 1.0,
+        "level": 0
+      },
+      "hard": {
+        "hp": 2.4,
+        "dmg": 1.8,
+        "loot": 1.6,
+        "level": 6
+      }
+    },
+    "salvage": {
+      "common": {
+        "zen": 300
+      },
+      "superior": {
+        "zen": 800,
+        "lume": 1
+      },
+      "ancestral": {
+        "zen": 2000,
+        "lume": 3
+      }
+    }
+  },
+  "progression": {
+    "xp_base": 100,
+    "xp_exp": 1.5,
+    "max_level": 60
   }
 }

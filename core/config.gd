@@ -34,3 +34,7 @@ static func sets() -> Dictionary:
 
 static func shop() -> Dictionary:
 	return load_json(SHOP_PATH)
+
+
+static func data(name: String) -> Dictionary:
+	return load_json("res://data/%s.json" % name)

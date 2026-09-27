@@ -1,0 +1,11 @@
+{
+  "mobs": {
+    "servo":       { "name": "Esqueleto Servo",       "model": "Skeleton_Minion",  "weapon": "Skeleton_Blade", "hp": 42, "dmg": 6,  "speed": 3.0, "range": 1.7, "attack_cd": 1.4, "xp": 12, "scale": 1.0 },
+    "espreitador": { "name": "Esqueleto Espreitador", "model": "Skeleton_Rogue",   "weapon": "Skeleton_Blade", "hp": 30, "dmg": 7,  "speed": 4.6, "range": 1.6, "attack_cd": 1.0, "xp": 14, "scale": 1.0 },
+    "couracado":   { "name": "Esqueleto Couraçado",   "model": "Skeleton_Warrior", "weapon": "Skeleton_Axe", "offhand": "Skeleton_Shield_Small_A", "hp": 95, "dmg": 12, "speed": 2.5, "range": 1.9, "attack_cd": 1.9, "xp": 26, "scale": 1.08 },
+    "litomante":   { "name": "Esqueleto Litomante",   "model": "Skeleton_Mage",    "weapon": "Skeleton_Staff", "hp": 34, "dmg": 9,  "speed": 2.8, "range": 9.0, "attack_cd": 2.3, "xp": 18, "scale": 1.0, "ranged": true, "bolt_color": "#9b6bff" },
+    "carcereiro":  { "name": "Carcereiro do Vale Oco", "model": "Skeleton_Warrior", "weapon": "Skeleton_Axe", "hp": 950, "dmg": 20, "speed": 2.9, "range": 2.8, "attack_cd": 2.0, "xp": 320, "scale": 1.9, "boss": true, "slam_cd": 6.5, "slam_radius": 4.5, "tint": "#ffb36b" },
+    "arauto":      { "name": "Arauto das Criptas",    "model": "Skeleton_Mage",    "weapon": "Skeleton_Staff", "hp": 1300, "dmg": 26, "speed": 3.0, "range": 10.0, "attack_cd": 1.6, "xp": 520, "scale": 1.8, "boss": true, "ranged": true, "bolt_color": "#ff4d6d", "slam_cd": 7.0, "slam_radius": 5.0, "tint": "#ff6b6b" },
+    "rei_partido": { "name": "Rei Partido",           "model": "Skeleton_Warrior", "weapon": "Skeleton_Axe", "offhand": "Skeleton_Shield_Small_A", "hp": 2400, "dmg": 34, "speed": 3.2, "range": 3.0, "attack_cd": 1.8, "xp": 900, "scale": 2.1, "boss": true, "slam_cd": 5.5, "slam_radius": 5.5, "tint": "#8fd3ff" }
+  }
+}

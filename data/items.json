@@ -1,0 +1,16 @@
+{
+  "slots": {
+    "helm":   { "label": "Elmo",     "base": { "def_flat": 3,  "hp_flat": 10 }, "common": ["Capuz de Couro", "Elmo Rebitado"], "superior": ["Elmo do Guarda", "Elmo de Placas Pardas"] },
+    "armor":  { "label": "Armadura", "base": { "def_flat": 6,  "hp_flat": 25 }, "common": ["Gibão Acolchoado", "Cota Remendada"], "superior": ["Couraça do Guarda", "Peitoral de Placas Pardas"] },
+    "gloves": { "label": "Luvas",    "base": { "def_flat": 2,  "atk_flat": 2 },  "common": ["Luvas de Couro", "Braçadeiras Gastas"], "superior": ["Manoplas do Guarda"] },
+    "pants":  { "label": "Calça",    "base": { "def_flat": 4,  "hp_flat": 15 }, "common": ["Calça Acolchoada", "Grevas Remendadas"], "superior": ["Grevas do Guarda"] },
+    "boots":  { "label": "Botas",    "base": { "def_flat": 2,  "move_speed": 2 }, "common": ["Botas de Viagem", "Sapatos Ferrados"], "superior": ["Botas do Guarda"] },
+    "weapon": { "label": "Arma",     "base": { "atk_flat": 8 }, "common": ["Espada Curta", "Espada de Ferro"], "superior": ["Espada Fendalua", "Lâmina do Guarda"] },
+    "shield": { "label": "Escudo",   "base": { "def_flat": 5,  "block": 3 },    "common": ["Broquel de Madeira", "Escudo Redondo"], "superior": ["Baluarte Pardo", "Escudo do Guarda"] }
+  },
+  "base_growth_per_level": 0.12,
+  "refine_bonus_per_level": 0.06,
+  "rarity_colors": { "common": "#c8c8c8", "superior": "#5aa0ff", "ancestral": "#3fd67a", "socketed": "#c77dff", "relic": "#ff9f1c" },
+  "rarity_labels": { "common": "Comum", "superior": "Superior", "ancestral": "Ancestral", "socketed": "Encaixado", "relic": "Relíquia" },
+  "tier_colors": { "1": "#ff9f1c", "2": "#c77dff", "3": "#5aa0ff", "4": "#3fd67a", "5": "#9a9a9a" }
+}

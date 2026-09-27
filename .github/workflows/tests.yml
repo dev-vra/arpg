@@ -20,3 +20,10 @@ jobs:
         run: ./run_tests.sh
       - name: Simulação de economia
         run: timeout 600 godot --headless --path . -s sim/economy_sim.gd
+      - name: Teste de fumaça do jogo (cena completa, headless)
+        run: |
+          godot --headless --path . --import >/dev/null 2>&1 || true
+          out=$(timeout 300 godot --headless --path . -s tests/smoke_game.gd 2>&1); code=$?
+          echo "$out" | grep -E "ok|FAIL|smoke:|SCRIPT ERROR"
+          if echo "$out" | grep -q "SCRIPT ERROR"; then exit 1; fi
+          exit $code

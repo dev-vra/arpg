@@ -1,12 +1,46 @@
 {
-  "glow_thresholds": [9, 12, 15],
-  "glow_strength": [0.0, 0.6, 1.4, 2.5],
+  "glow_thresholds": [
+    9,
+    12,
+    15
+  ],
+  "glow_strength": [
+    0.0,
+    0.45,
+    0.9,
+    1.5
+  ],
   "body_color": "#c9a58a",
-  "slot_part": { "helm": "head", "armor": "torso", "gloves": "arms", "pants": "legs", "boots": "feet" },
-  "sets": {
-    "ferro_vigilia": { "color": "#6f7a86", "glow": "#7fd1ff", "aura": "#9fe0ff" },
-    "coroa_vale_oco": { "color": "#8a6d3b", "glow": "#ffd27f", "aura": "#ffe3a0" },
-    "mares_rubras": { "color": "#8e2b2b", "glow": "#ff6a5a", "aura": "#ff9b8f" }
+  "slot_part": {
+    "helm": "head",
+    "armor": "torso",
+    "gloves": "arms",
+    "pants": "legs",
+    "boots": "feet"
   },
-  "default": { "color": "#777777", "glow": "#ffffff", "aura": "#ffffff" }
+  "sets": {
+    "ferro_vigilia": {
+      "color": "#6f7a86",
+      "glow": "#7fd1ff",
+      "aura": "#9fe0ff",
+      "style": "plates"
+    },
+    "coroa_vale_oco": {
+      "color": "#8a6d3b",
+      "glow": "#ffd27f",
+      "aura": "#ffe3a0",
+      "style": "crown"
+    },
+    "mares_rubras": {
+      "color": "#8e2b2b",
+      "glow": "#ff6a5a",
+      "aura": "#ff9b8f",
+      "style": "fins"
+    }
+  },
+  "default": {
+    "color": "#777777",
+    "glow": "#ffffff",
+    "aura": "#ffffff"
+  }
 }
