@@ -1,0 +1,33 @@
+{
+ "quest_items": {
+  "dente_carnical": {"name": "Dente de Carniçal", "color": "#e8e0c0"},
+  "capuz_rasgado": {"name": "Capuz Rasgado", "color": "#c9a0ff"},
+  "selo_rubro": {"name": "Selo Rubro", "color": "#ff5a6e"}
+ },
+ "quests": [
+  {"id": "q_primeiros_passos", "name": "Primeiros Passos", "giver": "mentor",
+   "desc": "O Vale Oco está infestado. Derrote 10 monstros por lá.",
+   "goal": {"type": "kill", "mob": "any", "map": "vale_oco", "count": 10},
+   "reward": {"xp": 250, "zen": 2000, "lume": 3}},
+  {"id": "q_dentes", "name": "Dentes do Carniçal", "giver": "mentor", "requires": ["q_primeiros_passos"],
+   "desc": "Vesna precisa de dentes de carniçal para temperar o aço. Traga 5.",
+   "goal": {"type": "collect", "item": "dente_carnical", "mob": "servo", "chance": 0.4, "count": 5},
+   "reward": {"xp": 350, "zen": 2500, "prisma": 3}},
+  {"id": "q_encapuzadas", "name": "Sombras Encapuzadas", "giver": "mentor", "requires": ["q_primeiros_passos"],
+   "desc": "Espreitadoras rondam o Vale. Derrote 6 e traga 3 capuzes como prova.",
+   "goal": {"type": "collect", "item": "capuz_rasgado", "mob": "espreitador", "chance": 0.5, "count": 3},
+   "reward": {"xp": 400, "zen": 3000, "sigilo": 1}},
+  {"id": "q_carcereiro", "name": "O Carcereiro do Vale", "giver": "mentor", "requires": ["q_dentes"],
+   "desc": "Limpe o Vale Oco: derrote o Carcereiro no fim da trilha.",
+   "goal": {"type": "clear", "map": "vale_oco", "count": 1},
+   "reward": {"xp": 800, "zen": 5000, "brasa": 2, "item": {"slot": "armor", "rarity": "ancestral", "set": "ferro_vigilia"}}},
+  {"id": "q_selos", "name": "Selos Rubros", "giver": "mentor", "requires": ["q_carcereiro"], "min_level": 8,
+   "desc": "Os Litomantes das Criptas carregam selos. Traga 4.",
+   "goal": {"type": "collect", "item": "selo_rubro", "mob": "litomante", "chance": 0.45, "count": 4},
+   "reward": {"xp": 1200, "zen": 8000, "prisma": 4, "sigilo": 1}},
+  {"id": "q_criptas", "name": "Coração das Criptas", "giver": "mentor", "requires": ["q_selos"],
+   "desc": "Atravesse as Criptas Rubras e derrote o Arauto.",
+   "goal": {"type": "clear", "map": "criptas_rubras", "count": 1},
+   "reward": {"xp": 2500, "zen": 15000, "brasa": 4, "item": {"slot": "helm", "rarity": "ancestral", "set": "ferro_vigilia"}}}
+ ]
+}

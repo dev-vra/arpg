@@ -46,7 +46,12 @@ func _run() -> void:
 	w.player.use_skill(1)
 	await create_timer(0.12).timeout
 	await _shot(out + "/2_combat.png")
-	w.hud.open_panel("forge")
-	w.hud.panel._set_mode("spin")
-	await _shot(out + "/3_forge.png")
+	gs.accept_quest("q_primeiros_passos")
+	for i in 3:
+		gs.inventory.append(Loot.make_item(ctx, ["weapon", "helm", "boots"][i], 25, "superior", ""))
+	w.hud.open_panel("inventory")
+	w.hud.panel._select(gs.inventory[0])
+	await _shot(out + "/3_inventory.png")
+	w.hud.open_panel("mentor")
+	await _shot(out + "/4_quests.png")
 	quit()

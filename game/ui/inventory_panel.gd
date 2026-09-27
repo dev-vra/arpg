@@ -54,11 +54,16 @@ func _render() -> void:
 	cnt.text = "%d / %d itens" % [GameState.inventory.size(), GameState.INVENTORY_SIZE]
 	cnt.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	head.add_child(cnt)
+	head.add_child(UiTheme.button("Equipar melhores", _equip_best, 190))
 	head.add_child(UiTheme.button("Reciclar comuns", _salvage_commons, 190))
 	var grid := GridContainer.new()
 	grid.columns = 4
 	for it in GameState.inventory:
-		grid.add_child(item_button(it, func(): _select(it), selected == it))
+		var b := item_button(it, func(): _select(it), selected == it)
+		if GameState.is_upgrade(it):
+			b.text += "  +"
+			b.add_theme_color_override("font_color", Color("#3fd67a"))
+		grid.add_child(b)
 	mid.add_child(scroll(grid))
 	# Detalhe
 	var right := VBoxContainer.new()
@@ -83,14 +88,32 @@ func _select(it: Dictionary) -> void:
 	_render()
 
 
+const COMPARE_ROWS := [["power", "Poder"], ["dps", "DPS"], ["max_hp", "Vida"], ["atk", "Ataque"], ["def", "Defesa"],
+	["crit_chance", "Crítico %"], ["crit_damage", "Dano crítico %"], ["attack_speed", "Vel. ataque %"],
+	["move_speed", "Vel. movimento %"], ["life_steal", "Roubo de vida %"], ["block", "Bloqueio %"], ["cooldown", "Recarga %"], ["resist_all", "Resistência %"]]
+
+
+## Diferença para o item equipado no mesmo slot: poder, DPS e cada atributo que muda.
 func _delta_text() -> String:
 	if GameState.equipped.get(selected["slot"]) == selected:
 		return ""
-	var eq := GameState.equipped.duplicate()
-	eq[selected["slot"]] = selected
-	var p := Stats.power(Stats.compute(GameState.character.level, eq.values(), GameState.items_db, GameState.sets_db))
-	var d := p - GameState.power()
-	return "\n[b]Poder se equipar: [color=%s]%s%d[/color][/b]" % ["#3fd67a" if d >= 0 else "#ff6b6b", "+" if d >= 0 else "", d]
+	var d := GameState.compare(selected)
+	var cur = GameState.equipped.get(selected["slot"])
+	var s := "\n[b]Se equipar[/b] [color=#8b8f99](no lugar de %s)[/color]\n" % (cur["name"] if cur else "nada")
+	for row in COMPARE_ROWS:
+		var v: float = d.get(row[0], 0.0)
+		if absf(v) < 0.05:
+			continue
+		var col := "#3fd67a" if v > 0 else "#ff6b6b"
+		s += "[color=%s]%s%s[/color]  %s\n" % [col, "+" if v > 0 else "", ItemText._num(v), row[1]]
+	return s
+
+
+func _equip_best() -> void:
+	var n := GameState.equip_best()
+	GameState.toast.emit("%d peça(s) trocada(s) pelas melhores" % n if n > 0 else "Você já está com o melhor", Color("#3fd67a"))
+	selected = {}
+	_render()
 
 
 func _salvage_selected() -> void:

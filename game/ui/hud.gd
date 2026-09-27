@@ -32,6 +32,7 @@ var panel_layer: Control
 var panel: Control
 var map_label: Label
 var perf_label: Label
+var quest_label: RichTextLabel
 
 
 func _ready() -> void:
@@ -122,6 +123,14 @@ func _top_left() -> void:
 	money_label.add_theme_font_size_override("normal_font_size", 17)
 	money_label.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	v.add_child(money_label)
+	quest_label = RichTextLabel.new()
+	quest_label.bbcode_enabled = true
+	quest_label.fit_content = true
+	quest_label.scroll_active = false
+	quest_label.add_theme_font_size_override("normal_font_size", 16)
+	quest_label.add_theme_font_size_override("bold_font_size", 16)
+	quest_label.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	v.add_child(quest_label)
 
 
 func _top_right() -> void:
@@ -169,6 +178,16 @@ func refresh() -> void:
 	money_label.text = "[color=#ffd54f]Zen %s[/color]  [color=#ffe08a]Lume %d[/color]  [color=#ff7043]Brasa %d[/color]  [color=#c77dff]Prisma %d[/color]  [color=#4dd0e1]Sigilo %d[/color]" % [
 		ItemText.short_zen(w.zen), w.amount("lume"), w.amount("brasa"), w.amount("prisma"), w.amount("sigilo")]
 	map_label.text = world.map_def["name"]
+	var lines := []
+	for id in GameState.tracked_quests():
+		var q: Dictionary = GameState.Quests.find(GameState.quests_db, id)
+		var prog: Array = GameState.Quests.progress(GameState.quests_db, GameState.quests, id)
+		if GameState.quests["done"].has(id):
+			lines.append("[color=#3fd67a]%s: concluída, fale com a Ilse[/color]" % q["name"])
+		else:
+			lines.append("[color=#ffe3a0]%s[/color] %d/%d" % [q["name"], prog[0], prog[1]])
+	quest_label.text = "\n".join(lines)
+	quest_label.visible = not lines.is_empty()
 
 
 func _process(_d: float) -> void:
@@ -212,7 +231,7 @@ func set_prompt(target) -> void:
 	prompt_target = target
 	prompt.visible = target != null and panel == null
 	if target:
-		var verb := {"forge": "Falar", "mentor": "Falar", "portal": "Usar", "exit": "Usar", "chest": "Abrir"}
+		var verb := {"forge": "Falar", "mentor": "Missões", "portal": "Usar", "exit": "Usar", "chest": "Abrir"}
 		prompt.text = "%s: %s  (E)" % [verb.get(target.kind, "Usar"), target.title]
 
 

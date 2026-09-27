@@ -240,7 +240,10 @@ func _on_mob_killed(m) -> void:
 	kills += 1
 	GameState.add_xp(int(float(m.def["xp"]) * (1.0 + 0.1 * (m.level - 1))))
 	var drops := Loot.roll_kill(GameState.loot_ctx(), map_def, GameState.difficulty, m.is_boss)
+	for qi in GameState.quest_drops(m.id):
+		drops.append({"kind": "quest", "key": qi})
 	spawn_drops(drops, m.global_position)
+	GameState.quest_event({"type": "kill", "mob": m.id, "map": map_id})
 	if m.is_boss:
 		boss_dead = true
 		hud.show_boss(null)
@@ -250,6 +253,7 @@ func _on_mob_killed(m) -> void:
 			GameState.complete_challenge("hollow_vale_hard")
 		if map_def.has("challenge") and GameState.character.level >= 45:
 			GameState.complete_challenge(map_def["challenge"])
+		GameState.quest_event({"type": "clear", "map": map_id})
 		GameState.save_game()
 
 

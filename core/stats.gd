@@ -65,3 +65,36 @@ static func mitigate(damage: float, defense: float, attacker_level: int) -> floa
 static func power(s: Dictionary) -> int:
 	var dps: float = s["atk"] * (1.0 + s["crit_chance"] / 100.0 * s["crit_damage"] / 100.0) * (1.0 + s["attack_speed"] / 100.0)
 	return int(dps * 4.0 + s["max_hp"] * 0.35 + s["def"] * 1.5)
+
+
+## Dano por segundo do ataque básico (média com crítico e velocidade).
+static func dps(s: Dictionary, basic_cooldown: float = 0.75) -> float:
+	var crit: float = s["crit_chance"] / 100.0 * s["crit_damage"] / 100.0
+	return s["atk"] * (1.0 + crit) * (1.0 + s["attack_speed"] / 100.0) / basic_cooldown
+
+
+## Diferença de atributos ao trocar a peça do slot pelo item (positivo = melhora).
+static func compare(level: int, equipped: Dictionary, item: Dictionary, items_db: Dictionary, sets_db: Dictionary) -> Dictionary:
+	var now := compute(level, equipped.values(), items_db, sets_db)
+	var eq := equipped.duplicate()
+	eq[item["slot"]] = item
+	var then := compute(level, eq.values(), items_db, sets_db)
+	var out := {"power": power(then) - power(now), "dps": dps(then) - dps(now)}
+	for k in now:
+		out[k] = then[k] - now[k]
+	return out
+
+
+## Melhor item por slot (maior poder) entre equipado e mochila.
+static func best_loadout(level: int, equipped: Dictionary, inventory: Array, items_db: Dictionary, sets_db: Dictionary) -> Dictionary:
+	var eq := equipped.duplicate()
+	var improved := true
+	while improved:
+		improved = false
+		for it in inventory:
+			if eq.get(it["slot"]) == it:
+				continue
+			if compare(level, eq, it, items_db, sets_db)["power"] > 0:
+				eq[it["slot"]] = it
+				improved = true
+	return eq

@@ -56,7 +56,7 @@ static func bbcode(it: Dictionary) -> String:
 
 
 static func stats_block(s: Dictionary) -> String:
-	var out := "[color=#d9a441][b]Poder %d[/b][/color]\n" % Stats.power(s)
+	var out := "[color=#d9a441][b]Poder %d[/b][/color]   DPS [b]%d[/b]\n" % [Stats.power(s), int(Stats.dps(s))]
 	for k in STAT_ORDER:
 		out += "%s [b]%s[/b]\n" % [STAT_LABEL[k], _num(s[k])]
 	return out

@@ -23,7 +23,29 @@ func setup(d: Dictionary, pos: Vector3, p) -> void:
 
 
 func _ready() -> void:
-	if drop["kind"] == "currency":
+	if drop["kind"] == "quest":
+		var qi: Dictionary = GameState.quests_db["quest_items"][drop["key"]]
+		var qc := Color(qi["color"])
+		add_child(Fx.beam(Color("#ffd166"), 2.6))
+		var gem := MeshInstance3D.new()
+		var sp := SphereMesh.new()
+		sp.radius = 0.18
+		sp.height = 0.36
+		gem.mesh = sp
+		gem.material_override = Fx.glow_mat(qc, 2.0)
+		gem.position.y = 0.45
+		add_child(gem)
+		var ql := Label3D.new()
+		ql.text = "! " + qi["name"]
+		ql.modulate = Color("#ffd166")
+		ql.outline_size = 10
+		ql.font_size = 40
+		ql.pixel_size = 0.006
+		ql.billboard = BaseMaterial3D.BILLBOARD_ENABLED
+		ql.no_depth_test = true
+		ql.position.y = 1.1
+		add_child(ql)
+	elif drop["kind"] == "currency":
 		var mi := MeshInstance3D.new()
 		var c := Color(JEWEL_COLORS.get(drop["key"], "#ffffff"))
 		if drop["key"] == "zen":
@@ -74,7 +96,11 @@ func _process(delta: float) -> void:
 	if player == null or player.dead:
 		return
 	var d: float = global_position.distance_to(player.global_position)
-	if drop["kind"] == "currency":
+	if drop["kind"] == "quest":
+		if d < 1.6:
+			GameState.quest_event({"type": "collect", "item": drop["key"]})
+			queue_free()
+	elif drop["kind"] == "currency":
 		if d < 4.0:
 			magnet = true
 		if magnet:
@@ -86,5 +112,6 @@ func _process(delta: float) -> void:
 	elif d < 1.3:
 		if GameState.add_item(drop["item"]):
 			var it: Dictionary = drop["item"]
-			GameState.toast.emit("+ %s" % it["name"], Color(GameState.items_db["rarity_colors"][it["rarity"]]))
+			var up := "  (melhor: +%d poder)" % GameState.compare(it)["power"] if GameState.is_upgrade(it) else ""
+			GameState.toast.emit("+ %s%s" % [it["name"], up], Color(GameState.items_db["rarity_colors"][it["rarity"]]))
 			queue_free()

@@ -14,6 +14,7 @@ const Progression = preload("res://core/progression.gd")
 const Loot = preload("res://core/loot.gd")
 const Salvage = preload("res://core/salvage.gd")
 const SaveFile = preload("res://core/save_file.gd")
+const Quests = preload("res://core/quests.gd")
 
 const SAVE_PATH := "user://save_offline.json"
 const INVENTORY_SIZE := 40
@@ -28,6 +29,8 @@ var mobs_db := Config.data("mobs")
 var skills_db := Config.data("skills")
 var visuals := Config.data("visuals")
 var themes_db := Config.data("themes")
+var quests_db := Config.data("quests")
+var quests: Dictionary = Quests.new_state()
 
 var rng = Rng.new()
 var character = Character.new()
@@ -155,7 +158,7 @@ func item_changed(item: Dictionary) -> void:
 
 func to_dict() -> Dictionary:
 	return {"version": SAVE_VERSION, "content_version": economy["content_version"], "character": character.to_dict(),
-		"xp": xp, "inventory": inventory, "equipped": equipped}
+		"xp": xp, "inventory": inventory, "equipped": equipped, "quests": quests}
 
 
 func save_game() -> void:
@@ -170,6 +173,7 @@ func load_game() -> void:
 	character = Character.from_dict(d["character"])
 	xp = int(d.get("xp", 0))
 	inventory = _ints(d.get("inventory", []))
+	quests = d.get("quests", Quests.new_state())
 	equipped = {}
 	var eq: Dictionary = d.get("equipped", {})
 	for k in eq:
@@ -181,6 +185,7 @@ func new_game() -> void:
 	xp = 0
 	inventory = []
 	equipped = {}
+	quests = Quests.new_state()
 	character.wallet.add("zen", 5000)
 	character.wallet.add("lume", 6)
 	character.wallet.add("prisma", 3)
@@ -205,3 +210,86 @@ func _ints(list: Array) -> Array:
 		for line in it["affixes"]:
 			line["tier"] = int(line["tier"])
 	return list
+
+
+# --- missões ---
+
+func quest_status(id: String) -> String:
+	return Quests.status(quests_db, quests, id, character.level)
+
+
+func accept_quest(id: String) -> bool:
+	var ok := Quests.accept(quests_db, quests, id, character.level)
+	if ok:
+		toast.emit("Missão aceita: %s" % Quests.find(quests_db, id)["name"], Color("#ffd166"))
+		save_game()
+		changed.emit()
+	return ok
+
+
+func quest_event(ev: Dictionary) -> void:
+	for id in Quests.on_event(quests_db, quests, ev):
+		var q := Quests.find(quests_db, id)
+		var p := Quests.progress(quests_db, quests, id)
+		if quests["done"].has(id):
+			toast.emit("%s concluída! Volte à Ilse." % q["name"], Color("#3fd67a"))
+			save_game()
+		elif q["goal"]["type"] != "kill" or p[0] % 5 == 0:
+			toast.emit("%s: %d/%d" % [q["name"], p[0], p[1]], Color("#ffe3a0"))
+	changed.emit()
+
+
+func quest_drops(mob_id: String) -> Array:
+	return Quests.drops_for_kill(quests_db, quests, mob_id, rng)
+
+
+## Entrega e aplica a recompensa (XP, moedas, joias e item).
+func turn_in_quest(id: String) -> Dictionary:
+	var r := Quests.turn_in(quests_db, quests, id)
+	if r.is_empty():
+		return r
+	for k in r:
+		if k == "xp":
+			continue
+		if k == "item":
+			var spec: Dictionary = r["item"]
+			var it := Loot.make_item(loot_ctx(), spec["slot"], maxi(1, character.level), spec["rarity"], spec.get("set", ""))
+			inventory.append(it)
+			toast.emit("Recompensa: %s" % it["name"], Color(items_db["rarity_colors"][it["rarity"]]))
+		else:
+			character.wallet.add(k, int(r[k]))
+	add_xp(int(r.get("xp", 0)))
+	toast.emit("Missão entregue: %s" % Quests.find(quests_db, id)["name"], Color("#3fd67a"))
+	save_game()
+	changed.emit()
+	return r
+
+
+## Missões que a HUD acompanha: ativas e prontas.
+func tracked_quests() -> Array:
+	return quests["active"].keys() + quests["done"]
+
+
+# --- comparação ---
+
+func compare(item: Dictionary) -> Dictionary:
+	return Stats.compare(character.level, equipped, item, items_db, sets_db)
+
+
+func is_upgrade(item: Dictionary) -> bool:
+	return equipped.get(item["slot"]) != item and compare(item)["power"] > 0
+
+
+func equip_best() -> int:
+	var best := Stats.best_loadout(character.level, equipped, inventory, items_db, sets_db)
+	var n := 0
+	for slot in best:
+		if equipped.get(slot) != best[slot]:
+			inventory.erase(best[slot])
+			if equipped.has(slot):
+				inventory.append(equipped[slot])
+			equipped[slot] = best[slot]
+			n += 1
+	recompute()
+	save_game()
+	return n

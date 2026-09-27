@@ -35,6 +35,7 @@ func _run() -> void:
 		await _frames(3)
 		_ok(w.hud.panel != null, "painel %s abre" % p)
 		w.hud.close_panel()
+	_ok(gs.accept_quest("q_primeiros_passos"), "aceitou missão inicial")
 	await _frames(2)
 	w.travel("vale_oco", "normal")
 	await _frames(12)
@@ -59,6 +60,11 @@ func _run() -> void:
 		m.take_damage(1e9, false, m.global_position)
 	await _frames(5)
 	_ok(w.boss_dead, "chefe morreu")
+	_ok(gs.quest_status("q_primeiros_passos") == "ready", "missão de abate concluída")
+	var zq: int = gs.character.wallet.zen
+	gs.turn_in_quest("q_primeiros_passos")
+	_ok(gs.quest_status("q_primeiros_passos") == "completed" and gs.character.wallet.zen > zq, "entregou e recebeu recompensa")
+	_ok(gs.accept_quest("q_dentes"), "aceitou missão de coleta")
 	_ok(gs.character.level > lvl0, "subiu de nível (%d)" % gs.character.level)
 	var drops := 0
 	for n in w.get_children():
@@ -89,6 +95,7 @@ func _run() -> void:
 	w.hud.panel._do_spin()
 	await _frames(3)
 	w.hud.close_panel()
+	_ok(gs.equip_best() >= 0 and gs.power() > 0, "equipar melhores")
 	# Equipa o primeiro item e confere o boneco.
 	if gs.inventory.size() > 0:
 		gs.equip(gs.inventory[0])
