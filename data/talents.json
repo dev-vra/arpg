@@ -160,20 +160,21 @@
      "skill": {
       "id": "brado",
       "heal_pct": 6.0
-     }
+     },
+     "notable": true
     },
     {
      "id": "juramento_2_s2",
-     "name": "Terra Sagrada",
-     "icon": "earth-crack",
+     "name": "Renovação",
+     "icon": "heart-plus",
      "row": 2,
      "col": "s2",
      "side": "superior",
      "max": 2,
-     "skill": {
-      "id": "impacto",
-      "stun": 0.3
-     }
+     "stats": {
+      "hp_regen_pct": 0.3
+     },
+     "notable": true
     },
     {
      "id": "juramento_2_n",
@@ -189,29 +190,29 @@
     },
     {
      "id": "juramento_2_i1",
-     "name": "Lâminas Vorazes",
-     "icon": "sword-spin",
+     "name": "Carrasco",
+     "icon": "skull-crossed-bones",
      "row": 2,
      "col": "i1",
      "side": "infernal",
      "max": 2,
-     "skill": {
-      "id": "giro",
-      "mult_pct": 12.0
-     }
+     "stats": {
+      "execute_pct": 10.0
+     },
+     "notable": true
     },
     {
      "id": "juramento_2_i2",
-     "name": "Carga Brutal",
-     "icon": "shield-bash",
+     "name": "Banquete Macabro",
+     "icon": "vampire-dracula",
      "row": 2,
      "col": "i2",
      "side": "infernal",
      "max": 2,
-     "skill": {
-      "id": "investida",
-      "mult_pct": 15.0
-     }
+     "stats": {
+      "on_kill_heal_pct": 1.0
+     },
+     "notable": true
     },
     {
      "id": "juramento_3_s1",
@@ -222,7 +223,7 @@
      "side": "superior",
      "max": 2,
      "stats": {
-      "hp_flat": 60.0
+      "dmg_taken_pct": -3.0
      }
     },
     {
@@ -251,14 +252,14 @@
     },
     {
      "id": "juramento_3_i1",
-     "name": "Instinto",
-     "icon": "bloody-sword",
+     "name": "Caçador de Tiranos",
+     "icon": "crown",
      "row": 3,
      "col": "i1",
      "side": "infernal",
      "max": 2,
      "stats": {
-      "crit_chance": 3.0
+      "dmg_boss_pct": 8.0
      }
     },
     {
@@ -275,30 +276,31 @@
     },
     {
      "id": "juramento_4_s1",
-     "name": "Égide",
-     "icon": "angel-outfit",
+     "name": "Halo",
+     "icon": "sun-radiations",
      "row": 4,
      "col": "s1",
      "side": "superior",
      "max": 2,
-     "skill": {
-      "id": "brado",
-      "def_bonus_pct": 15.0,
-      "duration": 1.5
+     "stats": {
+      "hp_pct": 4.0,
+      "resist_all": 3.0
      }
     },
     {
      "id": "juramento_4_s2",
-     "name": "Halo",
-     "icon": "sun-radiations",
+     "name": "Juramento Inquebrável",
+     "icon": "angel-outfit",
      "row": 4,
      "col": "s2",
      "side": "superior",
-     "max": 2,
+     "max": 1,
      "stats": {
-      "hp_pct": 5.0,
-      "resist_all": 3.0
-     }
+      "hp_pct": 20,
+      "dmg_taken_pct": -10,
+      "attack_speed": -15
+     },
+     "keystone": true
     },
     {
      "id": "juramento_4_n",
@@ -307,10 +309,10 @@
      "row": 4,
      "col": "n",
      "side": "neutral",
-     "max": 1,
+     "max": 2,
      "stats": {
-      "atk_pct": 3.0,
-      "def_pct": 3.0
+      "atk_pct": 2.0,
+      "def_pct": 2.0
      }
     },
     {
@@ -322,21 +324,23 @@
      "side": "infernal",
      "max": 2,
      "stats": {
-      "atk_pct": 6.0
+      "atk_pct": 5.0
      }
     },
     {
      "id": "juramento_4_i2",
-     "name": "Carnificina",
-     "icon": "vampire-dracula",
+     "name": "Pacto de Sangue",
+     "icon": "devil-mask",
      "row": 4,
      "col": "i2",
      "side": "infernal",
-     "max": 2,
+     "max": 1,
      "stats": {
-      "life_steal": 1.5,
-      "crit_damage": 8.0
-     }
+      "atk_pct": 30,
+      "hp_pct": -10,
+      "no_regen": 1
+     },
+     "keystone": true
     }
    ]
   },
@@ -354,7 +358,7 @@
      "side": "superior",
      "max": 2,
      "stats": {
-      "def_pct": 4.8
+      "def_pct": 4.5
      }
     },
     {
@@ -366,7 +370,7 @@
      "side": "superior",
      "max": 2,
      "stats": {
-      "hp_pct": 4.8
+      "hp_pct": 4.5
      }
     },
     {
@@ -378,7 +382,7 @@
      "side": "neutral",
      "max": 1,
      "stats": {
-      "atk_flat": 8.0
+      "atk_flat": 7.5
      }
     },
     {
@@ -390,7 +394,7 @@
      "side": "infernal",
      "max": 2,
      "stats": {
-      "atk_pct": 4.8
+      "atk_pct": 4.5
      }
     },
     {
@@ -402,19 +406,19 @@
      "side": "infernal",
      "max": 2,
      "stats": {
-      "crit_damage": 9.6
+      "crit_damage": 9.0
      }
     },
     {
      "id": "ascensao_1_s1",
-     "name": "Baluarte",
-     "icon": "round-shield",
+     "name": "Espinhos Sagrados",
+     "icon": "spiked-armor",
      "row": 1,
      "col": "s1",
      "side": "superior",
      "max": 2,
      "stats": {
-      "block": 3.2
+      "thorns_pct": 9.0
      }
     },
     {
@@ -426,7 +430,7 @@
      "side": "superior",
      "max": 2,
      "stats": {
-      "resist_all": 4.8
+      "resist_all": 4.5
      }
     },
     {
@@ -438,7 +442,7 @@
      "side": "neutral",
      "max": 1,
      "stats": {
-      "move_speed": 4.8
+      "move_speed": 4.5
      }
     },
     {
@@ -450,19 +454,19 @@
      "side": "infernal",
      "max": 2,
      "stats": {
-      "attack_speed": 4.8
+      "attack_speed": 4.5
      }
     },
     {
      "id": "ascensao_1_i2",
-     "name": "Banquete",
-     "icon": "blood",
+     "name": "Perseguição",
+     "icon": "run",
      "row": 1,
      "col": "i2",
      "side": "infernal",
      "max": 2,
      "stats": {
-      "life_steal": 1.6
+      "speed_on_kill": 9.0
      }
     },
     {
@@ -475,9 +479,10 @@
      "max": 2,
      "skill": {
       "id": "investida",
-      "distance_pct": 24.0,
-      "cooldown_pct": -12.8
-     }
+      "distance_pct": 22.5,
+      "cooldown_pct": -12.0
+     },
+     "notable": true
     },
     {
      "id": "ascensao_2_s2",
@@ -489,19 +494,21 @@
      "max": 2,
      "skill": {
       "id": "impacto",
-      "radius_pct": 19.2
-     }
+      "radius_pct": 18.0,
+      "stun": 0.3
+     },
+     "notable": true
     },
     {
      "id": "ascensao_2_n",
-     "name": "Mente Fria",
+     "name": "Amplitude",
      "icon": "sparkles",
      "row": 2,
      "col": "n",
      "side": "neutral",
      "max": 1,
      "stats": {
-      "cooldown": 4.8
+      "area_pct": 9.0
      }
     },
     {
@@ -514,9 +521,10 @@
      "max": 2,
      "skill": {
       "id": "giro",
-      "radius_pct": 19.2,
-      "cooldown_pct": -12.8
-     }
+      "radius_pct": 18.0,
+      "mult_pct": 15.0
+     },
+     "notable": true
     },
     {
      "id": "ascensao_2_i2",
@@ -528,19 +536,20 @@
      "max": 2,
      "skill": {
       "id": "impacto",
-      "mult_pct": 24.0
-     }
+      "mult_pct": 22.5
+     },
+     "notable": true
     },
     {
      "id": "ascensao_3_s1",
-     "name": "Sentinela Eterna",
+     "name": "Última Defesa",
      "icon": "heart-shield",
      "row": 3,
      "col": "s1",
      "side": "superior",
      "max": 2,
      "stats": {
-      "hp_flat": 96.0
+      "low_life_dr_pct": 12.0
      }
     },
     {
@@ -552,7 +561,7 @@
      "side": "superior",
      "max": 2,
      "stats": {
-      "def_flat": 40.0
+      "def_flat": 37.5
      }
     },
     {
@@ -564,7 +573,7 @@
      "side": "neutral",
      "max": 1,
      "stats": {
-      "crit_chance": 3.2
+      "crit_chance": 3.0
      }
     },
     {
@@ -576,19 +585,19 @@
      "side": "infernal",
      "max": 2,
      "stats": {
-      "crit_chance": 4.8
+      "crit_chance": 4.5
      }
     },
     {
      "id": "ascensao_3_i2",
-     "name": "Selvageria",
-     "icon": "mailed-fist",
+     "name": "Carrasco Rubro",
+     "icon": "skull-crossed-bones",
      "row": 3,
      "col": "i2",
      "side": "infernal",
      "max": 2,
      "stats": {
-      "atk_flat": 16.0
+      "execute_pct": 15.0
      }
     },
     {
@@ -600,22 +609,23 @@
      "side": "superior",
      "max": 2,
      "stats": {
-      "def_pct": 8.0,
-      "hp_pct": 6.4
+      "def_pct": 6.0,
+      "hp_pct": 4.5
      }
     },
     {
      "id": "ascensao_4_s2",
-     "name": "Graça",
-     "icon": "sun-radiations",
+     "name": "Martírio",
+     "icon": "holy-symbol",
      "row": 4,
      "col": "s2",
      "side": "superior",
-     "max": 2,
-     "skill": {
-      "id": "brado",
-      "heal_pct": 12.8
-     }
+     "max": 1,
+     "stats": {
+      "heal_mult_pct": 50,
+      "atk_pct": -15
+     },
+     "keystone": true
     },
     {
      "id": "ascensao_4_n",
@@ -624,10 +634,10 @@
      "row": 4,
      "col": "n",
      "side": "neutral",
-     "max": 1,
+     "max": 2,
      "stats": {
-      "atk_pct": 4.8,
-      "def_pct": 4.8
+      "atk_pct": 3.0,
+      "def_pct": 3.0
      }
     },
     {
@@ -639,22 +649,23 @@
      "side": "infernal",
      "max": 2,
      "stats": {
-      "atk_pct": 8.0,
-      "attack_speed": 6.4
+      "atk_pct": 6.0,
+      "attack_speed": 4.5
      }
     },
     {
      "id": "ascensao_4_i2",
-     "name": "Pacto de Sangue",
-     "icon": "devil-mask",
+     "name": "Fúria Descontrolada",
+     "icon": "fire-ray",
      "row": 4,
      "col": "i2",
      "side": "infernal",
-     "max": 2,
+     "max": 1,
      "stats": {
-      "life_steal": 2.4,
-      "crit_chance": 3.2
-     }
+      "attack_speed": 25,
+      "dmg_taken_pct": 15
+     },
+     "keystone": true
     }
    ]
   },
@@ -672,7 +683,7 @@
      "side": "superior",
      "max": 2,
      "stats": {
-      "def_pct": 7.2
+      "def_pct": 6.6
      }
     },
     {
@@ -684,7 +695,7 @@
      "side": "superior",
      "max": 2,
      "stats": {
-      "hp_pct": 7.2
+      "hp_pct": 6.6
      }
     },
     {
@@ -696,7 +707,7 @@
      "side": "neutral",
      "max": 1,
      "stats": {
-      "atk_flat": 12.0
+      "atk_flat": 11.0
      }
     },
     {
@@ -708,7 +719,7 @@
      "side": "infernal",
      "max": 2,
      "stats": {
-      "atk_pct": 7.2
+      "atk_pct": 6.6
      }
     },
     {
@@ -720,7 +731,7 @@
      "side": "infernal",
      "max": 2,
      "stats": {
-      "crit_damage": 14.4
+      "crit_damage": 13.2
      }
     },
     {
@@ -732,7 +743,7 @@
      "side": "superior",
      "max": 2,
      "stats": {
-      "block": 4.8
+      "block": 4.4
      }
     },
     {
@@ -744,7 +755,7 @@
      "side": "superior",
      "max": 2,
      "stats": {
-      "resist_all": 7.2
+      "resist_all": 6.6
      }
     },
     {
@@ -756,7 +767,7 @@
      "side": "neutral",
      "max": 1,
      "stats": {
-      "move_speed": 7.2
+      "move_speed": 6.6
      }
     },
     {
@@ -768,7 +779,7 @@
      "side": "infernal",
      "max": 2,
      "stats": {
-      "attack_speed": 7.2
+      "attack_speed": 6.6
      }
     },
     {
@@ -780,7 +791,7 @@
      "side": "infernal",
      "max": 2,
      "stats": {
-      "life_steal": 2.4
+      "life_steal": 2.2
      }
     },
     {
@@ -793,9 +804,10 @@
      "max": 2,
      "skill": {
       "id": "impacto",
-      "mult_pct": 36.0,
-      "stun": 0.72
-     }
+      "mult_pct": 33.0,
+      "stun": 0.66
+     },
+     "notable": true
     },
     {
      "id": "transcendencia_2_s2",
@@ -807,9 +819,10 @@
      "max": 2,
      "skill": {
       "id": "brado",
-      "duration": 4.8,
-      "def_bonus_pct": 24.0
-     }
+      "duration": 4.4,
+      "def_bonus_pct": 22.0
+     },
+     "notable": true
     },
     {
      "id": "transcendencia_2_n",
@@ -820,7 +833,7 @@
      "side": "neutral",
      "max": 1,
      "stats": {
-      "cooldown": 7.2
+      "cooldown": 6.6
      }
     },
     {
@@ -833,8 +846,9 @@
      "max": 2,
      "skill": {
       "id": "giro",
-      "mult_pct": 36.0
-     }
+      "mult_pct": 33.0
+     },
+     "notable": true
     },
     {
      "id": "transcendencia_2_i2",
@@ -846,9 +860,10 @@
      "max": 2,
      "skill": {
       "id": "investida",
-      "mult_pct": 48.0,
-      "distance_pct": 24.0
-     }
+      "mult_pct": 44.0,
+      "distance_pct": 22.0
+     },
+     "notable": true
     },
     {
      "id": "transcendencia_3_s1",
@@ -859,19 +874,19 @@
      "side": "superior",
      "max": 2,
      "stats": {
-      "hp_flat": 144.0
+      "low_life_dr_pct": 17.6
      }
     },
     {
      "id": "transcendencia_3_s2",
-     "name": "Fortaleza",
-     "icon": "spiked-armor",
+     "name": "Luz Plena",
+     "icon": "sun-radiations",
      "row": 3,
      "col": "s2",
      "side": "superior",
      "max": 2,
      "stats": {
-      "def_flat": 60.0
+      "crit_full_hp": 13.2
      }
     },
     {
@@ -883,7 +898,7 @@
      "side": "neutral",
      "max": 1,
      "stats": {
-      "crit_chance": 4.8
+      "crit_chance": 4.4
      }
     },
     {
@@ -895,7 +910,7 @@
      "side": "infernal",
      "max": 2,
      "stats": {
-      "crit_chance": 7.2
+      "dmg_boss_pct": 17.6
      }
     },
     {
@@ -907,7 +922,7 @@
      "side": "infernal",
      "max": 2,
      "stats": {
-      "atk_flat": 24.0
+      "on_kill_heal_pct": 2.2
      }
     },
     {
@@ -919,23 +934,24 @@
      "side": "superior",
      "max": 2,
      "stats": {
-      "def_pct": 14.4,
-      "hp_pct": 14.4,
-      "block": 7.2
+      "def_pct": 11.0,
+      "hp_pct": 11.0
      }
     },
     {
      "id": "transcendencia_4_s2",
-     "name": "Mão Divina",
-     "icon": "crystal-growth",
+     "name": "Égide Eterna",
+     "icon": "round-shield",
      "row": 4,
      "col": "s2",
      "side": "superior",
-     "max": 2,
+     "max": 1,
      "stats": {
-      "resist_all": 12.0,
-      "cooldown": 9.6
-     }
+      "block_cap": 75,
+      "block": 10,
+      "move_speed": -20
+     },
+     "keystone": true
     },
     {
      "id": "transcendencia_4_n",
@@ -944,10 +960,10 @@
      "row": 4,
      "col": "n",
      "side": "neutral",
-     "max": 1,
+     "max": 2,
      "stats": {
-      "atk_pct": 9.6,
-      "def_pct": 9.6
+      "atk_pct": 6.6,
+      "def_pct": 6.6
      }
     },
     {
@@ -959,22 +975,23 @@
      "side": "infernal",
      "max": 2,
      "stats": {
-      "atk_pct": 19.2,
-      "crit_damage": 28.8
+      "atk_pct": 13.2,
+      "crit_damage": 22.0
      }
     },
     {
      "id": "transcendencia_4_i2",
-     "name": "Fome Eterna",
-     "icon": "blood",
+     "name": "Coração de Cinza",
+     "icon": "ember-shot",
      "row": 4,
      "col": "i2",
      "side": "infernal",
-     "max": 2,
+     "max": 1,
      "stats": {
-      "life_steal": 4.8,
-      "attack_speed": 12.0
-     }
+      "crit_damage": 60,
+      "life_drain_pct": 1
+     },
+     "keystone": true
     }
    ]
   }

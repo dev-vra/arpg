@@ -35,6 +35,8 @@ var buff_def := 0.0
 var since_hit := 10.0
 var dead := false
 var attack_held := false
+var kill_speed_time := 0.0
+var since_action := 10.0
 var combo_i := 0
 
 
@@ -93,8 +95,17 @@ func _physics_process(delta: float) -> void:
 	invuln = maxf(0.0, invuln - delta)
 	buff_time = maxf(0.0, buff_time - delta)
 	since_hit += delta
-	if since_hit > 4.0 and hp < max_hp():
-		hp = minf(max_hp(), hp + max_hp() * 0.03 * delta)
+	since_action += delta
+	kill_speed_time = maxf(0.0, kill_speed_time - delta)
+	var st: Dictionary = GameState.stats
+	var regen: float = st.get("hp_regen_pct", 0.0)
+	if since_hit > 4.0 and st.get("no_regen", 0.0) <= 0.0:
+		regen += 3.0
+	if regen > 0.0 and hp < max_hp():
+		heal(max_hp() * regen / 100.0 * delta, false)
+	var drain: float = st.get("life_drain_pct", 0.0)
+	if drain > 0.0 and minf(since_hit, since_action) < 3.0 and hp > max_hp() * 0.1:
+		hp -= max_hp() * drain / 100.0 * delta
 		hp_changed.emit()
 
 	if dash_time > 0.0:
@@ -116,7 +127,7 @@ func _physics_process(delta: float) -> void:
 		dir = Vector3(kb.x, 0, kb.y)
 	if dir.length() > 1.0:
 		dir = dir.normalized()
-	var speed: float = SPEED * (1.0 + GameState.stats.get("move_speed", 0.0) / 100.0)
+	var speed: float = SPEED * (1.0 + (GameState.stats.get("move_speed", 0.0) + (GameState.stats.get("speed_on_kill", 0.0) if kill_speed_time > 0.0 else 0.0)) / 100.0)
 	if lock_time > 0.0:
 		speed *= 0.15
 	velocity = Vector3(dir.x * speed, -1.0, dir.z * speed)
@@ -190,8 +201,7 @@ func use_skill(i: int) -> void:
 			lock_time = 0.5
 			buff_time = float(s["duration"])
 			buff_def = float(s["def_bonus_pct"])
-			hp = minf(max_hp(), hp + max_hp() * float(s["heal_pct"]) / 100.0)
-			hp_changed.emit()
+			heal(max_hp() * float(s["heal_pct"]) / 100.0)
 			Fx.ring(world, global_position, 3.0, Color("#7dffb0"), 0.7)
 			Fx.sparks(world, global_position, Color("#7dffb0"), 24)
 			Fx.number(world, global_position, "+%d%% DEF" % int(buff_def), Color("#7dffb0"))
@@ -231,8 +241,7 @@ func drink_potion() -> void:
 		return
 	potions -= 1
 	potion_cd = 1.0
-	hp = minf(max_hp(), hp + max_hp() * 0.45)
-	hp_changed.emit()
+	heal(max_hp() * 0.45)
 	Fx.sparks(world, global_position, Color("#ff5a6e"), 18)
 
 
@@ -241,17 +250,22 @@ func drink_potion() -> void:
 func _hit(enemy, mult: float, color: Color) -> void:
 	var s: Dictionary = GameState.stats
 	var dmg: float = s["atk"] * mult * randf_range(0.9, 1.1)
-	var crit: bool = randf() * 100.0 < s["crit_chance"]
+	since_action = 0.0
+	if enemy.is_boss:
+		dmg *= 1.0 + s["dmg_boss_pct"] / 100.0
+	if enemy.hp < enemy.max_hp * 0.35:
+		dmg *= 1.0 + s["execute_pct"] / 100.0
+	var crit_c: float = s["crit_chance"] + (s["crit_full_hp"] if hp >= max_hp() * 0.9 else 0.0)
+	var crit: bool = randf() * 100.0 < crit_c
 	if crit:
 		dmg *= 1.0 + s["crit_damage"] / 100.0
 	var dealt: float = enemy.take_damage(dmg, crit, global_position)
 	if s["life_steal"] > 0.0 and dealt > 0.0:
-		hp = minf(max_hp(), hp + dealt * s["life_steal"] / 100.0)
-		hp_changed.emit()
+		heal(dealt * s["life_steal"] / 100.0, false)
 	Fx.sparks(world, enemy.global_position, color, 8 if not crit else 16)
 
 
-func take_damage(raw: float, attacker_level: int) -> void:
+func take_damage(raw: float, attacker_level: int, attacker = null) -> void:
 	if dead or invuln > 0.0:
 		return
 	var s: Dictionary = GameState.stats
@@ -261,6 +275,12 @@ func take_damage(raw: float, attacker_level: int) -> void:
 		return
 	var defense: float = s["def"] * (1.0 + (buff_def / 100.0 if buff_time > 0.0 else 0.0))
 	var dmg := Stats.mitigate(raw, defense, attacker_level)
+	var taken_pct: float = s["dmg_taken_pct"]
+	if hp < max_hp() * 0.4:
+		taken_pct -= s["low_life_dr_pct"]
+	dmg *= maxf(0.1, 1.0 + taken_pct / 100.0)
+	if attacker and is_instance_valid(attacker) and s["thorns_pct"] > 0.0:
+		attacker.take_damage(raw * s["thorns_pct"] / 100.0, false, global_position)
 	hp -= dmg
 	since_hit = 0.0
 	visual.flash()
@@ -272,3 +292,24 @@ func take_damage(raw: float, attacker_level: int) -> void:
 		dead = true
 		visual.play_once(kit["anims"]["death"], 1.0)
 		died.emit()
+
+
+
+## Toda cura passa por aqui (Martírio amplifica); números verdes quando visível.
+func heal(amount: float, show: bool = true) -> void:
+	if dead or amount <= 0.0:
+		return
+	amount *= 1.0 + GameState.stats.get("heal_mult_pct", 0.0) / 100.0
+	var before := hp
+	hp = minf(max_hp(), hp + amount)
+	if show and hp - before >= 1.0:
+		Fx.number(world, global_position, "+%d" % int(hp - before), Color("#6dff8a"))
+	hp_changed.emit()
+
+
+func on_kill() -> void:
+	var s: Dictionary = GameState.stats
+	if s.get("on_kill_heal_pct", 0.0) > 0.0:
+		heal(max_hp() * s["on_kill_heal_pct"] / 100.0, false)
+	if s.get("speed_on_kill", 0.0) > 0.0:
+		kill_speed_time = 3.0

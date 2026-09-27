@@ -226,7 +226,7 @@ func _strike(player, dist: float) -> void:
 	var reach := float(def["range"]) * float(def.get("scale", 1.0)) * 0.55 + 1.4
 	Fx.slash(world, global_position, (player.global_position - global_position).normalized(), Color("#ff6b6b"), 1.8, 90.0)
 	if dist <= reach:
-		player.take_damage(dmg, level)
+		player.take_damage(dmg, level, self)
 
 
 func _start_slam() -> void:
@@ -247,7 +247,7 @@ func _do_slam(player) -> void:
 	Fx.ring(world, global_position, r, Color("#ff5a3a"), 0.55)
 	Fx.sparks(world, global_position, Color("#ff9a5a"), 36)
 	if player.global_position.distance_to(global_position) <= r:
-		player.take_damage(dmg * 1.8, level)
+		player.take_damage(dmg * 1.8, level, self)
 
 
 func _set_param(value, param: String) -> void:

@@ -13,6 +13,10 @@ static func base(level: int) -> Dictionary:
 		"max_hp": 120.0 + 18.0 * level, "atk": 8.0 + 2.0 * level, "def": 4.0 + level,
 		"crit_chance": 5.0, "crit_damage": 50.0, "attack_speed": 0.0, "move_speed": 0.0,
 		"life_steal": 0.0, "block": 0.0, "cooldown": 0.0, "resist_all": 0.0, "zen_find": 0.0,
+		# Condicionais e keystones (espíritos):
+		"dmg_boss_pct": 0.0, "execute_pct": 0.0, "low_life_dr_pct": 0.0, "on_kill_heal_pct": 0.0,
+		"dmg_taken_pct": 0.0, "area_pct": 0.0, "hp_regen_pct": 0.0, "thorns_pct": 0.0, "crit_full_hp": 0.0,
+		"speed_on_kill": 0.0, "heal_mult_pct": 0.0, "life_drain_pct": 0.0, "no_regen": 0.0, "block_cap": 0.0,
 	}
 
 
@@ -51,7 +55,10 @@ static func compute(level: int, equipped: Array, items_db: Dictionary, sets_db: 
 	for k in pct:
 		s[k] = s[k] * (1.0 + pct[k] / 100.0)
 	s["crit_chance"] = minf(s["crit_chance"], 75.0)
-	s["block"] = minf(s["block"], 50.0)
+	s["block"] = minf(s["block"], maxf(50.0, s["block_cap"]))
+	s["dmg_taken_pct"] = maxf(s["dmg_taken_pct"], -60.0)
+	s["attack_speed"] = maxf(s["attack_speed"], -50.0)
+	s["move_speed"] = maxf(s["move_speed"], -50.0)
 	s["cooldown"] = minf(s["cooldown"], 40.0)
 	s["resist_all"] = minf(s["resist_all"], 60.0)
 	return s

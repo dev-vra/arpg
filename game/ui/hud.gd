@@ -388,3 +388,56 @@ func _unhandled_input(event: InputEvent) -> void:
 			open_panel("quests")
 		KEY_K:
 			open_panel("talents")
+
+
+
+## Faixa de level up: "NÍVEL X" dourado que surge grande e assenta, com divisória
+## brilhante e aviso de ponto de espírito e de skill nova.
+func level_banner(level: int) -> void:
+	var box := VBoxContainer.new()
+	box.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	box.alignment = BoxContainer.ALIGNMENT_CENTER
+	_place(box, Vector2(0.5, 0.3), Vector2(-360, -70), Vector2(720, 150))
+	root.add_child(box)
+	var t := Label.new()
+	t.text = "NÍVEL %d" % level
+	t.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	t.add_theme_font_size_override("font_size", 64)
+	t.add_theme_color_override("font_color", Color("#ffd98a"))
+	t.add_theme_color_override("font_outline_color", Color("#5a3a00"))
+	t.add_theme_constant_override("outline_size", 14)
+	t.add_theme_color_override("font_shadow_color", Color(1, 0.7, 0.2, 0.6))
+	t.add_theme_constant_override("shadow_outline_size", 24)
+	box.add_child(t)
+	var div := TextureRect.new()
+	div.texture = load("res://assets/ui/frames/divider.png")
+	div.stretch_mode = TextureRect.STRETCH_SCALE
+	div.custom_minimum_size = Vector2(520, 14)
+	div.size_flags_horizontal = Control.SIZE_SHRINK_CENTER
+	div.modulate = Color("#ffd166")
+	box.add_child(div)
+	var sub := Label.new()
+	var extra := ""
+	for sk in GameState.skills_db["sentinela"]["skills"]:
+		if int(sk.get("unlock_level", 1)) == level:
+			extra = "  ·  Nova skill: %s" % sk["name"]
+	sub.text = "+1 ponto de Espírito%s" % extra
+	sub.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	sub.add_theme_font_size_override("font_size", 24)
+	sub.add_theme_color_override("font_color", Color("#e8e2d6"))
+	sub.add_theme_color_override("font_outline_color", Color.BLACK)
+	sub.add_theme_constant_override("outline_size", 8)
+	box.add_child(sub)
+	box.pivot_offset = Vector2(360, 75)
+	box.scale = Vector2(1.8, 1.8)
+	box.modulate.a = 0.0
+	var tw := box.create_tween()
+	tw.set_parallel(true)
+	tw.tween_property(box, "scale", Vector2.ONE, 0.35).set_ease(Tween.EASE_OUT).set_trans(Tween.TRANS_BACK)
+	tw.tween_property(box, "modulate:a", 1.0, 0.2)
+	tw.chain().tween_interval(1.8)
+	tw.chain().tween_property(box, "modulate:a", 0.0, 0.6)
+	tw.chain().tween_callback(box.queue_free)
+	var lvl_tw := level_label.create_tween()
+	lvl_tw.tween_property(level_label, "modulate", Color(1.6, 1.3, 0.6), 0.2)
+	lvl_tw.tween_property(level_label, "modulate", Color.WHITE, 0.8)

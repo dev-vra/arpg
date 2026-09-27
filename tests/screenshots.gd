@@ -49,6 +49,9 @@ func _run() -> void:
 			near = m
 	w.player.global_position = near.global_position + Vector3(-3.5, 0, 2.5)
 	await create_timer(0.6).timeout
+	gs.add_xp(gs.xp_needed())
+	await create_timer(0.55).timeout
+	await _shot(out + "/6_levelup.png")
 	w.player.use_skill(1)
 	await create_timer(0.12).timeout
 	await _shot(out + "/2_combat.png")

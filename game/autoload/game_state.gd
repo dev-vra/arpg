@@ -83,7 +83,6 @@ func add_xp(amount: int) -> void:
 	if gained > 0:
 		recompute()
 		leveled.emit(character.level)
-		toast.emit("Nível %d! +%d ponto(s) de espírito" % [character.level, gained], Color("#ffd166"))
 		for s in skills_db["sentinela"]["skills"]:
 			if int(s.get("unlock_level", 1)) > character.level - gained and int(s.get("unlock_level", 1)) <= character.level:
 				toast.emit("Nova skill: %s" % s["name"], Color("#7fd1ff"))
@@ -397,7 +396,7 @@ func skill_with_mods(i: int) -> Dictionary:
 	if s.has("mult"):
 		s["mult"] = float(s["mult"]) * (1.0 + m.get("mult_pct", 0.0) / 100.0)
 	if s.has("radius"):
-		s["radius"] = float(s["radius"]) * (1.0 + m.get("radius_pct", 0.0) / 100.0)
+		s["radius"] = float(s["radius"]) * (1.0 + (m.get("radius_pct", 0.0) + stats.get("area_pct", 0.0)) / 100.0)
 	if s.has("distance"):
 		s["distance"] = float(s["distance"]) * (1.0 + m.get("distance_pct", 0.0) / 100.0)
 	s["cooldown"] = float(s["cooldown"]) * (1.0 + m.get("cooldown_pct", 0.0) / 100.0)

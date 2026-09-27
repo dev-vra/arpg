@@ -107,6 +107,11 @@ func _node_button(t: Dictionary, id: String) -> Button:
 	var dim := err in ["row_locked", "other_spirit", "tree_locked"] and p == 0
 	b.add_theme_color_override("icon_normal_color", col if not dim else Color(0.35, 0.35, 0.38))
 	b.add_theme_color_override("font_color", Color("#ffd166") if p > 0 else Color("#8b8f99"))
+	if n.get("keystone", false):
+		var ks := UiTheme.frame("slot", 6, 14)
+		ks.modulate_color = col
+		b.add_theme_stylebox_override("normal", ks)
+		b.custom_minimum_size = Vector2(92, 80)
 	if id == sel:
 		b.add_theme_stylebox_override("normal", UiTheme.frame("button_pressed", 6, 12))
 	b.pressed.connect(_select.bind(id))
@@ -120,8 +125,19 @@ func _select(id: String) -> void:
 
 func _effect(n: Dictionary) -> String:
 	var parts := []
+	var per := "" if n.get("keystone", false) else " por ponto"
 	for k in n.get("stats", {}):
-		parts.append("+%s %s por ponto" % [ItemText._num(float(n["stats"][k])), ItemText.stat_name(k) if GameState.affixes["stats"].has(k) else ItemText.STAT_LABEL.get(k, k)])
+		var v := float(n["stats"][k])
+		var label: String = ItemText.STAT_LABEL.get(k, ItemText.stat_name(k))
+		if k == "no_regen":
+			parts.append("[color=#ff6b6b]Sem regeneração fora de combate[/color]")
+			continue
+		var bad: bool = (v < 0.0 and k != "dmg_taken_pct") or (v > 0.0 and k in ["dmg_taken_pct", "life_drain_pct"])
+		parts.append("[color=%s]%s%s %s%s[/color]" % ["#ff6b6b" if bad else "#e8e2d6", "+" if v > 0 else "", ItemText._num(v), label, per])
+	if n.get("keystone", false):
+		parts.insert(0, "[color=#ffd166][b]KEYSTONE[/b][/color]: poder enorme com um custo. Só 1 ponto.")
+	elif n.get("notable", false):
+		parts.insert(0, "[color=#9fd3ff]Notável[/color]")
 	if n.has("skill"):
 		var names := {"investida": "Investida", "giro": "Giro", "brado": "Brado", "impacto": "Impacto"}
 		var labels := {"mult_pct": "dano %", "radius_pct": "raio %", "distance_pct": "distância %", "cooldown_pct": "recarga %", "stun": "atordoamento (s)", "heal_pct": "cura %", "def_bonus_pct": "defesa do brado %", "duration": "duração (s)"}

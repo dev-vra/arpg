@@ -124,8 +124,11 @@ func _run() -> void:
 	await _frames(3)
 	_ok(true, "equipou item")
 	# Dano no jogador até morrer.
-	w.player.invuln = 0.0
-	w.player.take_damage(1e9, 99)
+	for i in 20:
+		if w.player.dead:
+			break
+		w.player.invuln = 0.0
+		w.player.take_damage(1e9, 99)
 	await _frames(3)
 	_ok(w.player.dead, "jogador pode morrer")
 	print("\nsmoke: %s" % ("OK" if errors == 0 else "%d falhas" % errors))

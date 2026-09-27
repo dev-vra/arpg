@@ -37,3 +37,16 @@ Números propostos, a calibrar pela simulação. Nenhuma regra travada do plano 
     Árvore alinhada com 10+ pontos dá o bônus do espírito (dobra ao completar 25). Redistribuir é grátis no MVP.
     Nós mudam atributos e skills (dano, raio, distância, recarga, cura, atordoamento). Dados em `data/talents.json`.
 19. **UI**: ícones game-icons.net (CC BY 3.0, créditos no menu) e molduras Kenney (CC0).
+
+## Espíritos v2 (pesquisa PoE2 / Diablo IV / Torchlight Infinite)
+
+20. Cada árvore mistura três tipos de nó, como nas referências: **menores** (+% simples, estilo micro-talento do Torchlight),
+    **notáveis** na linha 3 (mudam skills ou dão condicionais, estilo Diablo IV) e **keystones** na última linha, uma por lado,
+    com poder grande e custo sério (estilo PoE2), máx. 1 ponto. Exemplos: Juramento Inquebrável (+20% vida, -10% dano
+    recebido, -15% vel. ataque), Pacto de Sangue (+30% ataque, -10% vida, sem regeneração), Coração de Cinza (+60% dano
+    crítico, perde 1% de vida/s em combate).
+21. Atributos condicionais novos: dano contra chefes, execução (<35% de vida), redução de dano com vida baixa, cura e
+    velocidade ao matar, regeneração, espinhos, área de skills, crítico com vida cheia, curas amplificadas, teto de bloqueio.
+22. **Efeitos**: texturas do Kenney Particle Pack (CC0) em golpes, impactos, anéis e na animação de level up
+    (runa no chão, pilar de luz, estrelas, faíscas, clarão e faixa "NÍVEL X"). Level up cura por completo.
+    Bibliotecas avaliadas e descartadas: GODOT-VFX-LIBRARY (MIT, mas só 2D) e GDQuest VFX (arte CC-BY-NC-SA, não comercial).

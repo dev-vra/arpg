@@ -7,7 +7,15 @@ const SetBonus = preload("res://core/set_bonus.gd")
 const STAT_ORDER := ["atk", "max_hp", "def", "crit_chance", "crit_damage", "attack_speed", "move_speed", "life_steal", "block", "cooldown", "resist_all"]
 const STAT_LABEL := {"atk": "Ataque", "max_hp": "Vida", "def": "Defesa", "crit_chance": "Crítico %", "crit_damage": "Dano crítico %",
 	"attack_speed": "Vel. ataque %", "move_speed": "Vel. movimento %", "life_steal": "Roubo de vida %", "block": "Bloqueio %",
-	"cooldown": "Recarga %", "resist_all": "Resistência %"}
+	"cooldown": "Recarga %", "resist_all": "Resistência %",
+	"dmg_boss_pct": "dano contra chefes %", "execute_pct": "dano contra inimigos com menos de 35% de vida %",
+	"low_life_dr_pct": "redução de dano com menos de 40% de vida %", "on_kill_heal_pct": "vida recuperada ao matar %",
+	"dmg_taken_pct": "dano recebido %", "area_pct": "área de todas as skills %", "hp_regen_pct": "regeneração de vida por segundo %",
+	"thorns_pct": "dano refletido em quem te acerta %", "crit_full_hp": "chance de crítico com vida cheia %",
+	"speed_on_kill": "vel. movimento por 3 s ao matar %", "heal_mult_pct": "curas recebidas %",
+	"life_drain_pct": "vida perdida por segundo em combate %", "no_regen": "sem regeneração fora de combate",
+	"block_cap": "bloqueio máximo %", "atk_flat": "Ataque", "atk_pct": "Ataque %", "hp_flat": "Vida", "hp_pct": "Vida %",
+	"def_flat": "Defesa", "def_pct": "Defesa %"}
 
 
 static func rarity_color(it: Dictionary) -> String:

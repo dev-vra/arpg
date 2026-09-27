@@ -46,6 +46,7 @@ func _ready() -> void:
 	add_child(player)
 	player.global_position = info["spawn"] + Vector3(0, 0.1, 0)
 	player.died.connect(_on_player_died)
+	GameState.leveled.connect(_on_level_up)
 	camera = Camera3D.new()
 	camera.fov = 42.0
 	camera.far = 120.0
@@ -257,6 +258,7 @@ func boss_awake(b) -> void:
 
 func _on_mob_killed(m) -> void:
 	kills += 1
+	player.on_kill()
 	GameState.add_xp(int(float(m.def["xp"]) * (1.0 + 0.1 * (m.level - 1))))
 	var drops := Loot.roll_kill(GameState.loot_ctx(), map_def, GameState.difficulty, m.is_boss)
 	for qi in GameState.quest_drops(m.id):
@@ -315,6 +317,16 @@ func travel(to_map: String, difficulty: String) -> void:
 	GameState.difficulty = difficulty
 	GameState.save_game()
 	get_tree().call_deferred("reload_current_scene")
+
+
+func _on_level_up(level: int) -> void:
+	if player == null or player.dead:
+		return
+	Fx.level_up(self, player.global_position)
+	player.hp = player.max_hp()
+	player.hp_changed.emit()
+	shake(0.25, 0.3)
+	hud.level_banner(level)
 
 
 func _on_player_died() -> void:
@@ -401,8 +413,14 @@ func _update_guide() -> void:
 		mm.visible_instance_count = 0
 		return
 	var pts := PackedVector3Array([player.global_position])
-	pts.append_array(path_between(player.global_position, guide_target["pos"]))
-	pts.append(guide_target["pos"])
+	var goal: Vector3 = guide_target["pos"]
+	if player.global_position.distance_to(goal) > 10.0 or not has_line_of_sight(player.global_position, goal):
+		var path := path_between(player.global_position, goal)
+		# Pula o centro da célula atual (evita setas para trás).
+		if path.size() > 1:
+			path.remove_at(0)
+		pts.append_array(path)
+	pts.append(goal)
 	var n := 0
 	var carry := 1.4
 	for i in range(pts.size() - 1):
