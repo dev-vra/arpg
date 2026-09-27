@@ -4,6 +4,9 @@ on:
   push:
   workflow_dispatch:
 
+permissions:
+  contents: write
+
 jobs:
   android:
     runs-on: ubuntu-latest
@@ -68,3 +71,12 @@ jobs:
           name: arpg-mvp-apk
           path: export/arpg-mvp.apk
           retention-days: 14
+      # Link direto e fixo: release "teste" sempre com o APK do último push.
+      - name: Publicar na release de teste
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh release delete teste --yes --cleanup-tag || true
+          gh release create teste export/arpg-mvp.apk --prerelease --target "$GITHUB_SHA" \
+            --title "Build de teste (${GITHUB_SHA::7})" \
+            --notes "APK de teste gerado automaticamente do branch ${GITHUB_REF_NAME}. Chave de teste, só para sideload."

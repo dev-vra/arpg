@@ -31,6 +31,9 @@ Arte: Quaternius (CC0), proporção realista: personagens base, roupas modulares
 
 ## APK
 
+Link direto do último build (release `teste`, atualizada a cada push): https://github.com/dev-vra/arpg/releases/download/teste/arpg-mvp.apk
+
+
 `export_presets.cfg` já tem o preset Android (arm64). Para gerar o APK é preciso instalar os export templates do Godot 4.4.1 e o Android SDK/JDK, e configurar o keystore de debug no editor. Depois: `godot --headless --export-debug Android export/arpg.apk`.
 
 Release (menor, ~30 MB), com a chave passada por variável de ambiente (nunca commitada):

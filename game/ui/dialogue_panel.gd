@@ -13,47 +13,61 @@ var intro := false
 var npc: Dictionary
 var text: RichTextLabel
 var options: VBoxContainer
+var _tw: Tween
 
 
 func _ready() -> void:
 	npc = GameState.dialogues_db["npcs"][npc_id]
 	var vp := get_viewport().get_visible_rect().size
-	var s := Vector2(minf(1120, vp.x - 24), minf(560, vp.y - 24))
+	var s := Vector2(minf(1180, vp.x - 24), 236)
 	custom_minimum_size = s
 	size = s
-	position = Vector2((vp.x - s.x) / 2.0, vp.y - s.y - 12)
+	position = Vector2((vp.x - s.x) / 2.0, vp.y - s.y - 10)
+	add_theme_stylebox_override("panel", UiTheme.box(Color(0.06, 0.065, 0.085, 0.94), UiTheme.GOLD.darkened(0.3), 12, 2, 10))
 	var row := HBoxContainer.new()
-	row.add_theme_constant_override("separation", 18)
+	row.add_theme_constant_override("separation", 14)
 	add_child(row)
 	row.add_child(_portrait())
-	var right := VBoxContainer.new()
-	right.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	right.add_theme_constant_override("separation", 12)
-	row.add_child(right)
+	# Centro: nome + fala + pular.
+	var mid := VBoxContainer.new()
+	mid.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	row.add_child(mid)
 	var head := HBoxContainer.new()
-	right.add_child(head)
-	var name_l := UiTheme.title(npc["name"], 30)
-	head.add_child(name_l)
+	mid.add_child(head)
+	head.add_child(UiTheme.title(npc["name"], 26))
 	var title_l := Label.new()
 	title_l.text = "  " + npc["title"]
 	title_l.add_theme_color_override("font_color", UiTheme.MUTED)
-	title_l.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	title_l.add_theme_font_size_override("font_size", 16)
 	title_l.size_flags_vertical = Control.SIZE_SHRINK_CENTER
 	head.add_child(title_l)
-	head.add_child(UiTheme.button("Fechar", func(): hud.close_panel(), 110))
 	text = RichTextLabel.new()
 	text.bbcode_enabled = true
-	text.custom_minimum_size = Vector2(0, 150)
-	text.add_theme_font_size_override("normal_font_size", 21)
-	text.add_theme_font_size_override("italics_font_size", 21)
-	right.add_child(text)
+	text.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	text.add_theme_font_size_override("normal_font_size", 20)
+	text.add_theme_font_size_override("italics_font_size", 20)
+	text.gui_input.connect(_on_text_input)
+	mid.add_child(text)
+	var skip := Button.new()
+	skip.text = "»"
+	skip.flat = true
+	skip.tooltip_text = "Pular"
+	skip.add_theme_font_size_override("font_size", 30)
+	skip.add_theme_color_override("font_color", UiTheme.GOLD)
+	skip.size_flags_horizontal = Control.SIZE_SHRINK_END
+	skip.pressed.connect(_skip)
+	mid.add_child(skip)
+	# Direita: opções.
+	var right := VBoxContainer.new()
+	right.custom_minimum_size = Vector2(minf(380, s.x * 0.36), 0)
+	row.add_child(right)
 	var sc := ScrollContainer.new()
 	sc.size_flags_vertical = Control.SIZE_EXPAND_FILL
 	sc.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
 	right.add_child(sc)
 	options = VBoxContainer.new()
 	options.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	options.add_theme_constant_override("separation", 8)
+	options.add_theme_constant_override("separation", 6)
 	sc.add_child(options)
 	if intro and npc.has("intro"):
 		_say(npc["intro"], [["Entendido.", _root]])
@@ -61,18 +75,33 @@ func _ready() -> void:
 		_root()
 
 
+func _on_text_input(e: InputEvent) -> void:
+	if e is InputEventMouseButton and e.pressed:
+		_skip()
+
+
+## Pular: completa a fala; se já estava completa e só há uma opção, segue.
+func _skip() -> void:
+	if text.visible_ratio < 1.0:
+		if _tw:
+			_tw.kill()
+		text.visible_ratio = 1.0
+	elif options.get_child_count() == 1:
+		options.get_child(0).emit_signal("pressed")
+
+
 ## Retrato: humanoide com a mesma aparência, num mundo 3D próprio, do peito para cima.
 func _portrait() -> Control:
 	var box := VBoxContainer.new()
 	var svc := SubViewportContainer.new()
-	svc.custom_minimum_size = Vector2(280, 380)
+	svc.custom_minimum_size = Vector2(190, 212)
 	svc.stretch = true
 	svc.add_theme_stylebox_override("panel", UiTheme.box(Color("#10131a"), UiTheme.GOLD, 10, 2, 0))
 	box.add_child(svc)
 	var sv := SubViewport.new()
 	sv.own_world_3d = true
 	sv.transparent_bg = false
-	sv.size = Vector2i(280, 380)
+	sv.size = Vector2i(190, 212)
 	svc.add_child(sv)
 	var env := WorldEnvironment.new()
 	env.environment = Environment.new()
@@ -101,23 +130,26 @@ func _portrait() -> Control:
 		h.play(npc["look"].get("anim", "Idle")))
 	sv.add_child(h)
 	var cam := Camera3D.new()
-	cam.fov = 32
+	cam.fov = 30
 	sv.add_child(cam)
-	cam.position = Vector3(0.05, 1.5, 1.35)
-	cam.look_at(Vector3(0, 1.42, 0))
+	cam.position = Vector3(0.04, 1.62, 0.78)
+	cam.look_at(Vector3(0, 1.56, 0))
 	return box
 
 
 func _say(line: String, opts: Array) -> void:
 	text.text = "[i]\"%s\"[/i]" % line
 	text.visible_ratio = 0.0
-	var tw := text.create_tween()
-	tw.tween_property(text, "visible_ratio", 1.0, clampf(line.length() / 70.0, 0.3, 2.0))
+	_tw = text.create_tween()
+	_tw.tween_property(text, "visible_ratio", 1.0, clampf(line.length() / 70.0, 0.3, 2.0))
 	for c in options.get_children():
 		c.queue_free()
 	for o in opts:
 		var b := UiTheme.button(o[0], o[1])
 		b.alignment = HORIZONTAL_ALIGNMENT_LEFT
+		b.custom_minimum_size.y = 44
+		b.clip_text = true
+		b.add_theme_font_size_override("font_size", 17)
 		if o.size() > 2:
 			b.add_theme_color_override("font_color", o[2])
 		options.add_child(b)

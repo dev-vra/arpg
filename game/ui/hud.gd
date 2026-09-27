@@ -171,7 +171,7 @@ func open_bigmap() -> void:
 	controls.release_all()
 	controls.enabled = false
 	var dim := ColorRect.new()
-	dim.color = Color(0, 0, 0, 0.7)
+	dim.color = Color(0.02, 0.03, 0.05, 0.82)
 	dim.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 	panel_layer.add_child(dim)
 	var big = Minimap.new()
@@ -192,7 +192,7 @@ func open_dialogue(npc_id: String, intro: bool = false) -> void:
 	controls.release_all()
 	controls.enabled = false
 	var dim := ColorRect.new()
-	dim.color = Color(0, 0, 0, 0.35)
+	dim.color = Color(0, 0, 0, 0.12)
 	dim.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 	panel_layer.add_child(dim)
 	var d = DialoguePanel.new()
@@ -208,7 +208,7 @@ func _top_right() -> void:
 	_place(h, Vector2(1, 0), Vector2(-740, 12), Vector2(726, 0))
 	minimap = Minimap.new()
 	minimap.world = world
-	_place(minimap, Vector2(1, 0), Vector2(-234, 74), Vector2(220, 220))
+	_place(minimap, Vector2(1, 0), Vector2(-284, 70), Vector2(270, 230))
 	minimap.opened.connect(open_bigmap)
 	root.add_child(minimap)
 	h.alignment = BoxContainer.ALIGNMENT_END
