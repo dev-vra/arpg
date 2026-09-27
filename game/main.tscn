@@ -1,8 +1,0 @@
-[gd_scene format=3]
-
-[node name="Main" type="Node3D"]
-
-[node name="Label" type="Label" parent="."]
-offset_left = 24.0
-offset_top = 24.0
-text = "ARPG - Fase 0"
