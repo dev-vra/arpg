@@ -3,6 +3,7 @@ extends PanelContainer
 
 const UiTheme = preload("res://game/ui/ui_theme.gd")
 const ItemText = preload("res://game/ui/item_text.gd")
+const GearLook = preload("res://game/actors/gear_look.gd")
 
 var hud
 var body: VBoxContainer
@@ -10,7 +11,18 @@ var panel_size := Vector2(1180, 660)
 const SLOT_ICONS := {"weapon": "broadsword", "shield": "round-shield", "helm": "visored-helm", "armor": "breastplate", "gloves": "gauntlet", "pants": "leg-armor", "boots": "boots"}
 
 
+var _pending := {}   # chave da miniatura -> botões esperando
+
+
+func _on_thumb(key: String, tex: Texture2D) -> void:
+	for b in _pending.get(key, []):
+		if is_instance_valid(b):
+			b.icon = tex
+	_pending.erase(key)
+
+
 func _ready() -> void:
+	Thumbs.thumb_ready.connect(_on_thumb)
 	var outer := VBoxContainer.new()
 	outer.add_theme_constant_override("separation", 10)
 	add_child(outer)
@@ -67,23 +79,31 @@ func scroll(child: Control) -> ScrollContainer:
 	return sc
 
 
-## Botão de item: borda na cor da raridade, slot, refino e marca de set.
-func item_button(it: Dictionary, cb: Callable, selected: bool = false) -> Button:
+## Botão de item: miniatura 3D da peça (gerada e guardada em cache pelo Thumbs),
+## moldura na cor da raridade e o refino no canto.
+func item_button(it: Dictionary, cb: Callable, selected: bool = false, px: int = 96) -> Button:
 	var b := Button.new()
-	b.custom_minimum_size = Vector2(118, 74)
+	b.custom_minimum_size = Vector2(px, px)
 	var col := Color(ItemText.rarity_color(it))
-	var sb := UiTheme.frame("slot", 6, 14)
+	var sb := UiTheme.frame("slot", 4, 14)
 	sb.modulate_color = col if not selected else UiTheme.GOLD
 	for st in ["normal", "hover", "pressed"]:
 		b.add_theme_stylebox_override(st, sb)
-	var label: String = GameState.items_db["slots"][it["slot"]]["label"]
-	b.icon = UiTheme.icon(SLOT_ICONS.get(it["slot"], "gems"))
 	b.expand_icon = true
-	b.add_theme_constant_override("icon_max_width", 30)
-	b.add_theme_color_override("icon_normal_color", col.lightened(0.2))
-	b.text = "%s%s\n%s" % [label, (" +%d" % int(it["refine"])) if int(it["refine"]) > 0 else "", "Set" if it.get("set_id", "") != "" else ("T%d" % _best_tier(it))]
-	b.add_theme_font_size_override("font_size", 17)
-	b.add_theme_color_override("font_color", col.lightened(0.3))
+	b.icon_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	b.vertical_icon_alignment = VERTICAL_ALIGNMENT_CENTER
+	b.add_theme_constant_override("icon_max_width", px - 14)
+	var tex: Texture2D = Thumbs.get_thumb(it)
+	b.icon = tex if tex else Thumbs.fallback(it["slot"])
+	if tex == null:
+		var key := GearLook.thumb_key(it)
+		if not _pending.has(key):
+			_pending[key] = []
+		_pending[key].append(b)
+	b.text = ("+%d" % int(it["refine"])) if int(it["refine"]) > 0 else ""
+	b.add_theme_font_size_override("font_size", 15)
+	b.add_theme_color_override("font_color", Color("#ffd166"))
+	b.tooltip_text = it.get("name", "")
 	b.pressed.connect(cb)
 	return b
 

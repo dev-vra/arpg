@@ -7,6 +7,7 @@ extends "res://game/actors/humanoid.gd"
 
 const SetBonus = preload("res://core/set_bonus.gd")
 const Fx = preload("res://game/fx/fx.gd")
+const GearLook = preload("res://game/actors/gear_look.gd")
 const ARMOR_SLOTS := ["helm", "armor", "gloves", "pants", "boots"]
 
 var aura_light: OmniLight3D
@@ -42,47 +43,15 @@ func apply_loadout(equipped: Dictionary) -> void:
 		if _sig.get(slot) == sig:
 			continue
 		_sig[slot] = sig
-		var look := _look(it)
+		var look := GearLook.look(it)
 		if slot in ARMOR_SLOTS:
-			var tier := "fine" if it["rarity"] != "common" else "common"
-			var spec: Array = _visuals["outfits"][tier][slot]
-			set_outfit(slot, _part_names(spec[0]), spec[1], look)
+			var spec := GearLook.outfit(it, sex)
+			set_outfit(slot, spec[0], spec[1], look)
 		elif _visuals["props"].has(slot):
 			var p: Dictionary = _visuals["props"][slot]
 			var xf := Transform3D(Basis.from_euler(Vector3(p["rot"][0], p["rot"][1], p["rot"][2]) * (PI / 180.0)), Vector3(p["pos"][0], p["pos"][1], p["pos"][2]))
 			set_prop(slot, p["prop"], p["bone"], xf, look)
 	_update_aura(equipped)
-
-
-func _part_names(names: Array) -> Array:
-	var out := []
-	var subs: Dictionary = _visuals["sex_parts"][sex]
-	for n in names:
-		var s: String = n.replace("{S}", sex)
-		for k in subs:
-			s = s.replace("{%s}" % k, subs[k])
-		out.append(s)
-	return out
-
-
-## Cor, metal e brilho de uma peça: set manda; senão, raridade.
-func _look(it: Dictionary) -> Dictionary:
-	var sid: String = it.get("set_id", "")
-	var strength := glow_for(int(it.get("refine", 0)))
-	if _visuals["sets"].has(sid):
-		var v: Dictionary = _visuals["sets"][sid]
-		return {"color": Color(v["color"]), "mix": float(v["mix"]), "metal": float(v["metal"]), "glow": Color(v["glow"]), "strength": strength}
-	var r: Dictionary = _visuals["rarity_look"].get(it["rarity"], _visuals["rarity_look"]["superior"])
-	var glow := Color(GameState.items_db["rarity_colors"].get(it["rarity"], "#ffffff"))
-	return {"color": Color(r["color"]), "mix": float(r["mix"]), "metal": float(r["metal"]), "glow": glow, "strength": strength}
-
-
-func glow_for(refine: int) -> float:
-	var step := 0
-	for t in _visuals["glow_thresholds"]:
-		if refine >= int(t):
-			step += 1
-	return float(_visuals["glow_strength"][step])
 
 
 func set_complete_id(equipped: Dictionary) -> String:
@@ -96,7 +65,7 @@ func set_complete_id(equipped: Dictionary) -> String:
 func _make_aura() -> CPUParticles3D:
 	var p := CPUParticles3D.new()
 	var q := QuadMesh.new()
-	q.size = Vector2(0.07, 0.07)
+	q.size = Vector2(0.22, 0.22)
 	p.mesh = q
 	p.amount = 32
 	p.lifetime = 1.6
@@ -123,7 +92,7 @@ func _update_aura(equipped: Dictionary) -> void:
 	if sid != "":
 		var c := Color(_visuals["sets"][sid]["aura"])
 		aura_light.light_color = c
-		aura_fx.material_override = Fx.glow_mat(c, 2.5)
+		aura_fx.material_override = Fx.tex_mat("spark_05", c, BaseMaterial3D.BILLBOARD_PARTICLES)
 
 
 
@@ -131,7 +100,7 @@ func _update_aura(equipped: Dictionary) -> void:
 func _make_spirit() -> CPUParticles3D:
 	var p := CPUParticles3D.new()
 	var q := QuadMesh.new()
-	q.size = Vector2(0.05, 0.05)
+	q.size = Vector2(0.2, 0.2)
 	p.mesh = q
 	p.amount = 20
 	p.lifetime = 1.8
@@ -150,5 +119,5 @@ func set_spirit(side: String, strength: int) -> void:
 	spirit_fx.emitting = side != "" and strength >= 5
 	if spirit_fx.emitting:
 		var c := Color(GameState.talents_db["spirit_bonus"][side]["aura"])
-		spirit_fx.material_override = Fx.glow_mat(c, 2.2)
+		spirit_fx.material_override = Fx.tex_mat("star_06" if side == "superior" else "flame_03", c, BaseMaterial3D.BILLBOARD_PARTICLES)
 		spirit_fx.amount = clampi(8 + strength, 10, 60)

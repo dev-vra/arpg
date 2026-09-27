@@ -132,8 +132,7 @@ func _portrait() -> Control:
 	var cam := Camera3D.new()
 	cam.fov = 30
 	sv.add_child(cam)
-	cam.position = Vector3(0.04, 1.62, 0.78)
-	cam.look_at(Vector3(0, 1.56, 0))
+	cam.look_at_from_position(Vector3(0.04, 1.62, 0.78), Vector3(0, 1.56, 0))
 	return box
 
 

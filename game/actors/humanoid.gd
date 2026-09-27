@@ -83,6 +83,7 @@ func _graft(path: String, look: Dictionary) -> Array:
 	var src: Node = load(path).instantiate()
 	var out := []
 	for mi in src.find_children("*", "MeshInstance3D", true, false):
+		mi.owner = null
 		mi.get_parent().remove_child(mi)
 		skeleton.add_child(mi)
 		mi.skeleton = NodePath("..")

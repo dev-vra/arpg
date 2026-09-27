@@ -38,3 +38,4 @@ textures/vram_compression/import_etc2_astc=true
 [autoload]
 
 GameState="*res://game/autoload/game_state.gd"
+Thumbs="*res://game/ui/thumbs.gd"

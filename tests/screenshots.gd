@@ -62,6 +62,11 @@ func _run() -> void:
 		gs.inventory.append(Loot.make_item(ctx, ["weapon", "helm", "boots"][i], 25, "superior", ""))
 	w.hud.open_panel("inventory")
 	w.hud.panel._select(gs.inventory[0])
+	await create_timer(6.0).timeout
+	var thumbs = root.get_node("Thumbs")
+	for k in thumbs.cache:
+		if thumbs.cache[k] is ImageTexture:
+			thumbs.cache[k].get_image().save_png(out + "/thumb_%s.png" % k.split("|")[0])
 	await _shot(out + "/3_inventory.png")
 	for id in ["juramento_0_s1", "juramento_0_s1", "juramento_0_s2", "juramento_0_s2", "juramento_0_n", "juramento_1_s1", "juramento_1_s2"]:
 		gs.add_talent(id)

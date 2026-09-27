@@ -98,29 +98,7 @@ static func disc(parent: Node, pos: Vector3, radius: float, color: Color, time: 
 
 
 static func sparks(parent: Node, pos: Vector3, color: Color, amount: int = 14) -> void:
-	burst(parent, pos + Vector3(0, 1.0, 0), "spark_01", color, maxi(4, amount / 2), 6.0, 0.35, 0.35, Vector3(0, -10, 0))
-	var p := CPUParticles3D.new()
-	var q := QuadMesh.new()
-	q.size = Vector2(0.09, 0.09)
-	p.mesh = q
-	p.material_override = glow_mat(color, 3.0)
-	p.one_shot = true
-	p.explosiveness = 1.0
-	p.amount = amount
-	p.lifetime = 0.45
-	p.direction = Vector3.UP
-	p.spread = 80.0
-	p.initial_velocity_min = 3.0
-	p.initial_velocity_max = 7.0
-	p.gravity = Vector3(0, -14, 0)
-	p.scale_amount_min = 0.6
-	p.scale_amount_max = 1.4
-	p.particle_flag_align_y = true
-	p.local_coords = false
-	parent.add_child(p)
-	p.global_position = pos + Vector3(0, 1.0, 0)
-	p.emitting = true
-	p.finished.connect(p.queue_free)
+	burst(parent, pos + Vector3(0, 1.0, 0), "spark_01", color, maxi(6, amount), 6.5, 0.4, 0.4, Vector3(0, -12, 0))
 
 
 static func number(parent: Node, pos: Vector3, text: String, color: Color, big: bool = false) -> void:

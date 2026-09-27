@@ -71,9 +71,9 @@ func _portal_fx(c: Color) -> void:
 	add_child(core)
 	var p := CPUParticles3D.new()
 	var q := QuadMesh.new()
-	q.size = Vector2(0.07, 0.07)
+	q.size = Vector2(0.25, 0.25)
 	p.mesh = q
-	p.material_override = Fx.glow_mat(c, 1.6)
+	p.material_override = Fx.tex_mat("star_06", c, BaseMaterial3D.BILLBOARD_PARTICLES)
 	p.amount = 24
 	p.lifetime = 1.4
 	p.emission_shape = CPUParticles3D.EMISSION_SHAPE_RING
