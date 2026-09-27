@@ -20,11 +20,9 @@ const PANELS := {
 var world
 var root: Control
 var controls
-var hp_bar: ProgressBar
 var hp_label: Label
 var xp_bar: ProgressBar
 var level_label: Label
-var money_label: RichTextLabel
 var toasts: VBoxContainer
 var boss_box: VBoxContainer
 var boss_bar: ProgressBar
@@ -71,7 +69,7 @@ func _ready() -> void:
 	perf_label.add_theme_font_size_override("font_size", 14)
 	perf_label.add_theme_color_override("font_color", Color(1, 1, 1, 0.6))
 	perf_label.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	_place(perf_label, Vector2(0, 1), Vector2(14, -24), Vector2(360, 20))
+	_place(perf_label, Vector2(0, 0), Vector2(14, 6), Vector2(360, 18))
 	root.add_child(perf_label)
 	GameState.changed.connect(refresh)
 	GameState.toast.connect(show_toast)
@@ -92,46 +90,72 @@ func _place(c: Control, anchor: Vector2, offset: Vector2, box: Vector2) -> void:
 	c.custom_minimum_size = box
 
 
+## Layout estilo Torchlight mobile: minimapa no canto superior esquerdo, missão
+## compacta à esquerda, "HP · DPS" e nível no centro de baixo, XP como linha fina
+## na borda inferior. A vida do herói fica numa barra acima da cabeça.
 func _top_left() -> void:
-	var pc := PanelContainer.new()
-	pc.position = Vector2(14, 12)
-	pc.custom_minimum_size = Vector2(470, 0)
-	root.add_child(pc)
-	var v := VBoxContainer.new()
-	v.add_theme_constant_override("separation", 6)
-	pc.add_child(v)
-	level_label = Label.new()
-	level_label.add_theme_font_size_override("font_size", 20)
-	v.add_child(level_label)
-	var hp_wrap := Control.new()
-	hp_wrap.custom_minimum_size = Vector2(0, 26)
-	v.add_child(hp_wrap)
-	hp_bar = ProgressBar.new()
-	hp_bar.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
-	hp_bar.show_percentage = false
-	hp_bar.add_theme_stylebox_override("fill", UiTheme.bar(Color("#c0392b")))
-	hp_wrap.add_child(hp_bar)
-	hp_label = Label.new()
-	hp_label.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
-	hp_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-	hp_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
-	hp_label.add_theme_font_size_override("font_size", 16)
-	hp_wrap.add_child(hp_label)
+	var info := VBoxContainer.new()
+	info.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	info.add_theme_constant_override("separation", 0)
+	_place(info, Vector2(0.5, 1), Vector2(-240, -64), Vector2(480, 56))
+	root.add_child(info)
+	hp_label = _hud_label(22)
+	info.add_child(hp_label)
+	level_label = _hud_label(17)
+	level_label.add_theme_color_override("font_color", Color("#e8dcc0"))
+	info.add_child(level_label)
 	xp_bar = ProgressBar.new()
-	xp_bar.custom_minimum_size = Vector2(0, 8)
 	xp_bar.show_percentage = false
-	xp_bar.add_theme_stylebox_override("fill", UiTheme.bar(Color("#d9a441")))
-	v.add_child(xp_bar)
-	money_label = RichTextLabel.new()
-	money_label.bbcode_enabled = true
-	money_label.fit_content = true
-	money_label.scroll_active = false
-	money_label.add_theme_font_size_override("normal_font_size", 17)
-	money_label.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	v.add_child(money_label)
+	xp_bar.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	xp_bar.add_theme_stylebox_override("background", UiTheme.bar(Color(0, 0, 0, 0.55)))
+	xp_bar.add_theme_stylebox_override("fill", UiTheme.bar(Color("#e0a33a")))
+	xp_bar.anchor_left = 0.0
+	xp_bar.anchor_right = 1.0
+	xp_bar.anchor_top = 1.0
+	xp_bar.anchor_bottom = 1.0
+	xp_bar.offset_top = -6
+	xp_bar.offset_bottom = 0
+	root.add_child(xp_bar)
+	# Caixa de missões: translúcida, recolhível, na lateral esquerda.
+	var qp := PanelContainer.new()
+	qp.add_theme_stylebox_override("panel", UiTheme.box(Color(0.05, 0.05, 0.07, 0.55), Color(0, 0, 0, 0), 6, 0, 8))
+	_place(qp, Vector2(0, 0.36), Vector2(0, 0), Vector2(310, 0))
+	root.add_child(qp)
+	var qv := VBoxContainer.new()
+	qp.add_child(qv)
+	var qh := HBoxContainer.new()
+	qv.add_child(qh)
+	var qt := Label.new()
+	qt.text = "Missões"
+	qt.add_theme_font_size_override("font_size", 15)
+	qt.add_theme_color_override("font_color", UiTheme.GOLD)
+	qt.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	qh.add_child(qt)
+	var fold := Button.new()
+	fold.flat = true
+	fold.text = "<"
+	fold.add_theme_font_size_override("font_size", 18)
+	fold.pressed.connect(_toggle_quests.bind(fold))
+	qh.add_child(fold)
 	quest_box = VBoxContainer.new()
-	quest_box.add_theme_constant_override("separation", 2)
-	v.add_child(quest_box)
+	quest_box.add_theme_constant_override("separation", 0)
+	qv.add_child(quest_box)
+
+
+func _toggle_quests(fold: Button) -> void:
+	quest_box.visible = not quest_box.visible
+	fold.text = "<" if quest_box.visible else ">"
+
+
+func _hud_label(size: int) -> Label:
+	var l := Label.new()
+	l.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	l.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	l.add_theme_font_size_override("font_size", size)
+	l.add_theme_color_override("font_color", Color.WHITE)
+	l.add_theme_color_override("font_outline_color", Color(0, 0, 0, 0.9))
+	l.add_theme_constant_override("outline_size", 7)
+	return l
 
 
 ## Caixa de missões clicável: toque rastreia (trilha no chão e no mapa); de novo abre o diário.
@@ -213,7 +237,7 @@ func _top_right() -> void:
 	_place(h, Vector2(1, 0), Vector2(-560, 8), Vector2(546, 0))
 	minimap = Minimap.new()
 	minimap.world = world
-	_place(minimap, Vector2(1, 0), Vector2(-284, 70), Vector2(270, 230))
+	_place(minimap, Vector2(0, 0), Vector2(8, 26), Vector2(250, 200))
 	minimap.opened.connect(open_bigmap)
 	root.add_child(minimap)
 	h.alignment = BoxContainer.ALIGNMENT_END
@@ -251,22 +275,17 @@ func _boss_bar() -> void:
 func refresh() -> void:
 	var p = world.player
 	var c = GameState.character
-	level_label.text = "Sentinela · Nível %d · Poder %d" % [c.level, GameState.power()]
-	hp_bar.max_value = p.max_hp()
-	hp_bar.value = p.hp
-	hp_label.text = "%d / %d" % [ceili(p.hp), ceili(p.max_hp())]
+	hp_label.text = "HP %d      DPS %d" % [ceili(p.hp), int(GameState.Stats.dps(GameState.stats))]
 	xp_bar.max_value = GameState.xp_needed()
 	xp_bar.value = GameState.xp
-	var w = c.wallet
-	money_label.text = "[color=#ffd54f]Cinzas %s[/color]  [color=#ffe08a]Lume %d[/color]  [color=#ff7043]Brasa %d[/color]  [color=#c77dff]Prisma %d[/color]  [color=#4dd0e1]Sigilo %d[/color]" % [
-		ItemText.short_zen(w.zen), w.amount("lume"), w.amount("brasa"), w.amount("prisma"), w.amount("sigilo")]
+	level_label.text = "Nível %d (%d%%)" % [c.level, int(100.0 * GameState.xp / maxf(1.0, GameState.xp_needed()))]
 	map_label.text = world.map_def["name"]
 	_render_quests()
 
 
 func _process(_d: float) -> void:
 	# Medidor para o teste em aparelho (Gate 0): FPS, draw calls e primitivas.
-	perf_label.text = "%d FPS · %d draw calls · %dk tris" % [Engine.get_frames_per_second(),
+	perf_label.text = "%d FPS · %d dc · %dk tris" % [Engine.get_frames_per_second(),
 		RenderingServer.get_rendering_info(RenderingServer.RENDERING_INFO_TOTAL_DRAW_CALLS_IN_FRAME),
 		RenderingServer.get_rendering_info(RenderingServer.RENDERING_INFO_TOTAL_PRIMITIVES_IN_FRAME) / 1000]
 	if boss and is_instance_valid(boss):

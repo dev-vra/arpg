@@ -52,10 +52,16 @@ func _render() -> void:
 	mid.add_child(head)
 	var cnt := Label.new()
 	cnt.text = "%d / %d itens" % [GameState.inventory.size(), GameState.INVENTORY_SIZE]
-	cnt.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	head.add_child(cnt)
-	head.add_child(UiTheme.button("Equipar melhores", _equip_best, 190))
-	head.add_child(UiTheme.button("Reciclar comuns", _salvage_commons, 190))
+	var w = GameState.character.wallet
+	var money := rich("  [color=#ffd54f]Cinzas %s[/color]  [color=#ffe08a]Lume %d[/color]  [color=#ff7043]Brasa %d[/color]  [color=#c77dff]Prisma %d[/color]  [color=#4dd0e1]Sigilo %d[/color]" % [
+		ItemText.short_zen(w.zen), w.amount("lume"), w.amount("brasa"), w.amount("prisma"), w.amount("sigilo")])
+	money.add_theme_font_size_override("normal_font_size", 16)
+	head.add_child(money)
+	var acts := HBoxContainer.new()
+	mid.add_child(acts)
+	acts.add_child(UiTheme.button("Equipar melhores", _equip_best, 190))
+	acts.add_child(UiTheme.button("Reciclar comuns", _salvage_commons, 190))
 	var grid := GridContainer.new()
 	grid.columns = 4
 	for it in GameState.inventory:

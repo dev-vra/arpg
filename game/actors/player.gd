@@ -61,6 +61,8 @@ func _ready() -> void:
 	kit = GameState.skills_db["sentinela"]
 	add_to_group("player")
 	GameState.changed.connect(_on_state_changed)
+	_make_head_bar()
+	hp_changed.connect(_update_head_bar)
 	visual.apply_loadout(GameState.equipped)
 	_on_state_changed()
 	hp = max_hp()
@@ -313,3 +315,51 @@ func on_kill() -> void:
 		heal(max_hp() * s["on_kill_heal_pct"] / 100.0, false)
 	if s.get("speed_on_kill", 0.0) > 0.0:
 		kill_speed_time = 3.0
+
+
+
+# --- barra de vida acima da cabeça (estilo ARPG mobile) ---
+
+var _bar_fill: MeshInstance3D
+var _bar_lag: MeshInstance3D
+
+
+func _bar_quad(w: float, h: float, c: Color, prio: int) -> MeshInstance3D:
+	var mi := MeshInstance3D.new()
+	var q := QuadMesh.new()
+	q.size = Vector2(w, h)
+	mi.mesh = q
+	var m := StandardMaterial3D.new()
+	m.shading_mode = BaseMaterial3D.SHADING_MODE_UNSHADED
+	m.albedo_color = c
+	m.transparency = BaseMaterial3D.TRANSPARENCY_ALPHA
+	m.billboard_mode = BaseMaterial3D.BILLBOARD_ENABLED
+	m.no_depth_test = true
+	m.render_priority = prio
+	mi.material_override = m
+	mi.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
+	return mi
+
+
+func _make_head_bar() -> void:
+	var bar := Node3D.new()
+	bar.position.y = 2.35
+	add_child(bar)
+	bar.add_child(_bar_quad(1.16, 0.14, Color(0, 0, 0, 0.75), 0))
+	_bar_lag = _bar_quad(1.1, 0.09, Color(1, 0.85, 0.4, 0.9), 1)
+	bar.add_child(_bar_lag)
+	_bar_fill = _bar_quad(1.1, 0.09, Color("#43d35a"), 2)
+	bar.add_child(_bar_fill)
+
+
+## Vida atual em verde; o trecho perdido fica amarelo e escoa logo depois.
+func _update_head_bar() -> void:
+	if _bar_fill == null:
+		return
+	var f := clampf(hp / maxf(1.0, max_hp()), 0.0, 1.0)
+	_bar_fill.scale.x = maxf(f, 0.001)
+	_bar_fill.position.x = -(1.0 - f) * 0.55
+	var tw := _bar_lag.create_tween()
+	tw.tween_interval(0.35)
+	tw.tween_property(_bar_lag, "scale:x", maxf(f, 0.001), 0.4)
+	tw.parallel().tween_property(_bar_lag, "position:x", -(1.0 - f) * 0.55, 0.4)
