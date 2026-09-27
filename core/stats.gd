@@ -27,7 +27,7 @@ static func item_base(item: Dictionary, items_db: Dictionary) -> Dictionary:
 	return out
 
 
-static func compute(level: int, equipped: Array, items_db: Dictionary, sets_db: Dictionary) -> Dictionary:
+static func compute(level: int, equipped: Array, items_db: Dictionary, sets_db: Dictionary, extra: Array = []) -> Dictionary:
 	var s := base(level)
 	var pct := {"atk": 0.0, "max_hp": 0.0, "def": 0.0}
 	var adds := []
@@ -38,6 +38,7 @@ static func compute(level: int, equipped: Array, items_db: Dictionary, sets_db: 
 			lines[line["stat"]] = lines.get(line["stat"], 0.0) + float(line["value"])
 		adds.append(lines)
 	adds.append(SetBonus.evaluate(equipped, sets_db)["_total"])
+	adds.append_array(extra)
 	for block in adds:
 		for k in block:
 			var v := float(block[k])
@@ -74,11 +75,11 @@ static func dps(s: Dictionary, basic_cooldown: float = 0.75) -> float:
 
 
 ## Diferença de atributos ao trocar a peça do slot pelo item (positivo = melhora).
-static func compare(level: int, equipped: Dictionary, item: Dictionary, items_db: Dictionary, sets_db: Dictionary) -> Dictionary:
-	var now := compute(level, equipped.values(), items_db, sets_db)
+static func compare(level: int, equipped: Dictionary, item: Dictionary, items_db: Dictionary, sets_db: Dictionary, extra: Array = []) -> Dictionary:
+	var now := compute(level, equipped.values(), items_db, sets_db, extra)
 	var eq := equipped.duplicate()
 	eq[item["slot"]] = item
-	var then := compute(level, eq.values(), items_db, sets_db)
+	var then := compute(level, eq.values(), items_db, sets_db, extra)
 	var out := {"power": power(then) - power(now), "dps": dps(then) - dps(now)}
 	for k in now:
 		out[k] = then[k] - now[k]

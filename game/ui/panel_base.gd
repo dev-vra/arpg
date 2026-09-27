@@ -7,6 +7,7 @@ const ItemText = preload("res://game/ui/item_text.gd")
 var hud
 var body: VBoxContainer
 var panel_size := Vector2(1180, 660)
+const SLOT_ICONS := {"weapon": "broadsword", "shield": "round-shield", "helm": "visored-helm", "armor": "breastplate", "gloves": "gauntlet", "pants": "leg-armor", "boots": "boots"}
 
 
 func _ready() -> void:
@@ -71,10 +72,15 @@ func item_button(it: Dictionary, cb: Callable, selected: bool = false) -> Button
 	var b := Button.new()
 	b.custom_minimum_size = Vector2(118, 74)
 	var col := Color(ItemText.rarity_color(it))
-	var sb := UiTheme.box(Color("#1b1e25") if not selected else Color("#3a3222"), col if not selected else UiTheme.GOLD, 8, 3 if selected else 2, 6)
+	var sb := UiTheme.frame("slot", 6, 14)
+	sb.modulate_color = col if not selected else UiTheme.GOLD
 	for st in ["normal", "hover", "pressed"]:
 		b.add_theme_stylebox_override(st, sb)
 	var label: String = GameState.items_db["slots"][it["slot"]]["label"]
+	b.icon = UiTheme.icon(SLOT_ICONS.get(it["slot"], "gems"))
+	b.expand_icon = true
+	b.add_theme_constant_override("icon_max_width", 30)
+	b.add_theme_color_override("icon_normal_color", col.lightened(0.2))
 	b.text = "%s%s\n%s" % [label, (" +%d" % int(it["refine"])) if int(it["refine"]) > 0 else "", "Set" if it.get("set_id", "") != "" else ("T%d" % _best_tier(it))]
 	b.add_theme_font_size_override("font_size", 17)
 	b.add_theme_color_override("font_color", col.lightened(0.3))

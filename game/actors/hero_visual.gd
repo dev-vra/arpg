@@ -11,6 +11,7 @@ const ARMOR_SLOTS := ["helm", "armor", "gloves", "pants", "boots"]
 
 var aura_light: OmniLight3D
 var aura_fx: CPUParticles3D
+var spirit_fx: CPUParticles3D
 var _visuals: Dictionary
 var _sig := {}   # slot -> assinatura do item montado (evita remontar sem mudança)
 
@@ -26,6 +27,8 @@ func _ready() -> void:
 	add_child(aura_light)
 	aura_fx = _make_aura()
 	add_child(aura_fx)
+	spirit_fx = _make_spirit()
+	add_child(spirit_fx)
 
 
 func apply_loadout(equipped: Dictionary) -> void:
@@ -121,3 +124,31 @@ func _update_aura(equipped: Dictionary) -> void:
 		var c := Color(_visuals["sets"][sid]["aura"])
 		aura_light.light_color = c
 		aura_fx.material_override = Fx.glow_mat(c, 2.5)
+
+
+
+## Partículas do espírito dominante: fagulhas douradas subindo (Superior) ou brasas (Infernal).
+func _make_spirit() -> CPUParticles3D:
+	var p := CPUParticles3D.new()
+	var q := QuadMesh.new()
+	q.size = Vector2(0.05, 0.05)
+	p.mesh = q
+	p.amount = 20
+	p.lifetime = 1.8
+	p.emission_shape = CPUParticles3D.EMISSION_SHAPE_SPHERE
+	p.emission_sphere_radius = 0.55
+	p.position.y = 1.0
+	p.direction = Vector3.UP
+	p.gravity = Vector3(0, 0.8, 0)
+	p.initial_velocity_min = 0.1
+	p.initial_velocity_max = 0.5
+	p.emitting = false
+	return p
+
+
+func set_spirit(side: String, strength: int) -> void:
+	spirit_fx.emitting = side != "" and strength >= 5
+	if spirit_fx.emitting:
+		var c := Color(GameState.talents_db["spirit_bonus"][side]["aura"])
+		spirit_fx.material_override = Fx.glow_mat(c, 2.2)
+		spirit_fx.amount = clampi(8 + strength, 10, 60)

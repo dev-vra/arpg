@@ -60,5 +60,10 @@ func _run() -> void:
 	w.hud.open_panel("inventory")
 	w.hud.panel._select(gs.inventory[0])
 	await _shot(out + "/3_inventory.png")
+	for id in ["juramento_0_s1", "juramento_0_s1", "juramento_0_s2", "juramento_0_s2", "juramento_0_n", "juramento_1_s1", "juramento_1_s2"]:
+		gs.add_talent(id)
+	w.hud.open_panel("talents")
+	w.hud.panel._select("juramento_1_s1")
+	await _shot(out + "/5_talents.png")
 
 	quit()

@@ -14,7 +14,8 @@
     "Sword_Regular_A",
     "Sword_Regular_B",
     "Sword_Regular_C"
-   ]
+   ],
+   "icon": "broadsword"
   },
   "skills": [
    {
@@ -26,11 +27,12 @@
     "cooldown": 6.0,
     "distance": 7.0,
     "radius": 1.8,
-    "icon": "»",
+    "icon": "shield-bash",
     "tags": [
      "melee",
      "movement"
-    ]
+    ],
+    "unlock_level": 1
    },
    {
     "id": "giro",
@@ -40,11 +42,12 @@
     "mult": 1.4,
     "cooldown": 5.0,
     "radius": 3.4,
-    "icon": "@",
+    "icon": "sword-spin",
     "tags": [
      "melee",
      "area"
-    ]
+    ],
+    "unlock_level": 3
    },
    {
     "id": "brado",
@@ -56,10 +59,11 @@
     "def_bonus_pct": 40,
     "heal_pct": 18,
     "radius": 8.0,
-    "icon": "+",
+    "icon": "shouting",
     "tags": [
      "buff"
-    ]
+    ],
+    "unlock_level": 6
    },
    {
     "id": "impacto",
@@ -71,18 +75,20 @@
     "radius": 4.2,
     "forward": 2.2,
     "stun": 1.2,
-    "icon": "#",
+    "icon": "earth-crack",
     "tags": [
      "melee",
      "area"
-    ]
+    ],
+    "unlock_level": 10
    }
   ],
   "dodge": {
    "cooldown": 2.5,
    "distance": 5.0,
    "duration": 0.35,
-   "anim": "Roll"
+   "anim": "Roll",
+   "icon": "dodge"
   },
   "anims": {
    "idle": "Sword_Idle",

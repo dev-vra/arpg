@@ -20,13 +20,13 @@ func _ready() -> void:
 func buttons() -> Array:
 	var s := size
 	var a := Vector2(s.x - 135, s.y - 135)
-	var out := [{"id": "attack", "pos": a, "r": 74.0, "label": "", "color": Color("#d9a441")}]
+	var out := [{"id": "attack", "pos": a, "r": 74.0, "label": "", "icon": "broadsword", "color": Color("#d9a441")}]
 	var offs := [Vector2(-185, 25), Vector2(-165, -110), Vector2(-75, -190), Vector2(55, -200)]
 	var kit: Array = GameState.skills_db["sentinela"]["skills"]
 	for i in 4:
-		out.append({"id": "skill%d" % i, "pos": a + offs[i], "r": 50.0, "label": kit[i]["icon"], "color": Color("#8fb8ff"), "skill": i})
-	out.append({"id": "dodge", "pos": a + Vector2(-300, 40), "r": 42.0, "label": "", "color": Color("#9fe0c0")})
-	out.append({"id": "potion", "pos": a + Vector2(-290, -80), "r": 36.0, "label": "", "color": Color("#ff5a6e")})
+		out.append({"id": "skill%d" % i, "pos": a + offs[i], "r": 50.0, "label": "", "icon": kit[i]["icon"], "color": Color("#8fb8ff"), "skill": i})
+	out.append({"id": "dodge", "pos": a + Vector2(-300, 40), "r": 42.0, "label": "", "icon": "dodge", "color": Color("#9fe0c0")})
+	out.append({"id": "potion", "pos": a + Vector2(-290, -80), "r": 36.0, "label": "", "icon": "health-potion", "color": Color("#ff5a6e")})
 	return out
 
 
@@ -128,9 +128,22 @@ func _draw() -> void:
 				var a := -PI / 2 + TAU * frac * i / 32.0
 				pts.append(pos + Vector2(cos(a), sin(a)) * (r - 3))
 			draw_colored_polygon(pts, Color(0, 0, 0, 0.55))
-		if b["label"] == "" and cd <= 0.0:
-			_icon(b["id"], pos, r)
+		var locked: bool = b.has("skill") and not GameState.skill_unlocked(b["skill"])
+		var tex: Texture2D = _tex(b.get("icon", ""))
+		if tex:
+			var isz := r * 1.15
+			draw_texture_rect(tex, Rect2(pos - Vector2(isz, isz) / 2.0, Vector2(isz, isz)), false, Color(1, 1, 1, 0.25 if (cd > 0.0 or locked) else 0.95))
+		if locked:
+			draw_circle(pos, r - 3, Color(0, 0, 0, 0.55))
+			var lv := "Nv %d" % int(GameState.skills_db["sentinela"]["skills"][b["skill"]]["unlock_level"])
+			var ls := font.get_string_size(lv, HORIZONTAL_ALIGNMENT_CENTER, -1, 20)
+			draw_string(font, pos + Vector2(-ls.x / 2, 7), lv, HORIZONTAL_ALIGNMENT_CENTER, -1, 20, Color("#c9c4b8"))
+			continue
 		var fs := int(r * 0.8)
+		if cd <= 0.0:
+			if extra != "":
+				draw_string(font, pos + Vector2(r * 0.45, r * 0.9), extra, HORIZONTAL_ALIGNMENT_LEFT, -1, 22, Color.WHITE)
+			continue
 		var label: String = b["label"] if cd <= 0.0 else ("%.0f" % ceil(cd) if cd >= 1.0 else "%.1f" % cd)
 		var ts := font.get_string_size(label, HORIZONTAL_ALIGNMENT_CENTER, -1, fs)
 		draw_string(font, pos + Vector2(-ts.x / 2, ts.y / 3), label, HORIZONTAL_ALIGNMENT_CENTER, -1, fs, Color.WHITE if cd <= 0.0 else Color(1, 1, 1, 0.7))
@@ -154,3 +167,14 @@ func _icon(id: String, p: Vector2, r: float) -> void:
 		"potion":
 			draw_circle(p + Vector2(0, r * 0.12), r * 0.42, Color("#ff5a6e"))
 			draw_rect(Rect2(p + Vector2(-r * 0.14, -r * 0.55), Vector2(r * 0.28, r * 0.3)), w)
+
+
+var _tex_cache := {}
+
+
+func _tex(name: String) -> Texture2D:
+	if name == "":
+		return null
+	if not _tex_cache.has(name):
+		_tex_cache[name] = load("res://assets/ui/icons/%s.svg" % name)
+	return _tex_cache[name]

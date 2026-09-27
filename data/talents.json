@@ -1,0 +1,982 @@
+{
+ "row_cost": 5,
+ "tree_points": 25,
+ "spirit_bonus": {
+  "superior": {
+   "name": "Espírito Superior",
+   "stats": {
+    "def_pct": 5,
+    "hp_pct": 5
+   },
+   "aura": "#ffe7a3",
+   "icon": "angel-wings"
+  },
+  "infernal": {
+   "name": "Espírito Infernal",
+   "stats": {
+    "atk_pct": 5,
+    "crit_damage": 8
+   },
+   "aura": "#ff4a2a",
+   "icon": "evil-wings"
+  },
+  "min_points": 10,
+  "complete_mult": 2.0
+ },
+ "trees": [
+  {
+   "id": "juramento",
+   "name": "Juramento",
+   "unlock_level": 1,
+   "nodes": [
+    {
+     "id": "juramento_0_s1",
+     "name": "Pele de Ferro",
+     "icon": "breastplate",
+     "row": 0,
+     "col": "s1",
+     "side": "superior",
+     "max": 2,
+     "stats": {
+      "def_pct": 3.0
+     }
+    },
+    {
+     "id": "juramento_0_s2",
+     "name": "Vigor Sagrado",
+     "icon": "heart-plus",
+     "row": 0,
+     "col": "s2",
+     "side": "superior",
+     "max": 2,
+     "stats": {
+      "hp_pct": 3.0
+     }
+    },
+    {
+     "id": "juramento_0_n",
+     "name": "Treino de Armas",
+     "icon": "crossed-swords",
+     "row": 0,
+     "col": "n",
+     "side": "neutral",
+     "max": 1,
+     "stats": {
+      "atk_flat": 5.0
+     }
+    },
+    {
+     "id": "juramento_0_i1",
+     "name": "Fúria",
+     "icon": "fist",
+     "row": 0,
+     "col": "i1",
+     "side": "infernal",
+     "max": 2,
+     "stats": {
+      "atk_pct": 3.0
+     }
+    },
+    {
+     "id": "juramento_0_i2",
+     "name": "Golpe Cruel",
+     "icon": "sword-wound",
+     "row": 0,
+     "col": "i2",
+     "side": "infernal",
+     "max": 2,
+     "stats": {
+      "crit_damage": 6.0
+     }
+    },
+    {
+     "id": "juramento_1_s1",
+     "name": "Guarda Firme",
+     "icon": "round-shield",
+     "row": 1,
+     "col": "s1",
+     "side": "superior",
+     "max": 2,
+     "stats": {
+      "block": 2.0
+     }
+    },
+    {
+     "id": "juramento_1_s2",
+     "name": "Bênção",
+     "icon": "holy-symbol",
+     "row": 1,
+     "col": "s2",
+     "side": "superior",
+     "max": 2,
+     "stats": {
+      "resist_all": 3.0
+     }
+    },
+    {
+     "id": "juramento_1_n",
+     "name": "Passo Leve",
+     "icon": "run",
+     "row": 1,
+     "col": "n",
+     "side": "neutral",
+     "max": 1,
+     "stats": {
+      "move_speed": 3.0
+     }
+    },
+    {
+     "id": "juramento_1_i1",
+     "name": "Frenesi",
+     "icon": "whirlwind",
+     "row": 1,
+     "col": "i1",
+     "side": "infernal",
+     "max": 2,
+     "stats": {
+      "attack_speed": 3.0
+     }
+    },
+    {
+     "id": "juramento_1_i2",
+     "name": "Sede",
+     "icon": "blood",
+     "row": 1,
+     "col": "i2",
+     "side": "infernal",
+     "max": 2,
+     "stats": {
+      "life_steal": 1.0
+     }
+    },
+    {
+     "id": "juramento_2_s1",
+     "name": "Brado Luminoso",
+     "icon": "shouting",
+     "row": 2,
+     "col": "s1",
+     "side": "superior",
+     "max": 2,
+     "skill": {
+      "id": "brado",
+      "heal_pct": 6.0
+     }
+    },
+    {
+     "id": "juramento_2_s2",
+     "name": "Terra Sagrada",
+     "icon": "earth-crack",
+     "row": 2,
+     "col": "s2",
+     "side": "superior",
+     "max": 2,
+     "skill": {
+      "id": "impacto",
+      "stun": 0.3
+     }
+    },
+    {
+     "id": "juramento_2_n",
+     "name": "Foco",
+     "icon": "sparkles",
+     "row": 2,
+     "col": "n",
+     "side": "neutral",
+     "max": 1,
+     "stats": {
+      "cooldown": 3.0
+     }
+    },
+    {
+     "id": "juramento_2_i1",
+     "name": "Lâminas Vorazes",
+     "icon": "sword-spin",
+     "row": 2,
+     "col": "i1",
+     "side": "infernal",
+     "max": 2,
+     "skill": {
+      "id": "giro",
+      "mult_pct": 12.0
+     }
+    },
+    {
+     "id": "juramento_2_i2",
+     "name": "Carga Brutal",
+     "icon": "shield-bash",
+     "row": 2,
+     "col": "i2",
+     "side": "infernal",
+     "max": 2,
+     "skill": {
+      "id": "investida",
+      "mult_pct": 15.0
+     }
+    },
+    {
+     "id": "juramento_3_s1",
+     "name": "Muralha",
+     "icon": "heart-shield",
+     "row": 3,
+     "col": "s1",
+     "side": "superior",
+     "max": 2,
+     "stats": {
+      "hp_flat": 60.0
+     }
+    },
+    {
+     "id": "juramento_3_s2",
+     "name": "Couraça",
+     "icon": "cross-shield",
+     "row": 3,
+     "col": "s2",
+     "side": "superior",
+     "max": 2,
+     "stats": {
+      "def_flat": 25.0
+     }
+    },
+    {
+     "id": "juramento_3_n",
+     "name": "Olho Treinado",
+     "icon": "lightning-helix",
+     "row": 3,
+     "col": "n",
+     "side": "neutral",
+     "max": 1,
+     "stats": {
+      "crit_chance": 2.0
+     }
+    },
+    {
+     "id": "juramento_3_i1",
+     "name": "Instinto",
+     "icon": "bloody-sword",
+     "row": 3,
+     "col": "i1",
+     "side": "infernal",
+     "max": 2,
+     "stats": {
+      "crit_chance": 3.0
+     }
+    },
+    {
+     "id": "juramento_3_i2",
+     "name": "Brutalidade",
+     "icon": "mailed-fist",
+     "row": 3,
+     "col": "i2",
+     "side": "infernal",
+     "max": 2,
+     "stats": {
+      "atk_flat": 10.0
+     }
+    },
+    {
+     "id": "juramento_4_s1",
+     "name": "Égide",
+     "icon": "angel-outfit",
+     "row": 4,
+     "col": "s1",
+     "side": "superior",
+     "max": 2,
+     "skill": {
+      "id": "brado",
+      "def_bonus_pct": 15.0,
+      "duration": 1.5
+     }
+    },
+    {
+     "id": "juramento_4_s2",
+     "name": "Halo",
+     "icon": "sun-radiations",
+     "row": 4,
+     "col": "s2",
+     "side": "superior",
+     "max": 2,
+     "stats": {
+      "hp_pct": 5.0,
+      "resist_all": 3.0
+     }
+    },
+    {
+     "id": "juramento_4_n",
+     "name": "Juramento Cumprido",
+     "icon": "crown",
+     "row": 4,
+     "col": "n",
+     "side": "neutral",
+     "max": 1,
+     "stats": {
+      "atk_pct": 3.0,
+      "def_pct": 3.0
+     }
+    },
+    {
+     "id": "juramento_4_i1",
+     "name": "Chama Interna",
+     "icon": "burning-embers",
+     "row": 4,
+     "col": "i1",
+     "side": "infernal",
+     "max": 2,
+     "stats": {
+      "atk_pct": 6.0
+     }
+    },
+    {
+     "id": "juramento_4_i2",
+     "name": "Carnificina",
+     "icon": "vampire-dracula",
+     "row": 4,
+     "col": "i2",
+     "side": "infernal",
+     "max": 2,
+     "stats": {
+      "life_steal": 1.5,
+      "crit_damage": 8.0
+     }
+    }
+   ]
+  },
+  {
+   "id": "ascensao",
+   "name": "Ascensão",
+   "unlock_level": 26,
+   "nodes": [
+    {
+     "id": "ascensao_0_s1",
+     "name": "Aço Abençoado",
+     "icon": "shield-reflect",
+     "row": 0,
+     "col": "s1",
+     "side": "superior",
+     "max": 2,
+     "stats": {
+      "def_pct": 4.8
+     }
+    },
+    {
+     "id": "ascensao_0_s2",
+     "name": "Fôlego Divino",
+     "icon": "heart-plus",
+     "row": 0,
+     "col": "s2",
+     "side": "superior",
+     "max": 2,
+     "stats": {
+      "hp_pct": 4.8
+     }
+    },
+    {
+     "id": "ascensao_0_n",
+     "name": "Disciplina",
+     "icon": "crossed-swords",
+     "row": 0,
+     "col": "n",
+     "side": "neutral",
+     "max": 1,
+     "stats": {
+      "atk_flat": 8.0
+     }
+    },
+    {
+     "id": "ascensao_0_i1",
+     "name": "Ira Rubra",
+     "icon": "flame",
+     "row": 0,
+     "col": "i1",
+     "side": "infernal",
+     "max": 2,
+     "stats": {
+      "atk_pct": 4.8
+     }
+    },
+    {
+     "id": "ascensao_0_i2",
+     "name": "Dilacerar",
+     "icon": "bleeding-wound",
+     "row": 0,
+     "col": "i2",
+     "side": "infernal",
+     "max": 2,
+     "stats": {
+      "crit_damage": 9.6
+     }
+    },
+    {
+     "id": "ascensao_1_s1",
+     "name": "Baluarte",
+     "icon": "round-shield",
+     "row": 1,
+     "col": "s1",
+     "side": "superior",
+     "max": 2,
+     "stats": {
+      "block": 3.2
+     }
+    },
+    {
+     "id": "ascensao_1_s2",
+     "name": "Véu de Luz",
+     "icon": "holy-symbol",
+     "row": 1,
+     "col": "s2",
+     "side": "superior",
+     "max": 2,
+     "stats": {
+      "resist_all": 4.8
+     }
+    },
+    {
+     "id": "ascensao_1_n",
+     "name": "Marcha",
+     "icon": "sprint",
+     "row": 1,
+     "col": "n",
+     "side": "neutral",
+     "max": 1,
+     "stats": {
+      "move_speed": 4.8
+     }
+    },
+    {
+     "id": "ascensao_1_i1",
+     "name": "Sangue Quente",
+     "icon": "whirlwind",
+     "row": 1,
+     "col": "i1",
+     "side": "infernal",
+     "max": 2,
+     "stats": {
+      "attack_speed": 4.8
+     }
+    },
+    {
+     "id": "ascensao_1_i2",
+     "name": "Banquete",
+     "icon": "blood",
+     "row": 1,
+     "col": "i2",
+     "side": "infernal",
+     "max": 2,
+     "stats": {
+      "life_steal": 1.6
+     }
+    },
+    {
+     "id": "ascensao_2_s1",
+     "name": "Investida Sagrada",
+     "icon": "shield-bash",
+     "row": 2,
+     "col": "s1",
+     "side": "superior",
+     "max": 2,
+     "skill": {
+      "id": "investida",
+      "distance_pct": 24.0,
+      "cooldown_pct": -12.8
+     }
+    },
+    {
+     "id": "ascensao_2_s2",
+     "name": "Impacto Celeste",
+     "icon": "earth-crack",
+     "row": 2,
+     "col": "s2",
+     "side": "superior",
+     "max": 2,
+     "skill": {
+      "id": "impacto",
+      "radius_pct": 19.2
+     }
+    },
+    {
+     "id": "ascensao_2_n",
+     "name": "Mente Fria",
+     "icon": "sparkles",
+     "row": 2,
+     "col": "n",
+     "side": "neutral",
+     "max": 1,
+     "stats": {
+      "cooldown": 4.8
+     }
+    },
+    {
+     "id": "ascensao_2_i1",
+     "name": "Redemoinho Rubro",
+     "icon": "sword-spin",
+     "row": 2,
+     "col": "i1",
+     "side": "infernal",
+     "max": 2,
+     "skill": {
+      "id": "giro",
+      "radius_pct": 19.2,
+      "cooldown_pct": -12.8
+     }
+    },
+    {
+     "id": "ascensao_2_i2",
+     "name": "Terremoto Infernal",
+     "icon": "fire-ray",
+     "row": 2,
+     "col": "i2",
+     "side": "infernal",
+     "max": 2,
+     "skill": {
+      "id": "impacto",
+      "mult_pct": 24.0
+     }
+    },
+    {
+     "id": "ascensao_3_s1",
+     "name": "Sentinela Eterna",
+     "icon": "heart-shield",
+     "row": 3,
+     "col": "s1",
+     "side": "superior",
+     "max": 2,
+     "stats": {
+      "hp_flat": 96.0
+     }
+    },
+    {
+     "id": "ascensao_3_s2",
+     "name": "Placas Benditas",
+     "icon": "cross-shield",
+     "row": 3,
+     "col": "s2",
+     "side": "superior",
+     "max": 2,
+     "stats": {
+      "def_flat": 40.0
+     }
+    },
+    {
+     "id": "ascensao_3_n",
+     "name": "Precisão",
+     "icon": "lightning-helix",
+     "row": 3,
+     "col": "n",
+     "side": "neutral",
+     "max": 1,
+     "stats": {
+      "crit_chance": 3.2
+     }
+    },
+    {
+     "id": "ascensao_3_i1",
+     "name": "Presas",
+     "icon": "bloody-sword",
+     "row": 3,
+     "col": "i1",
+     "side": "infernal",
+     "max": 2,
+     "stats": {
+      "crit_chance": 4.8
+     }
+    },
+    {
+     "id": "ascensao_3_i2",
+     "name": "Selvageria",
+     "icon": "mailed-fist",
+     "row": 3,
+     "col": "i2",
+     "side": "infernal",
+     "max": 2,
+     "stats": {
+      "atk_flat": 16.0
+     }
+    },
+    {
+     "id": "ascensao_4_s1",
+     "name": "Asas da Aurora",
+     "icon": "angel-wings",
+     "row": 4,
+     "col": "s1",
+     "side": "superior",
+     "max": 2,
+     "stats": {
+      "def_pct": 8.0,
+      "hp_pct": 6.4
+     }
+    },
+    {
+     "id": "ascensao_4_s2",
+     "name": "Graça",
+     "icon": "sun-radiations",
+     "row": 4,
+     "col": "s2",
+     "side": "superior",
+     "max": 2,
+     "skill": {
+      "id": "brado",
+      "heal_pct": 12.8
+     }
+    },
+    {
+     "id": "ascensao_4_n",
+     "name": "Ascensão Plena",
+     "icon": "crown",
+     "row": 4,
+     "col": "n",
+     "side": "neutral",
+     "max": 1,
+     "stats": {
+      "atk_pct": 4.8,
+      "def_pct": 4.8
+     }
+    },
+    {
+     "id": "ascensao_4_i1",
+     "name": "Asas do Abismo",
+     "icon": "evil-wings",
+     "row": 4,
+     "col": "i1",
+     "side": "infernal",
+     "max": 2,
+     "stats": {
+      "atk_pct": 8.0,
+      "attack_speed": 6.4
+     }
+    },
+    {
+     "id": "ascensao_4_i2",
+     "name": "Pacto de Sangue",
+     "icon": "devil-mask",
+     "row": 4,
+     "col": "i2",
+     "side": "infernal",
+     "max": 2,
+     "stats": {
+      "life_steal": 2.4,
+      "crit_chance": 3.2
+     }
+    }
+   ]
+  },
+  {
+   "id": "transcendencia",
+   "name": "Transcendência",
+   "unlock_level": 51,
+   "nodes": [
+    {
+     "id": "transcendencia_0_s1",
+     "name": "Forma Celeste",
+     "icon": "angel-outfit",
+     "row": 0,
+     "col": "s1",
+     "side": "superior",
+     "max": 2,
+     "stats": {
+      "def_pct": 7.2
+     }
+    },
+    {
+     "id": "transcendencia_0_s2",
+     "name": "Coração de Luz",
+     "icon": "heart-plus",
+     "row": 0,
+     "col": "s2",
+     "side": "superior",
+     "max": 2,
+     "stats": {
+      "hp_pct": 7.2
+     }
+    },
+    {
+     "id": "transcendencia_0_n",
+     "name": "Maestria",
+     "icon": "crossed-swords",
+     "row": 0,
+     "col": "n",
+     "side": "neutral",
+     "max": 1,
+     "stats": {
+      "atk_flat": 12.0
+     }
+    },
+    {
+     "id": "transcendencia_0_i1",
+     "name": "Forma Infernal",
+     "icon": "devil-mask",
+     "row": 0,
+     "col": "i1",
+     "side": "infernal",
+     "max": 2,
+     "stats": {
+      "atk_pct": 7.2
+     }
+    },
+    {
+     "id": "transcendencia_0_i2",
+     "name": "Execução",
+     "icon": "skull-crossed-bones",
+     "row": 0,
+     "col": "i2",
+     "side": "infernal",
+     "max": 2,
+     "stats": {
+      "crit_damage": 14.4
+     }
+    },
+    {
+     "id": "transcendencia_1_s1",
+     "name": "Escudo da Aurora",
+     "icon": "shield-reflect",
+     "row": 1,
+     "col": "s1",
+     "side": "superior",
+     "max": 2,
+     "stats": {
+      "block": 4.8
+     }
+    },
+    {
+     "id": "transcendencia_1_s2",
+     "name": "Santuário",
+     "icon": "holy-symbol",
+     "row": 1,
+     "col": "s2",
+     "side": "superior",
+     "max": 2,
+     "stats": {
+      "resist_all": 7.2
+     }
+    },
+    {
+     "id": "transcendencia_1_n",
+     "name": "Vento",
+     "icon": "run",
+     "row": 1,
+     "col": "n",
+     "side": "neutral",
+     "max": 1,
+     "stats": {
+      "move_speed": 7.2
+     }
+    },
+    {
+     "id": "transcendencia_1_i1",
+     "name": "Tempestade",
+     "icon": "whirlwind",
+     "row": 1,
+     "col": "i1",
+     "side": "infernal",
+     "max": 2,
+     "stats": {
+      "attack_speed": 7.2
+     }
+    },
+    {
+     "id": "transcendencia_1_i2",
+     "name": "Vampirismo",
+     "icon": "vampire-dracula",
+     "row": 1,
+     "col": "i2",
+     "side": "infernal",
+     "max": 2,
+     "stats": {
+      "life_steal": 2.4
+     }
+    },
+    {
+     "id": "transcendencia_2_s1",
+     "name": "Juízo",
+     "icon": "earth-crack",
+     "row": 2,
+     "col": "s1",
+     "side": "superior",
+     "max": 2,
+     "skill": {
+      "id": "impacto",
+      "mult_pct": 36.0,
+      "stun": 0.72
+     }
+    },
+    {
+     "id": "transcendencia_2_s2",
+     "name": "Bastião Vivo",
+     "icon": "shouting",
+     "row": 2,
+     "col": "s2",
+     "side": "superior",
+     "max": 2,
+     "skill": {
+      "id": "brado",
+      "duration": 4.8,
+      "def_bonus_pct": 24.0
+     }
+    },
+    {
+     "id": "transcendencia_2_n",
+     "name": "Serenidade",
+     "icon": "sparkles",
+     "row": 2,
+     "col": "n",
+     "side": "neutral",
+     "max": 1,
+     "stats": {
+      "cooldown": 7.2
+     }
+    },
+    {
+     "id": "transcendencia_2_i1",
+     "name": "Apocalipse",
+     "icon": "ember-shot",
+     "row": 2,
+     "col": "i1",
+     "side": "infernal",
+     "max": 2,
+     "skill": {
+      "id": "giro",
+      "mult_pct": 36.0
+     }
+    },
+    {
+     "id": "transcendencia_2_i2",
+     "name": "Rastro de Cinza",
+     "icon": "burning-embers",
+     "row": 2,
+     "col": "i2",
+     "side": "infernal",
+     "max": 2,
+     "skill": {
+      "id": "investida",
+      "mult_pct": 48.0,
+      "distance_pct": 24.0
+     }
+    },
+    {
+     "id": "transcendencia_3_s1",
+     "name": "Imortal",
+     "icon": "heart-shield",
+     "row": 3,
+     "col": "s1",
+     "side": "superior",
+     "max": 2,
+     "stats": {
+      "hp_flat": 144.0
+     }
+    },
+    {
+     "id": "transcendencia_3_s2",
+     "name": "Fortaleza",
+     "icon": "spiked-armor",
+     "row": 3,
+     "col": "s2",
+     "side": "superior",
+     "max": 2,
+     "stats": {
+      "def_flat": 60.0
+     }
+    },
+    {
+     "id": "transcendencia_3_n",
+     "name": "Clareza",
+     "icon": "lightning-helix",
+     "row": 3,
+     "col": "n",
+     "side": "neutral",
+     "max": 1,
+     "stats": {
+      "crit_chance": 4.8
+     }
+    },
+    {
+     "id": "transcendencia_3_i1",
+     "name": "Crueldade",
+     "icon": "bloody-sword",
+     "row": 3,
+     "col": "i1",
+     "side": "infernal",
+     "max": 2,
+     "stats": {
+      "crit_chance": 7.2
+     }
+    },
+    {
+     "id": "transcendencia_3_i2",
+     "name": "Massacre",
+     "icon": "mailed-fist",
+     "row": 3,
+     "col": "i2",
+     "side": "infernal",
+     "max": 2,
+     "stats": {
+      "atk_flat": 24.0
+     }
+    },
+    {
+     "id": "transcendencia_4_s1",
+     "name": "Avatar da Aurora",
+     "icon": "sun-radiations",
+     "row": 4,
+     "col": "s1",
+     "side": "superior",
+     "max": 2,
+     "stats": {
+      "def_pct": 14.4,
+      "hp_pct": 14.4,
+      "block": 7.2
+     }
+    },
+    {
+     "id": "transcendencia_4_s2",
+     "name": "Mão Divina",
+     "icon": "crystal-growth",
+     "row": 4,
+     "col": "s2",
+     "side": "superior",
+     "max": 2,
+     "stats": {
+      "resist_all": 12.0,
+      "cooldown": 9.6
+     }
+    },
+    {
+     "id": "transcendencia_4_n",
+     "name": "Transcender",
+     "icon": "crown",
+     "row": 4,
+     "col": "n",
+     "side": "neutral",
+     "max": 1,
+     "stats": {
+      "atk_pct": 9.6,
+      "def_pct": 9.6
+     }
+    },
+    {
+     "id": "transcendencia_4_i1",
+     "name": "Avatar da Cinza",
+     "icon": "burning-embers",
+     "row": 4,
+     "col": "i1",
+     "side": "infernal",
+     "max": 2,
+     "stats": {
+      "atk_pct": 19.2,
+      "crit_damage": 28.8
+     }
+    },
+    {
+     "id": "transcendencia_4_i2",
+     "name": "Fome Eterna",
+     "icon": "blood",
+     "row": 4,
+     "col": "i2",
+     "side": "infernal",
+     "max": 2,
+     "stats": {
+      "life_steal": 4.8,
+      "attack_speed": 12.0
+     }
+    }
+   ]
+  }
+ ]
+}

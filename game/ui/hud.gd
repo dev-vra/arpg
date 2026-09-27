@@ -14,6 +14,7 @@ const PANELS := {
 	"mentor": preload("res://game/ui/mentor_panel.gd"),
 	"menu": preload("res://game/ui/menu_panel.gd"),
 	"quests": preload("res://game/ui/quest_log_panel.gd"),
+	"talents": preload("res://game/ui/talent_panel.gd"),
 }
 
 var world
@@ -36,6 +37,7 @@ var panel: Control
 var map_label: Label
 var perf_label: Label
 var quest_box: VBoxContainer
+var talent_btn: Button
 var minimap
 
 
@@ -159,6 +161,9 @@ func _on_quest_pressed(id: String) -> void:
 		GameState.tracked_quest = id
 		GameState.toast.emit("Rastreando: siga as marcas douradas", Color("#ffd166"))
 		_render_quests()
+	var pts := GameState.talent_points()
+	talent_btn.text = str(pts) if pts > 0 else ""
+	talent_btn.add_theme_color_override("font_color", Color("#ffd166"))
 
 
 func minimap_dirty() -> void:
@@ -205,7 +210,7 @@ func open_dialogue(npc_id: String, intro: bool = false) -> void:
 
 func _top_right() -> void:
 	var h := HBoxContainer.new()
-	_place(h, Vector2(1, 0), Vector2(-740, 12), Vector2(726, 0))
+	_place(h, Vector2(1, 0), Vector2(-560, 8), Vector2(546, 0))
 	minimap = Minimap.new()
 	minimap.world = world
 	_place(minimap, Vector2(1, 0), Vector2(-284, 70), Vector2(270, 230))
@@ -218,11 +223,13 @@ func _top_right() -> void:
 	map_label.add_theme_color_override("font_color", UiTheme.GOLD)
 	map_label.size_flags_vertical = Control.SIZE_SHRINK_CENTER
 	h.add_child(map_label)
-	h.add_child(UiTheme.button("Missões", func(): open_panel("quests"), 120))
-	h.add_child(UiTheme.button("Mochila", func(): open_panel("inventory"), 120))
+	h.add_child(UiTheme.icon_button("scroll-quill", "Missões (L)", func(): open_panel("quests")))
+	talent_btn = UiTheme.icon_button("angel-wings", "Espíritos (K)", func(): open_panel("talents"))
+	h.add_child(talent_btn)
+	h.add_child(UiTheme.icon_button("open-treasure-chest", "Mochila (I)", func(): open_panel("inventory")))
 	if world.map_def["kind"] == "field":
-		h.add_child(UiTheme.button("Base", func(): world.travel("bastiao", "normal"), 90))
-	h.add_child(UiTheme.button("Menu", func(): open_panel("menu"), 90))
+		h.add_child(UiTheme.icon_button("treasure-map", "Voltar ao Bastião", func(): world.travel("bastiao", "normal")))
+	h.add_child(UiTheme.icon_button("crown", "Menu (Esc)", func(): open_panel("menu")))
 
 
 func _boss_bar() -> void:
@@ -379,3 +386,5 @@ func _unhandled_input(event: InputEvent) -> void:
 			open_bigmap()
 		KEY_L:
 			open_panel("quests")
+		KEY_K:
+			open_panel("talents")

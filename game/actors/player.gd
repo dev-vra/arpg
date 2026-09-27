@@ -60,6 +60,7 @@ func _ready() -> void:
 	add_to_group("player")
 	GameState.changed.connect(_on_state_changed)
 	visual.apply_loadout(GameState.equipped)
+	_on_state_changed()
 	hp = max_hp()
 
 
@@ -70,6 +71,8 @@ func max_hp() -> float:
 func _on_state_changed() -> void:
 	if visual and visual.model:
 		visual.apply_loadout(GameState.equipped)
+		var sp := GameState.spirit()
+		visual.set_spirit(sp["side"], int(sp.get(sp["side"], 0)) if sp["side"] != "" else 0)
 	hp = minf(hp, max_hp())
 	hp_changed.emit()
 
@@ -155,7 +158,10 @@ func basic_attack() -> void:
 func use_skill(i: int) -> void:
 	if dead or i >= kit["skills"].size() or cooldowns[i] > 0.0 or dash_time > 0.0:
 		return
-	var s: Dictionary = kit["skills"][i]
+	if not GameState.skill_unlocked(i):
+		GameState.toast.emit("Libera no nível %d" % int(kit["skills"][i]["unlock_level"]), Color("#8b8f99"))
+		return
+	var s: Dictionary = GameState.skill_with_mods(i)
 	cooldowns[i] = float(s["cooldown"]) * cd_mult()
 	var target = world.nearest_enemy(global_position, AUTO_AIM + 3.0)
 	if target and s["kind"] != "buff":

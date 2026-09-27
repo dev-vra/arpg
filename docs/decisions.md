@@ -27,3 +27,13 @@ Números propostos, a calibrar pela simulação. Nenhuma regra travada do plano 
 
 16. **"Zen" virou "Cinzas"** (decisão do dono do projeto): Zen é a moeda do Mu e feria a regra de nomes próprios.
     A chave interna continua `zen` nos dados e no save, para não quebrar saves; só o nome exibido mudou.
+
+## Níveis, skills e Espíritos
+
+17. **Nível máximo 75**, 1 ponto de espírito por nível. Skills da Sentinela liberam nos níveis 1, 3, 6 e 10.
+18. **Três árvores de espírito** (Juramento 1+, Ascensão 26+, Transcendência 51+), 25 pontos cada; no lugar do "deus" do Torchlight.
+    Cada linha: 2 nós Superiores (máx. 2), 1 neutro (máx. 1), 2 Infernais (máx. 2). O primeiro ponto de um lado alinha a árvore
+    e tranca o outro lado: o espírito sai dos atributos que o jogador ativa. Linha r exige 5r pontos na árvore.
+    Árvore alinhada com 10+ pontos dá o bônus do espírito (dobra ao completar 25). Redistribuir é grátis no MVP.
+    Nós mudam atributos e skills (dano, raio, distância, recarga, cura, atordoamento). Dados em `data/talents.json`.
+19. **UI**: ícones game-icons.net (CC BY 3.0, créditos no menu) e molduras Kenney (CC0).

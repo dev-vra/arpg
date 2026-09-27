@@ -41,7 +41,11 @@ func _run() -> void:
 	await _frames(3)
 	_ok(w.hud.panel != null, "mapa grande abre")
 	w.hud.close_panel()
-	for p in ["inventory", "forge", "maps", "mentor", "menu", "quests"]:
+	gs.character.level = 12
+	_ok(gs.add_talent("juramento_0_i1") == "" and gs.talent_points() == 11, "investiu ponto de espírito")
+	_ok(gs.skill_with_mods(0)["mult"] > 0 and gs.skill_unlocked(3), "skills liberadas por nível")
+	gs.character.level = 1
+	for p in ["inventory", "forge", "maps", "mentor", "menu", "quests", "talents"]:
 		w.hud.open_panel(p)
 		await _frames(3)
 		_ok(w.hud.panel != null, "painel %s abre" % p)

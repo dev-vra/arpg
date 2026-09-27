@@ -26,6 +26,10 @@ a luz virou fragmentos espalhados pela terra e a sombra que ela prendia escapou 
 - **Criptas Rubras**: tumbas da linhagem real. Os **Litomantes**, culto que prende almas em selos de pedra, servem ao **Arauto**.
 - **Trono Partido**: a sala do trono, onde o Rei Partido espera a Coroa se refazer para ele.
 
+## Espíritos
+A Coroa prendia duas forças: a luz (**Superior**) e a sombra (**Infernal**). Toda Sentinela carrega um fragmento das duas;
+o que ela cultiva decide qual espírito desperta. Superiores protegem e curam; Infernais queimam e drenam.
+
 ## Sets
 - **Ferro-Vigília**: armadura das primeiras Sentinelas, temperada com Brasa.
 - **Coroa do Vale Oco**: relíquias douradas da guarda do Vale.

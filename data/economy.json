@@ -297,6 +297,6 @@
   "progression": {
     "xp_base": 100,
     "xp_exp": 1.5,
-    "max_level": 60
+    "max_level": 75
   }
 }

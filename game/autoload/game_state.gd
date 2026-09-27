@@ -15,6 +15,7 @@ const Loot = preload("res://core/loot.gd")
 const Salvage = preload("res://core/salvage.gd")
 const SaveFile = preload("res://core/save_file.gd")
 const Quests = preload("res://core/quests.gd")
+const Talents = preload("res://core/talents.gd")
 
 const SAVE_PATH := "user://save_offline.json"
 const INVENTORY_SIZE := 40
@@ -32,6 +33,9 @@ var themes_db := Config.data("themes")
 var quests_db := Config.data("quests")
 var quests: Dictionary = Quests.new_state()
 var dialogues_db := Config.data("dialogues")
+var talents_db := Config.data("talents")
+var talents: Dictionary = Talents.new_state()
+var talent_bonus: Dictionary = {"stats": {}, "skills": {}}
 var tracked_quest := ""
 var flags: Dictionary = {}
 var discovered: Dictionary = {}   # map_id -> PackedByteArray (1 = célula vista)
@@ -56,7 +60,8 @@ func loot_ctx() -> Dictionary:
 
 
 func recompute() -> void:
-	stats = Stats.compute(character.level, equipped.values(), items_db, sets_db)
+	talent_bonus = Talents.bonuses(talents_db, talents)
+	stats = Stats.compute(character.level, equipped.values(), items_db, sets_db, [talent_bonus["stats"]])
 	changed.emit()
 
 
@@ -78,7 +83,10 @@ func add_xp(amount: int) -> void:
 	if gained > 0:
 		recompute()
 		leveled.emit(character.level)
-		toast.emit("Nível %d!" % character.level, Color("#ffd166"))
+		toast.emit("Nível %d! +%d ponto(s) de espírito" % [character.level, gained], Color("#ffd166"))
+		for s in skills_db["sentinela"]["skills"]:
+			if int(s.get("unlock_level", 1)) > character.level - gained and int(s.get("unlock_level", 1)) <= character.level:
+				toast.emit("Nova skill: %s" % s["name"], Color("#7fd1ff"))
 	changed.emit()
 
 
@@ -163,7 +171,7 @@ func item_changed(item: Dictionary) -> void:
 func to_dict() -> Dictionary:
 	return {"version": SAVE_VERSION, "content_version": economy["content_version"], "character": character.to_dict(),
 		"xp": xp, "inventory": inventory, "equipped": equipped, "quests": quests,
-		"tracked": tracked_quest, "flags": flags, "discovered": _pack_discovered()}
+		"tracked": tracked_quest, "talents": talents, "flags": flags, "discovered": _pack_discovered()}
 
 
 func save_game() -> void:
@@ -180,6 +188,9 @@ func load_game() -> void:
 	inventory = _ints(d.get("inventory", []))
 	quests = d.get("quests", Quests.new_state())
 	tracked_quest = d.get("tracked", "")
+	talents = d.get("talents", Talents.new_state())
+	for k in talents["points"]:
+		talents["points"][k] = int(talents["points"][k])
 	flags = d.get("flags", {})
 	discovered = {}
 	var disc: Dictionary = d.get("discovered", {})
@@ -198,6 +209,7 @@ func new_game() -> void:
 	equipped = {}
 	quests = Quests.new_state()
 	tracked_quest = ""
+	talents = Talents.new_state()
 	flags = {}
 	discovered = {}
 	character.wallet.add("zen", 5000)
@@ -288,7 +300,7 @@ func tracked_quests() -> Array:
 # --- comparação ---
 
 func compare(item: Dictionary) -> Dictionary:
-	return Stats.compare(character.level, equipped, item, items_db, sets_db)
+	return Stats.compare(character.level, equipped, item, items_db, sets_db, [talent_bonus["stats"]])
 
 
 func is_upgrade(item: Dictionary) -> bool:
@@ -350,3 +362,50 @@ func npc_quests(npc: String) -> Array:
 		if q.get("giver", "mentor") == npc and quest_status(q["id"]) != "locked" and quest_status(q["id"]) != "completed":
 			out.append(q)
 	return out
+
+
+
+# --- espíritos (talentos) ---
+
+func talent_points() -> int:
+	return Talents.available(character.level, talents)
+
+
+func add_talent(id: String) -> String:
+	var err := Talents.can_add(talents_db, talents, id, character.level)
+	if err == "":
+		Talents.add(talents_db, talents, id, character.level)
+		recompute()
+		save_game()
+	return err
+
+
+func reset_talent_tree(tree_id: String) -> void:
+	Talents.reset_tree(talents_db, talents, tree_id)
+	recompute()
+	save_game()
+
+
+func spirit() -> Dictionary:
+	return Talents.spirit(talents_db, talents)
+
+
+## Skill com os modificadores dos talentos aplicados (dano, raio, distância, recarga...).
+func skill_with_mods(i: int) -> Dictionary:
+	var s: Dictionary = skills_db["sentinela"]["skills"][i].duplicate()
+	var m: Dictionary = talent_bonus["skills"].get(s["id"], {})
+	if s.has("mult"):
+		s["mult"] = float(s["mult"]) * (1.0 + m.get("mult_pct", 0.0) / 100.0)
+	if s.has("radius"):
+		s["radius"] = float(s["radius"]) * (1.0 + m.get("radius_pct", 0.0) / 100.0)
+	if s.has("distance"):
+		s["distance"] = float(s["distance"]) * (1.0 + m.get("distance_pct", 0.0) / 100.0)
+	s["cooldown"] = float(s["cooldown"]) * (1.0 + m.get("cooldown_pct", 0.0) / 100.0)
+	for k in ["stun", "heal_pct", "def_bonus_pct", "duration"]:
+		if s.has(k):
+			s[k] = float(s[k]) + m.get(k, 0.0)
+	return s
+
+
+func skill_unlocked(i: int) -> bool:
+	return character.level >= int(skills_db["sentinela"]["skills"][i].get("unlock_level", 1))
