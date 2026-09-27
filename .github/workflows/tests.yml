@@ -18,3 +18,5 @@ jobs:
           mv "Godot_v${GODOT_VERSION}-stable_linux.x86_64" /usr/local/bin/godot
       - name: Unidade, distribuição de tiers, loja e nomes
         run: ./run_tests.sh
+      - name: Simulação de economia
+        run: timeout 600 godot --headless --path . -s sim/economy_sim.gd
